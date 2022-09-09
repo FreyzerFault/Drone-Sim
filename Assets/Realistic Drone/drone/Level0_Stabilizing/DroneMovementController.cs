@@ -456,7 +456,7 @@ public class DroneMovementController : MonoBehaviour {
     /// </summary>
     private void ApplyTorque()
     {
-        float torque = helixV1.Torque + helixV2.Torque + helixO1.Torque + helixO2.Torque;
+        float torque = helixV1.Throttle + helixV2.Throttle + helixO1.Throttle + helixO2.Throttle;
         transform.Rotate(transform.up, torque * Time.deltaTime);
     }
 

@@ -11,8 +11,8 @@ public class DroneSettings {
         public const float minRotationSpeed = 0.2f;
         public const float maxRotationSpeed = 3f;
 
-        public const float minTorque = 0.2f;
-        public const float maxTorque = 3f;
+        public const float minThrottle = 0.2f;
+        public const float maxThrottle = 3f;
 
         public const float minVerticalVel = -8f;
         public const float maxVerticalVel = 15f;

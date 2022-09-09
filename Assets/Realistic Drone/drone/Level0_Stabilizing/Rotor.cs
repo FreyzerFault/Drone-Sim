@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.InputSystem;
 
 public class Rotor : MonoBehaviour {
 
-    // Drone Rigidbody (parent)
-    private Rigidbody rBody;
+    // Drone (parent)
+    private DroneController drone;
+    private Rigidbody droneRB;
 
     // Rotor Engine Power [0,1]
     public float power;
@@ -14,29 +15,34 @@ public class Rotor : MonoBehaviour {
     
     // Animation Active
     public bool animationActivated = false;
-    
-    // Up force vector of the rotor
-    private LineRenderer lr;
+
+    private MeshRenderer meshRenderer;
+    private MeshRenderer blurMeshRenderer;
+    public Texture2D[] blurTextures;
 
     // Torque = Rotational Force (CW > 0, CCW < 0)
-    public float Torque
+    public float Throttle
     {
         get => (counterclockwise ? -1 : 1) * 
             Mathf.Lerp(
-            DroneSettings.saturationValues.minTorque,
-            DroneSettings.saturationValues.maxTorque,
+            DroneSettings.saturationValues.minThrottle,
+            DroneSettings.saturationValues.maxThrottle,
             power);
     }
-    
-    void Start()
-    {        
-        Transform t = this.transform;
-        while (t.parent != null && !t.CompareTag("Player")) 
-            t = t.parent;
-        
-        rBody = t.GetComponent<Rigidbody>();
 
-        lr = GetComponent<LineRenderer>();
+    public float MaxRotationSpeed => drone.droneSettings.saturationValues.MaxRotationSpeed;
+    
+    void Awake()
+    {        
+        Transform t = transform;
+        if (t.parent != null && t.parent.GetComponent<DroneController>())
+        {
+            drone = t.parent.GetComponent<DroneController>();
+            droneRB = drone.GetComponent<Rigidbody>();
+        }
+
+        meshRenderer = GetComponent<MeshRenderer>();
+        blurMeshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
     }
 
     void Update()
@@ -44,16 +50,47 @@ public class Rotor : MonoBehaviour {
         // Animation
         if (animationActivated)
         {
-            transform.Rotate(0, 0, Torque * 700 * Time.deltaTime * (counterclockwise ? -1 : 1));
+            AnimatePropeller();
         }
-        
-        // Line Renderer
-        lr.SetPosition(1, new Vector3(0, 0, power * 3f));
     }
     
     void FixedUpdate()
     {
         // Force upwards to drone from rotor point
-        rBody.AddForceAtPosition(transform.forward * (power * Time.fixedDeltaTime * 1000), transform.position);
+        ApplyUpForce();
+    }
+
+    private void AnimatePropeller()
+    {
+        transform.Rotate(0, 0, 
+            Mathf.Lerp(0, MaxRotationSpeed, power * 2) * Time.deltaTime * (counterclockwise ? -1 : 1)
+            );
+
+        // If power < 0.5, hide propeller and show blur propeller quad
+        meshRenderer.enabled = power < 0.5f;
+        blurMeshRenderer.enabled = power >= 0.5f;
+
+        // Switch between blur textures by power
+        if (power > 0.5f)
+        {
+            if (power < 0.65f)
+                blurMeshRenderer.sharedMaterial.mainTexture = blurTextures[0];
+            else if (power < 0.8f)
+                blurMeshRenderer.sharedMaterial.mainTexture = blurTextures[1];
+            else if (power < 0.9f)
+                blurMeshRenderer.sharedMaterial.mainTexture = blurTextures[2];
+        }
+    }
+
+    private void ApplyUpForce()
+    {
+        droneRB.AddForceAtPosition(transform.forward * (power * Physics.gravity.magnitude / 2), transform.position);
+    }
+    
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.Lerp(Color.red, Color.green, power);
+        
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward * (power));
     }
 }
