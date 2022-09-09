@@ -43,7 +43,7 @@ public class configReader : MonoBehaviour {
     /// <param name="myVals">Array of float containing the parameters</param>
     protected void writeKeysOnDMC(float[] myVals)
     {
-        droneMovementController dmc = GetComponent<droneMovementController>();
+        DroneMovementController dmc = GetComponent<DroneMovementController>();
 
         PID yPID = new PID(myVals[0], myVals[1], myVals[2], myVals[3]);
         PID zPID = new PID(myVals[4], myVals[5], myVals[6], myVals[7]);

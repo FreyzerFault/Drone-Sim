@@ -11,12 +11,12 @@ public class GPS : MonoBehaviour
     /// </summary>
     public Vector2 getCoords() { return new Vector2(noiseX.getNoise(transform.position.x), noiseY.getNoise(transform.position.z)); }
 
-    noiseAdder noiseX;
-    noiseAdder noiseY;
+    NoiseAdder noiseX;
+    NoiseAdder noiseY;
 
     /// <summary>
     /// Function Called when the object is activated for the first time
     /// </summary>
-    void Awake() { noiseX = new noiseAdder(); noiseY = new noiseAdder(); }
+    void Awake() { noiseX = new NoiseAdder(); noiseY = new NoiseAdder(); }
      
 }

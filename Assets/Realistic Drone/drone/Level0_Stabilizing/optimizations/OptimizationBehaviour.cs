@@ -73,7 +73,7 @@ public abstract class OptimizationBehaviour : MonoBehaviour {
     /// The reference will be used to send the result of the experiment (the fitness)
     /// </summary>
     public void setFather(OptimizationManager om) { father = om; }
-    protected droneMovementController dmc;
+    protected DroneMovementController dmc;
     protected WaypointProgressTracker wpt;
 
     protected GameObject spawnedWaypoint;
@@ -94,7 +94,7 @@ public abstract class OptimizationBehaviour : MonoBehaviour {
         setID();
         hideBody(hidebody);
         setLifeTime(lifeTime);
-        dmc = gameObject.GetComponent<droneMovementController>();
+        dmc = gameObject.GetComponent<DroneMovementController>();
         routePosition = routePos;
         lastroutePosition = routePos;
     }
@@ -144,7 +144,7 @@ public abstract class OptimizationBehaviour : MonoBehaviour {
     protected void writeKeysOnDMC(float[] myVals, GameObject waypointCircuit)
     {
         // if the variables are empty, is assigns them
-        dmc = (dmc != null ? dmc : GetComponent<droneMovementController>());
+        dmc = (dmc != null ? dmc : GetComponent<DroneMovementController>());
         wpt = (wpt != null ? wpt : GetComponent<WaypointProgressTracker>());
 
         // initializing new PIDs

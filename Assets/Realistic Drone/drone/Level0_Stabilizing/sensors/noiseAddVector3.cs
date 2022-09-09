@@ -3,9 +3,9 @@ using System.Collections;
 
 public class noiseAddVector3 {
 
-    noiseAdder xN;
-    noiseAdder yN;
-    noiseAdder zN;
+    NoiseAdder xN;
+    NoiseAdder yN;
+    NoiseAdder zN;
      
     /// <summary>
     /// Constructor of the class
@@ -13,9 +13,9 @@ public class noiseAddVector3 {
     /// </summary>
     public noiseAddVector3()
     {
-        xN = new noiseAdder();
-        yN = new noiseAdder();
-        zN = new noiseAdder();      
+        xN = new NoiseAdder();
+        yN = new NoiseAdder();
+        zN = new NoiseAdder();      
     }
 
     /// <summary>

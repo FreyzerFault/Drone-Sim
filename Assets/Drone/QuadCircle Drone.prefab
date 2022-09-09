@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 6551168}
   - component: {fileID: 11439902}
   m_Layer: 0
-  m_Name: DronePrefab 1
+  m_Name: QuadCircle Drone
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

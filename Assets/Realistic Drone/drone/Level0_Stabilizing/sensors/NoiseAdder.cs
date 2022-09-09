@@ -1,22 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class noiseAdder {
+public class NoiseAdder {
 
     float sigma = 1f;
 
-    LinkedList<float> lastValues;
+    LinkedList<float> lastValues = new LinkedList<float>();
     const int maxNr = 50;
     int filled = 0;
-     
-    /// <summary>
-    /// constructor of noiseAdder class
-    /// </summary>
-    public noiseAdder()
-    {
-        lastValues = new LinkedList<float>();
-    }
-
+    
     /// <summary>
     /// Obtain the noise using the value passed as parameter and the past values
     /// </summary>
@@ -40,24 +32,21 @@ public class noiseAdder {
             average += f;
         average /= lastValues.Count;
         sigma = (val - average) * (val - average);
-        sigma = droneSettings.keepOnRange(sigma, 0, 2f);
+        sigma = DroneSettings.keepOnRange(sigma, 0, 2f);
 
         return val + sigma * gaussianFloatBetween1_1() * 0.1f;
     }
 
-    /// <summary>
-    /// Return a floating point value, using a normal distribution, in the range [-1,1]
-    /// </summary>
+    
+    // Return a floating point value, using a normal distribution, in the range [-1,1]
     private float gaussianFloatBetween1_1() {
         float f = gaussianFloat();
-        f = (!droneSettings.isInsideRange(f, -3, 3) ? 0 : f);
-        return droneSettings.normalizeBetween(f, -3, 3) - 0.5f;        
+        f = (!DroneSettings.isInsideRange(f, -3, 3) ? 0 : f);
+        return DroneSettings.normalizeBetween(f, -3, 3) - 0.5f;        
     }
 
-    /// <summary>
-    /// Obtain a number using a normal distribution
-    /// </summary>
-    /// <returns></returns>
+    
+    // Obtain a number using a normal distribution
     private float gaussianFloat()
     {
         float u, v, S;

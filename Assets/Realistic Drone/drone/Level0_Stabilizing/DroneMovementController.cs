@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 
 
-public class droneMovementController : MonoBehaviour {
+public class DroneMovementController : MonoBehaviour {
 
     #region phisical Parts and related functions
 
@@ -15,10 +15,10 @@ public class droneMovementController : MonoBehaviour {
     public Magnetometer mag;
 
     // Rotors of the drone (have to be associated to the four rotors of the drone, with the order V1,O1,V2,O2)
-    public rotor helixV1;
-    public rotor helixV2;
-    public rotor helixO1;
-    public rotor helixO2;
+    public Rotor helixV1;
+    public Rotor helixV2;
+    public Rotor helixO1;
+    public Rotor helixO2;
 
     // PIDs of the drone. Instanciated in run-time
     public PID yawPID;
@@ -28,50 +28,27 @@ public class droneMovementController : MonoBehaviour {
     public PID zPID;
     public PID xPID;
 
-    /// <summary>
-    /// Used to simulate the torque applied to the drone, following the differences between the rotors power
-    /// </summary>
-    /// <param name="amount">sum of the results of <c>verse(Rotor r)</c>, applied over every rotor</param>
-    void applyTorque(float amount) { transform.Rotate(transform.up, amount * Time.deltaTime); }
 
-    /// <summary>
-    /// Calculates the amount of torque that a single rotor is generating over the entire system.
-    /// <para>The sum of the results of this funcion, applied to the four rotors have to be passed as 
-    /// parameter to the function <c>applyTorque(float amount)</c></para>
-    /// </summary>
-    /// <param name="r">Rotor class</param>
-    /// <returns>The amount of torque that a single rotor is generating over the entire system</returns>
-    float torqueGeneratedBy(rotor r) { return (r.counterclockwise ? -1 : 1) * denormalizeTorque(r.getPower()) * 10; }
-
-    /// <summary>
-    /// Transform the power calculated by the algorithms (that is always between 0 and 1) so it can be used by the rotors class
-    /// </summary>
-    /// <param name="pow">Power of the rotor, calculated by the algorithms</param>
-    /// <returns>A value between [saturationValues.minRotationSpeed, saturationValues.maxRotationSpeed] </returns>
-    float denormalizePower(float pow) { return denormalize(pow, droneSettings.saturationValues.minRotationSpeed, droneSettings.saturationValues.maxRotationSpeed); }
-
-    /// <summary>
-    /// Transform the power calculated by the algorithms (that is always between 0 and 1) so it can be used to calculate the overall torque
-    /// </summary>
-    /// <param name="pow">Power of the rotor, calculated by the algorithms</param>
-    /// <returns>A value between [saturationValues.minTorque, saturationValues.maxTorque] </returns>
-    float denormalizeTorque(float pow) { return denormalize(pow, droneSettings.saturationValues.minTorque, droneSettings.saturationValues.maxTorque); }
-
-    /// <summary>
-    /// Generic function used to denormalize
-    /// </summary>
-    /// <param name="pow">Number to denormalize that belongs to the interval [0,1]</param>
-    /// <param name="lBound">Lower bound of the denormalized number</param>
-    /// <param name="uBound">Upper bound of the denormalized number</param>
-    /// <returns>The number passed as argument, denormalized in the interval [lBound,uBound]</returns>
-    float denormalize(float pow, float lBound, float uBound) { return pow * (uBound - lBound) + lBound; }
-
-    /// <summary>
-    /// Keep a number in the interval [0,1], truncating it if it is outside that range
-    /// </summary>
-    /// <param name="num">Number that has to be maintained in the interval [0,1]</param>
-    /// <returns>if (num € [0,1]) -> num; else if (num is less than 0) -> 0; else -> 1</returns>
-    float keepOnRange01(float num) { return (float.IsNaN(num) ? 0 : droneSettings.keepOnRange(num, 0f, 1f)); }
+    
+    // /// <summary>
+    // /// Transform the power [0,1] to rotor speed [minRotationSpeed, maxRotationSpeed] from Settings
+    // /// </summary>
+    // /// <param name="pow">Power of the rotor</param>
+    // /// <returns>A value between [minRotationSpeed, maxRotationSpeed] </returns>
+    // float denormalizeRotorSpeed(float pow)
+    // {
+    //     return Mathf.Lerp(DroneSettings.saturationValues.minRotationSpeed, DroneSettings.saturationValues.maxRotationSpeed, pow);
+    // }
+    //
+    // /// <summary>
+    // /// Transform the power [0,1] to torque by the range [minTorque,maxTorque] from Settings
+    // /// </summary>
+    // /// <param name="pow">Power of the rotor</param>
+    // /// <returns>A value between [minTorque,maxTorque] </returns>
+    // float denormalizeTorque(float pow)
+    // {
+    //     return Mathf.Lerp(DroneSettings.saturationValues.minTorque, DroneSettings.saturationValues.maxTorque, pow);
+    // }
     #endregion
 
     #region targets 
@@ -219,12 +196,12 @@ public class droneMovementController : MonoBehaviour {
         float vel = bar.getverticalSpeed();
 
         //calculates the idealVelocity, we'll use this to extract an error that will be given to the PID
-        float idealVel = distanceToPoint * (testing ? constVertVel : droneSettings.constVerticalIdealVelocity);
-        idealVel = droneSettings.keepOnRange(idealVel, droneSettings.saturationValues.minVerticalVel, droneSettings.saturationValues.maxVerticalVel);
+        float idealVel = distanceToPoint * (testing ? constVertVel : DroneSettings.constVerticalIdealVelocity);
+        idealVel = DroneSettings.keepOnRange(idealVel, DroneSettings.saturationValues.minVerticalVel, DroneSettings.saturationValues.maxVerticalVel);
 
         //calculates the idealAcc, we'll use this to extract an error that will be given to the PID
-        float idealAcc = (idealVel - vel) * (testing ? constVertAcc : droneSettings.constVerticalIdealAcceler);
-        idealAcc = droneSettings.keepOnRange(idealAcc, droneSettings.saturationValues.minVerticalAcc, droneSettings.saturationValues.maxVerticalAcc);
+        float idealAcc = (idealVel - vel) * (testing ? constVertAcc : DroneSettings.constVerticalIdealAcceler);
+        idealAcc = DroneSettings.keepOnRange(idealAcc, DroneSettings.saturationValues.minVerticalAcc, DroneSettings.saturationValues.maxVerticalAcc);
 
         //Error used by the PID
         float Err = (idealAcc - acc);
@@ -247,8 +224,8 @@ public class droneMovementController : MonoBehaviour {
         float vel = this.gyro.getRollVel();
 
         //calculates idealVelocity and idealAcceleration, we'll use this to extract an error that will be given to the PID
-        float idealVel = rollDistance * (testing ? constHorizVel : droneSettings.constHorizontalIdealVelocity);
-        float idealAcc = (idealVel - vel) * (testing ? constHorizAcc : droneSettings.constHorizontalIdealAcceler);
+        float idealVel = rollDistance * (testing ? constHorizVel : DroneSettings.constHorizontalIdealVelocity);
+        float idealAcc = (idealVel - vel) * (testing ? constHorizAcc : DroneSettings.constHorizontalIdealAcceler);
 
         //Error used by the PID
         float Err = (idealAcc - acc);
@@ -269,8 +246,8 @@ public class droneMovementController : MonoBehaviour {
         float vel = this.gyro.getPitchVel();
 
         //calculates idealVelocity and idealAcceleration, we'll use this to extract an error that will be given to the PID
-        float idealVel = pitchDistance * (testing ? constHorizVel : droneSettings.constHorizontalIdealVelocity);
-        float idealAcc = (idealVel - vel) * (testing ? constHorizAcc : droneSettings.constHorizontalIdealAcceler);
+        float idealVel = pitchDistance * (testing ? constHorizVel : DroneSettings.constHorizontalIdealVelocity);
+        float idealAcc = (idealVel - vel) * (testing ? constHorizAcc : DroneSettings.constHorizontalIdealAcceler);
 
         //Error used by the PID
         float Err = (idealAcc - acc);
@@ -292,7 +269,7 @@ public class droneMovementController : MonoBehaviour {
 
         //calculates idealVelocity, we'll use this to extract an error that will be given to the PID
         float vel = mag.getYawVel();
-        float idealVel = -yawDistance * (testing ? constYawVel : droneSettings.constYawIdealVelocity);
+        float idealVel = -yawDistance * (testing ? constYawVel : DroneSettings.constYawIdealVelocity);
 
         //Error used by the PID
         float Err = (idealVel - vel);
@@ -313,20 +290,20 @@ public class droneMovementController : MonoBehaviour {
     float zStabilization(float targetZ)
     {
         //calculates the error and extracts the measurements from the sensors 
-        float distanceToPoint = droneSettings.keepOnAbsRange(targetZ, 30f);
+        float distanceToPoint = DroneSettings.keepOnAbsRange(targetZ, 30f);
         float acc = this.acc.getLinearAcceleration().z;
         float vel = this.acc.getLocalLinearVelocity().z;
         float yawVel = this.mag.getYawVel();
 
         //calculates idealVelocity and idealAcceleration, we'll use this to extract an error that will be given to the PID
-        float idealVel = distanceToPoint * (testing ? constAxisVel : droneSettings.constAxisIdealVelocity);
-        idealVel = droneSettings.keepOnAbsRange(idealVel, droneSettings.saturationValues.maxHorizontalVel);
-        float idealAcc = (idealVel - vel) * (testing ? constAxisAcc : droneSettings.constAxisIdealAcceler);
-        idealAcc = droneSettings.keepOnAbsRange(idealAcc, 3f);
+        float idealVel = distanceToPoint * (testing ? constAxisVel : DroneSettings.constAxisIdealVelocity);
+        idealVel = DroneSettings.keepOnAbsRange(idealVel, DroneSettings.saturationValues.maxHorizontalVel);
+        float idealAcc = (idealVel - vel) * (testing ? constAxisAcc : DroneSettings.constAxisIdealAcceler);
+        idealAcc = DroneSettings.keepOnAbsRange(idealAcc, 3f);
 
         //Error used by the PID
         float Err = (idealAcc - acc);
-        Err *= 1 - keepOnRange01(Math.Abs(idealYaw - mag.getYaw()));
+        Err *= 1 - Mathf.Clamp01(Math.Abs(idealYaw - mag.getYaw()));
 
         //dS.addLine(new float[] { Err, distanceToPoint, vel, idealVel, acc, idealAcc  });      // use this to save the data to the DataSaver class
         return zPID.getU(Err, Time.deltaTime);                
@@ -340,19 +317,19 @@ public class droneMovementController : MonoBehaviour {
     float xStabilization(float targetX)
     {
         //calculates the error and extracts the measurements from the sensors
-        float distanceToPoint = droneSettings.keepOnAbsRange(targetX, 30f);
+        float distanceToPoint = DroneSettings.keepOnAbsRange(targetX, 30f);
         float acc = this.acc.getLinearAcceleration().x;
         float vel = this.acc.getLocalLinearVelocity().x;
 
         //calculates idealVelocity and idealAcceleration, we'll use this to extract an error that will be given to the PID
-        float idealVel = distanceToPoint * (testing ? constAxisVel : droneSettings.constAxisIdealVelocity);
-        idealVel = droneSettings.keepOnAbsRange(idealVel, droneSettings.saturationValues.maxHorizontalVel);
-        float idealAcc = (idealVel - vel) * (testing ? constAxisAcc : droneSettings.constAxisIdealAcceler);
-        idealAcc = droneSettings.keepOnAbsRange(idealAcc, 3f);
+        float idealVel = distanceToPoint * (testing ? constAxisVel : DroneSettings.constAxisIdealVelocity);
+        idealVel = DroneSettings.keepOnAbsRange(idealVel, DroneSettings.saturationValues.maxHorizontalVel);
+        float idealAcc = (idealVel - vel) * (testing ? constAxisAcc : DroneSettings.constAxisIdealAcceler);
+        idealAcc = DroneSettings.keepOnAbsRange(idealAcc, 3f);
 
         //Error used by the PID
         float Err = (idealAcc - acc);
-        Err *= 1 - keepOnRange01(Math.Abs(idealYaw - mag.getYaw()));
+        Err *= 1 - Mathf.Clamp01(Math.Abs(idealYaw - mag.getYaw()));
 
         return xPID.getU(Err, Time.deltaTime);
     }
@@ -390,12 +367,12 @@ public class droneMovementController : MonoBehaviour {
             gameObject.GetComponent<configReader>().enabled == false)
         { 
             // if not, we get the values from the settings
-            yPID = new PID(droneSettings.verticalPID_P, droneSettings.verticalPID_I, droneSettings.verticalPID_D, droneSettings.verticalPID_U);
-            yawPID = new PID(droneSettings.yawPID_P, droneSettings.yawPID_I, droneSettings.yawPID_D, droneSettings.yawPID_U);
-            rollPID = new PID(droneSettings.orizPID_P, droneSettings.orizPID_I, droneSettings.orizPID_D, droneSettings.orizPID_U);
-            pitchPID = new PID(droneSettings.orizPID_P, droneSettings.orizPID_I, droneSettings.orizPID_D, droneSettings.orizPID_U);
-            zPID = new PID(droneSettings.axisPID_P, droneSettings.axisPID_I, droneSettings.axisPID_D, droneSettings.axisPID_U);
-            xPID = new PID(droneSettings.axisPID_P, droneSettings.axisPID_I, droneSettings.axisPID_D, droneSettings.axisPID_U);
+            yPID = new PID(DroneSettings.verticalPID_P, DroneSettings.verticalPID_I, DroneSettings.verticalPID_D, DroneSettings.verticalPID_U);
+            yawPID = new PID(DroneSettings.yawPID_P, DroneSettings.yawPID_I, DroneSettings.yawPID_D, DroneSettings.yawPID_U);
+            rollPID = new PID(DroneSettings.orizPID_P, DroneSettings.orizPID_I, DroneSettings.orizPID_D, DroneSettings.orizPID_U);
+            pitchPID = new PID(DroneSettings.orizPID_P, DroneSettings.orizPID_I, DroneSettings.orizPID_D, DroneSettings.orizPID_U);
+            zPID = new PID(DroneSettings.axisPID_P, DroneSettings.axisPID_I, DroneSettings.axisPID_D, DroneSettings.axisPID_U);
+            xPID = new PID(DroneSettings.axisPID_P, DroneSettings.axisPID_I, DroneSettings.axisPID_D, DroneSettings.axisPID_U);
         }
 
         linedrawer = gameObject.GetComponent<lineDrawer>();
@@ -449,8 +426,8 @@ public class droneMovementController : MonoBehaviour {
         linedrawer.drawPosition(ticket2, zComponent);
 
         // calling the stabilization algorithms that will modify the rotation power
-        idealPitch = droneSettings.keepOnAbsRange(zStabilization(targetZ), 0.40f);
-        idealRoll = droneSettings.keepOnAbsRange(xStabilization(targetX), 0.40f);
+        idealPitch = DroneSettings.keepOnAbsRange(zStabilization(targetZ), 0.40f);
+        idealRoll = DroneSettings.keepOnAbsRange(xStabilization(targetX), 0.40f);
         idealYaw = mag.getYawToCenterOn(lookingAtPoint);
         yStabilization(targetY);
         pitchStabilization(idealPitch);
@@ -460,19 +437,28 @@ public class droneMovementController : MonoBehaviour {
         // if the drone has to rotate more than 0.22 (~40°) it stabilizes itself to a fixed point to avoid getting off the route and to increase stability
         followTarget(yawErr < 0.22f);
 
-        // truncate and applies the power to the rotors
-        pV1 = keepOnRange01(pV1);
-        pV2 = keepOnRange01(pV2);
-        pO1 = keepOnRange01(pO1);
-        pO2 = keepOnRange01(pO2);
-        helixV1.setPower(denormalizePower(pV1));
-        helixV2.setPower(denormalizePower(pV2));
-        helixO1.setPower(denormalizePower(pO1));
-        helixO2.setPower(denormalizePower(pO2));
+        // Assign each rotor POWER [0,1]
+        helixV1.power = Mathf.Clamp01(pV1);
+        helixV2.power = Mathf.Clamp01(pV2);
+        helixO1.power = Mathf.Clamp01(pO1);
+        helixO2.power = Mathf.Clamp01(pO2);
 
-        // Calculate the torque generated by each rotor and applies it to the drone
-        applyTorque(torqueGeneratedBy(helixV1) + torqueGeneratedBy(helixV2) + torqueGeneratedBy(helixO1) + torqueGeneratedBy(helixO2));
+        ApplyTorque();
     }
 
+    #region Physics
 
+    /// <summary>
+    /// YAW of the Drone
+    /// <p>Calculate the torque generated by each rotor and applies it to the drone</p>
+    /// <p>If the sum is 0, the drone will not rotate</p>
+    /// <p>If the sum is 1, the drone will rotate by the difference between the CW and CCW rotors</p>
+    /// </summary>
+    private void ApplyTorque()
+    {
+        float torque = helixV1.Torque + helixV2.Torque + helixO1.Torque + helixO2.Torque;
+        transform.Rotate(transform.up, torque * Time.deltaTime);
+    }
+
+    #endregion
 }

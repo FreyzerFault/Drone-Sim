@@ -20,7 +20,7 @@ public class GeneticSettings {
     // fitness functions of the individuals
     const float minFitness = -5000;
     const float maxFitness = 5000;
-    public static float normalizeFitness(float f) { return droneSettings.normalizeBetween(f, minFitness, maxFitness); }
+    public static float normalizeFitness(float f) { return DroneSettings.normalizeBetween(f, minFitness, maxFitness); }
 
     // Variable used to avoid the monopolization of the new born from one single parents
     // it is setted high because it is not a real problem

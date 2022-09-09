@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class droneSettings {
+public class DroneSettings {
     /// <summary>
     /// Values that represent the limits.
     /// <para>It could be because a drone in the physic world wouldn't exceede them

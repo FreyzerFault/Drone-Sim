@@ -76,6 +76,9 @@ public class WaypointProgressTracker : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        if (waypoint == null)
+            return;
+        
         // if we are using a WaypointCircuit we recalculate the position of the objects used to navigate it
         if (waypoint.isCircuit())
         {
@@ -105,7 +108,7 @@ public class WaypointProgressTracker : MonoBehaviour
                     lookAheadForTargetOffset += 0.25f;
             
 
-                lookAheadForTargetOffset = droneSettings.keepOnRange(lookAheadForTargetOffset, 3f, 12f);            
+                lookAheadForTargetOffset = DroneSettings.keepOnRange(lookAheadForTargetOffset, 3f, 12f);            
             }
 
             // determine the position we should currently be aiming for
@@ -131,20 +134,20 @@ public class WaypointProgressTracker : MonoBehaviour
             }
             
             // setting drones variables
-            gameObject.GetComponent<droneMovementController>().setRoutePos(getRoutePosition());
+            gameObject.GetComponent<DroneMovementController>().setRoutePos(getRoutePosition());
             float distToRoute = Vector3.Distance(transform.position, getRoutePosition());
-            gameObject.GetComponent<droneMovementController>().setLookingPoint(waypoint.GetRoutePosition(progressDistance + distanceOfPointToLookAt - distToRoute));
-            gameObject.GetComponent<droneMovementController>().stayOnFixedPoint = false;
+            gameObject.GetComponent<DroneMovementController>().setLookingPoint(waypoint.GetRoutePosition(progressDistance + distanceOfPointToLookAt - distToRoute));
+            gameObject.GetComponent<DroneMovementController>().stayOnFixedPoint = false;
         }
         else
         {
             Vector3 routePos = getRoutePosition();
 
             // setting drones variables
-            gameObject.GetComponent<droneMovementController>().setRoutePos(routePos);
+            gameObject.GetComponent<DroneMovementController>().setRoutePos(routePos);
             target.position = getRoutePosition();// + Vector3.forward;
-            gameObject.GetComponent<droneMovementController>().stayOnFixedPoint = true;         
-            gameObject.GetComponent<droneMovementController>().setLookingPoint(((singlePoint) waypoint).getLookingAtPoint());
+            gameObject.GetComponent<DroneMovementController>().stayOnFixedPoint = true;         
+            gameObject.GetComponent<DroneMovementController>().setLookingPoint(((singlePoint) waypoint).getLookingAtPoint());
     
         }
 
@@ -161,7 +164,10 @@ public class WaypointProgressTracker : MonoBehaviour
             { 
                 Gizmos.color = Color.blue;
                 Gizmos.DrawLine(transform.position, target.position);
-                Gizmos.DrawWireSphere(waypoint.GetRoutePosition(progressDistance), 0.25f);
+                
+                if (waypoint != null)
+                    Gizmos.DrawWireSphere(waypoint.GetRoutePosition(progressDistance), 0.25f);
+                
                 Gizmos.color = Color.cyan;
                 Gizmos.DrawLine(target.position, target.position + target.forward);
             }

@@ -10,13 +10,13 @@ public class Magnetometer : MonoBehaviour {
     private static Vector2 northPolePosition = new Vector2(0,40000);
     public Vector3 getNorthPolePosition() { return northPolePosition; }
 
-    private rotor helixV1;
-    private rotor helixV2;
-    private rotor helixO1;
-    private rotor helixO2;
+    private Rotor helixV1;
+    private Rotor helixV2;
+    private Rotor helixO1;
+    private Rotor helixO2;
      
-    noiseAdder nYaw;
-    noiseAdder nSpeed;
+    NoiseAdder nYaw;
+    NoiseAdder nSpeed;
      
     private float yaw;
     /// <summary>
@@ -48,11 +48,11 @@ public class Magnetometer : MonoBehaviour {
     void Awake()
     {
         // initializes the noiseAdders
-        nYaw = new noiseAdder();
-        nSpeed = new noiseAdder();
+        nYaw = new NoiseAdder();
+        nSpeed = new NoiseAdder();
 
         // look for the rotors in the droneMovementController
-        droneMovementController dmc = gameObject.GetComponent<droneMovementController>();
+        DroneMovementController dmc = gameObject.GetComponent<DroneMovementController>();
         helixO1 = dmc.helixO1;
         helixO2 = dmc.helixO2;
         helixV1 = dmc.helixV1;
@@ -81,7 +81,7 @@ public class Magnetometer : MonoBehaviour {
         bool isPositive = myPos.x > destPoint.x; //&& destPoint.x < northPolePosition.x || myPos.x > destPoint.x && destPoint.x > northPolePosition.x;
         float alpha = Vector2.Angle(direction, reference);
 
-        return droneSettings.normalizeBetween(alpha, 0, 180f) * (isPositive ? 1 : -1);
+        return DroneSettings.normalizeBetween(alpha, 0, 180f) * (isPositive ? 1 : -1);
     }
 
     /// <summary>
@@ -102,7 +102,7 @@ public class Magnetometer : MonoBehaviour {
         bool isPositive = Vector2.Distance((v2 + o1) / 2f, northPolePosition) > Vector2.Distance((v1 + o2) / 2f, northPolePosition);
         float alpha = Vector2.Angle(direction, reference);
 
-        return droneSettings.normalizeBetween(alpha, 0,180f) * (isPositive ? 1 : -1);
+        return DroneSettings.normalizeBetween(alpha, 0,180f) * (isPositive ? 1 : -1);
 
     }
 
