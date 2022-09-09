@@ -47,7 +47,13 @@ public class DroneController : MonoBehaviour
     /// </summary>
     private void ApplyYaw()
     {
-        float torque = rotorCW1.Throttle + rotorCW2.Throttle + rotorCCW1.Throttle + rotorCCW2.Throttle;
+        rotorCW1.power = yaw / 2 + 0.5f;
+        rotorCW2.power = yaw / 2 + 0.5f;
+        rotorCCW1.power = -yaw / 2 + 0.5f;
+        rotorCCW2.power = -yaw / 2 + 0.5f;
+        
+        float torque = rotorCW1.Torque + rotorCW2.Torque + rotorCCW1.Torque + rotorCCW2.Torque;
+        
         transform.Rotate(transform.up, torque * Time.fixedDeltaTime);
     }
 

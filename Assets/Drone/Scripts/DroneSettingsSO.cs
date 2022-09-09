@@ -9,8 +9,9 @@ public class DroneSettingsSO : ScriptableObject
     [Serializable]
     // Limit Physic values
     public class SaturationValues {
-        // Max rotation speed of the propellers
-        public float MaxRotationSpeed = 3f;
+        // Max params of the propellers
+        public float MaxRotationSpeed = 10000;
+        public float MaxTorque = 10;
         
         // Depends on drone's surface facing velocity direction (angle of attack)
         public float MinDragCoefficient = 0.01f;

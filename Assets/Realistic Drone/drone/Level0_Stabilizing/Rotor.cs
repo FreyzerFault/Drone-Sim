@@ -13,24 +13,26 @@ public class Rotor : MonoBehaviour {
     // Orientation
     public bool counterclockwise = false;
     
+
+    // Torque = Rotational Force (CW > 0, CCW < 0)
+    public float Torque => Mathf.Lerp(0, MaxTorque, power) * (counterclockwise ? -1 : 1);
+    
+    // Throttle = upward force (Power = 0.5 => Hover => Throttle = Gravity)
+    public float Throttle => power * Physics.gravity.magnitude / 2;
+
+    
+    public float MaxRotationSpeed => drone.droneSettings.saturationValues.MaxRotationSpeed;
+    public float MaxTorque => drone.droneSettings.saturationValues.MaxTorque;
+    
+    
     // Animation Active
     public bool animationActivated = false;
 
     private MeshRenderer meshRenderer;
     private MeshRenderer blurMeshRenderer;
     public Texture2D[] blurTextures;
-
-    // Torque = Rotational Force (CW > 0, CCW < 0)
-    public float Throttle
-    {
-        get => (counterclockwise ? -1 : 1) * 
-            Mathf.Lerp(
-            DroneSettings.saturationValues.minThrottle,
-            DroneSettings.saturationValues.maxThrottle,
-            power);
-    }
-
-    public float MaxRotationSpeed => drone.droneSettings.saturationValues.MaxRotationSpeed;
+    
+    private AudioSource audioSource;
     
     void Awake()
     {        
@@ -43,6 +45,8 @@ public class Rotor : MonoBehaviour {
 
         meshRenderer = GetComponent<MeshRenderer>();
         blurMeshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -51,7 +55,11 @@ public class Rotor : MonoBehaviour {
         if (animationActivated)
         {
             AnimatePropeller();
+            SetTexture();
         }
+        
+        // Audio
+        SetAudio();
     }
     
     void FixedUpdate()
@@ -65,7 +73,10 @@ public class Rotor : MonoBehaviour {
         transform.Rotate(0, 0, 
             Mathf.Lerp(0, MaxRotationSpeed, power * 2) * Time.deltaTime * (counterclockwise ? -1 : 1)
             );
+    }
 
+    private void SetTexture()
+    {
         // If power < 0.5, hide propeller and show blur propeller quad
         meshRenderer.enabled = power < 0.5f;
         blurMeshRenderer.enabled = power >= 0.5f;
@@ -81,10 +92,17 @@ public class Rotor : MonoBehaviour {
                 blurMeshRenderer.sharedMaterial.mainTexture = blurTextures[2];
         }
     }
-
+    
+    private void SetAudio()
+    {
+        float powerSqr = power * power;
+        audioSource.volume = Mathf.Lerp(0, .5f, powerSqr);
+        audioSource.pitch = Mathf.Lerp(0.9f, 1.1f, powerSqr);
+    }
+    
     private void ApplyUpForce()
     {
-        droneRB.AddForceAtPosition(transform.forward * (power * Physics.gravity.magnitude / 2), transform.position);
+        droneRB.AddForceAtPosition(transform.forward * Throttle, transform.position);
     }
     
     private void OnDrawGizmos()
