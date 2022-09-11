@@ -15,7 +15,7 @@ public class Rotor : MonoBehaviour {
     public bool counterclockwise = false;
     
 
-    // Torque = Rotational Force (CW > 0, CCW < 0)
+    // Torque = Rotational Force applied to propeller by rotor (CW > 0, CCW < 0)
     public float Torque => Mathf.Lerp(0, MaxTorque, power) * (counterclockwise ? -1 : 1);
     
     // Throttle = upward force (Power = 0.5 => Hover => Throttle = Gravity)
@@ -55,6 +55,9 @@ public class Rotor : MonoBehaviour {
 
     void Update()
     {
+        // CLAMP Power [0,1]
+        power = Mathf.Clamp01(power);
+        
         // Smooth change in power
         float powerDiff = power - lastPower;
         if (Mathf.Abs(powerDiff) > smoothStep)
@@ -77,9 +80,12 @@ public class Rotor : MonoBehaviour {
     
     void FixedUpdate()
     {
+        // CLAMP Power [0,1]
+        power = Mathf.Clamp01(power);
+        
         // Force upwards to drone from rotor point
-        ApplyThrottle();
-        ApplyTorque();
+        //ApplyThrottle();
+        //ApplyTorque();
     }
 
 
@@ -117,9 +123,12 @@ public class Rotor : MonoBehaviour {
         drone.rb.AddForceAtPosition(transform.forward * Throttle, transform.position);
     }
     
+    // Torque is based in 3º law of Newton
+    // Action-Reaction principle: For every action there is an equal and opposite reaction
+    // Torque applied to propeller will apply a inverse torque to drone
     private void ApplyTorque()
     {
-        drone.rb.AddTorque(transform.forward * Torque);
+        drone.rb.AddRelativeTorque(transform.forward * -Torque);
     }
     
     private void OnDrawGizmos()

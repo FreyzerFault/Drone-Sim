@@ -14,19 +14,17 @@ public class DroneInputController : MonoBehaviour
     private void OnMove(InputValue value)
     {
         Vector2 move = value.Get<Vector2>();
-        droneController.roll = move.x;
-        droneController.pitch = move.y;
-        
-        Debug.Log(move);
+        droneController.rollInput = move.x;
+        droneController.pitchInput = move.y;
     }
 
     private void OnRotate(InputValue value)
     {
-        droneController.yaw = value.Get<float>();
+        droneController.yawInput = value.Get<float>();
     }
     
     private void OnLift(InputValue value)
     {
-        droneController.lift = value.Get<float>();
+        droneController.liftInput = value.Get<float>();
     }
 }

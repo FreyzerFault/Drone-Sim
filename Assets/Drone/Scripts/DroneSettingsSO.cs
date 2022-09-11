@@ -16,6 +16,7 @@ public class DroneSettingsSO : ScriptableObject
         public float maxDragCoefficient = 0.80f;
         
         // Movement params
+        public float maxLift = 5;
         public float maxPitch = 30;
         public float maxRoll = 30;
         public float yawPower = 4;
