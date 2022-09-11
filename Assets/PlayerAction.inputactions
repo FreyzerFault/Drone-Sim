@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Pitch Roll",
+                    "name": "Move",
                     "type": "Value",
                     "id": "b7edcbee-169d-4589-bfd3-832ca994e399",
                     "expectedControlType": "Vector2",
@@ -25,12 +25,12 @@
                 },
                 {
                     "name": "Rotate",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "15071c6d-5b88-407b-90b4-83cc5fd466b8",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Analog",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "CamRotation",
@@ -281,7 +281,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pitch Roll",
+                    "action": "Move",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -292,7 +292,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pitch Roll",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -303,7 +303,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pitch Roll",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -314,7 +314,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pitch Roll",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -325,7 +325,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pitch Roll",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -336,7 +336,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pitch Roll",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -347,7 +347,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pitch Roll",
+                    "action": "Move",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -358,7 +358,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pitch Roll",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -369,7 +369,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pitch Roll",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -380,7 +380,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pitch Roll",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -391,7 +391,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pitch Roll",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

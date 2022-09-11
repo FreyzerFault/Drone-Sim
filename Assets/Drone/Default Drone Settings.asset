@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Default Drone Settings
   m_EditorClassIdentifier: 
   saturationValues:
-    MaxRotationSpeed: 10000
-    MinDragCoefficient: 0.01
-    MaxDragCoefficient: 0.25
+    maxRotationSpeed: 10000
+    maxTorque: 1
+    minDragCoefficient: 0.1
+    maxDragCoefficient: 0.2

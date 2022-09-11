@@ -8,6 +8,8 @@ public class DroneController : MonoBehaviour
     public DroneSettingsSO droneSettings;
     public EnvironmentSettingsSO environmentSettings;
     
+    public Rigidbody rb;
+    
     // Rotors of the drone (have to be associated to the four rotors of the drone, with the order V1,O1,V2,O2)
     public Rotor rotorCW1;
     public Rotor rotorCW2;
@@ -15,18 +17,29 @@ public class DroneController : MonoBehaviour
     public Rotor rotorCCW2;
     
     
-    [Range(0,1)] public float yaw = 0;
-    [Range(0,1)] public float pitch = 0;
-    [Range(0,1)] public float roll = 0;
-    [Range(0,1)] public float lift = 0;
+    [Range(-1,1)] public float yaw = 0;
+    [Range(-1,1)] public float pitch = 0;
+    [Range(-1,1)] public float roll = 0;
+    [Range(-1,1)] public float lift = 0;
+
+    public float Weight => rb.mass * Physics.gravity.magnitude;
+    
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
     private void FixedUpdate()
     {
-        ApplyYaw();
+        // Propeller Forces
         ApplyLift();
-        
-        Debug.Log("Lift: " + lift);
+        ApplyPitch();
+        ApplyYaw();
+
+        // External Forces
+        ApplyDrag();
     }
+
 
     #region Physics
 
@@ -45,24 +58,80 @@ public class DroneController : MonoBehaviour
     /// <p>If the sum is 0, the drone will not rotate</p>
     /// <p>If the sum is 1, the drone will rotate by the difference between the CW and CCW rotors</p>
     /// </summary>
+    private void ApplyPitch()
+    {
+        // Back Propellers
+        rotorCW1.power += pitch * droneSettings.saturationValues.maxPitch;
+        rotorCCW2.power += pitch * droneSettings.saturationValues.maxPitch;
+        
+        // Front Propellers
+        rotorCW2.power -= pitch * droneSettings.saturationValues.maxPitch;
+        rotorCCW1.power -= pitch * droneSettings.saturationValues.maxPitch;
+    }
+
     private void ApplyYaw()
     {
-        rotorCW1.power = yaw / 2 + 0.5f;
-        rotorCW2.power = yaw / 2 + 0.5f;
-        rotorCCW1.power = -yaw / 2 + 0.5f;
-        rotorCCW2.power = -yaw / 2 + 0.5f;
+        rotorCW1.power += yaw * droneSettings.saturationValues.yawPower;
+        rotorCW2.power += yaw * droneSettings.saturationValues.yawPower;
+        rotorCCW1.power -= yaw * droneSettings.saturationValues.yawPower;
+        rotorCCW2.power -= yaw * droneSettings.saturationValues.yawPower;
+    }
+    
+    private void ApplyDrag()
+    {
+        float minDrag = droneSettings.saturationValues.minDragCoefficient;
+        float maxDrag = droneSettings.saturationValues.maxDragCoefficient;
         
-        float torque = rotorCW1.Torque + rotorCW2.Torque + rotorCCW1.Torque + rotorCCW2.Torque;
+        // Drag depends on angle of attack 0-90 ([X, Z] axis rotation)
+        // Angle 0 -> min drag 
+        // Angle 90 -> max drag 
+        Vector3 rotation = transform.rotation.eulerAngles;
+        float attackAngleNormalized = 
+            Mathf.InverseLerp(0, 90, Mathf.Abs(rotation.x))
+            * Mathf.InverseLerp(0, 90, Mathf.Abs(rotation.z));
+        float horizontalDragCoefficient = Mathf.Lerp(minDrag, maxDrag, attackAngleNormalized);
+
+        // Vertical Drag is inversely proportional to the horizontal
+        float verticalDragCoefficient = Mathf.Lerp(maxDrag, minDrag, attackAngleNormalized);
+
+        // Square Velocity H and V components
+        Vector3 velHorizontal = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        Vector3 velVertical = new Vector3(0, rb.velocity.y, 0);
+        float sqrVelH = velHorizontal.sqrMagnitude;
+        float sqrVelV = velVertical.sqrMagnitude;
         
-        transform.Rotate(transform.up, torque * Time.fixedDeltaTime);
+        // Drag components
+        float dragH = 0.5f * horizontalDragCoefficient * environmentSettings.atmosphericSettings.airDensity * sqrVelH;
+        float dragV = 0.5f * verticalDragCoefficient * environmentSettings.atmosphericSettings.airDensity * sqrVelV;
+        
+        // Apply Forces
+        rb.AddRelativeForce(-velHorizontal.normalized * dragH);
+        rb.AddRelativeForce(-velVertical.normalized * dragV);
+
+        // DEBUG
+        drag = -velHorizontal.normalized * dragH + -velVertical.normalized * dragV;
+        angleOfAttack = attackAngleNormalized;
+        vDrag = verticalDragCoefficient;
+        hDrag = horizontalDragCoefficient;
     }
 
     #endregion
 
+    public Vector3 drag;
+    public float angleOfAttack;
+    
+    public float vDrag;
+    public float hDrag;
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.magenta;
         
         Gizmos.DrawLine(transform.position, transform.position + GetComponent<Rigidbody>().centerOfMass);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(transform.position, transform.position + drag);
+        //Gizmos.DrawLine(transform.position, transform.position + rb.velocity);
+        
     }
 }

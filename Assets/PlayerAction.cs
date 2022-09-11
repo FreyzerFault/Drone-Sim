@@ -37,7 +37,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Pitch Roll"",
+                    ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""b7edcbee-169d-4589-bfd3-832ca994e399"",
                     ""expectedControlType"": ""Vector2"",
@@ -47,12 +47,12 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Rotate"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""15071c6d-5b88-407b-90b4-83cc5fd466b8"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Analog"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""CamRotation"",
@@ -303,7 +303,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pitch Roll"",
+                    ""action"": ""Move"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -314,7 +314,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pitch Roll"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -325,7 +325,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pitch Roll"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -336,7 +336,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pitch Roll"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -347,7 +347,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pitch Roll"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -358,7 +358,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pitch Roll"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -369,7 +369,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pitch Roll"",
+                    ""action"": ""Move"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -380,7 +380,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pitch Roll"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -391,7 +391,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pitch Roll"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -402,7 +402,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pitch Roll"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -413,7 +413,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pitch Roll"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -425,7 +425,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Lift = m_Gameplay.FindAction("Lift", throwIfNotFound: true);
-        m_Gameplay_PitchRoll = m_Gameplay.FindAction("Pitch Roll", throwIfNotFound: true);
+        m_Gameplay_Move = m_Gameplay.FindAction("Move", throwIfNotFound: true);
         m_Gameplay_Rotate = m_Gameplay.FindAction("Rotate", throwIfNotFound: true);
         m_Gameplay_CamRotation = m_Gameplay.FindAction("CamRotation", throwIfNotFound: true);
     }
@@ -488,7 +488,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Gameplay;
     private IGameplayActions m_GameplayActionsCallbackInterface;
     private readonly InputAction m_Gameplay_Lift;
-    private readonly InputAction m_Gameplay_PitchRoll;
+    private readonly InputAction m_Gameplay_Move;
     private readonly InputAction m_Gameplay_Rotate;
     private readonly InputAction m_Gameplay_CamRotation;
     public struct GameplayActions
@@ -496,7 +496,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         private @PlayerAction m_Wrapper;
         public GameplayActions(@PlayerAction wrapper) { m_Wrapper = wrapper; }
         public InputAction @Lift => m_Wrapper.m_Gameplay_Lift;
-        public InputAction @PitchRoll => m_Wrapper.m_Gameplay_PitchRoll;
+        public InputAction @Move => m_Wrapper.m_Gameplay_Move;
         public InputAction @Rotate => m_Wrapper.m_Gameplay_Rotate;
         public InputAction @CamRotation => m_Wrapper.m_Gameplay_CamRotation;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
@@ -511,9 +511,9 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @Lift.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLift;
                 @Lift.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLift;
                 @Lift.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLift;
-                @PitchRoll.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPitchRoll;
-                @PitchRoll.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPitchRoll;
-                @PitchRoll.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPitchRoll;
+                @Move.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMove;
+                @Move.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMove;
+                @Move.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMove;
                 @Rotate.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotate;
                 @Rotate.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotate;
                 @Rotate.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotate;
@@ -527,9 +527,9 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @Lift.started += instance.OnLift;
                 @Lift.performed += instance.OnLift;
                 @Lift.canceled += instance.OnLift;
-                @PitchRoll.started += instance.OnPitchRoll;
-                @PitchRoll.performed += instance.OnPitchRoll;
-                @PitchRoll.canceled += instance.OnPitchRoll;
+                @Move.started += instance.OnMove;
+                @Move.performed += instance.OnMove;
+                @Move.canceled += instance.OnMove;
                 @Rotate.started += instance.OnRotate;
                 @Rotate.performed += instance.OnRotate;
                 @Rotate.canceled += instance.OnRotate;
@@ -543,7 +543,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
     public interface IGameplayActions
     {
         void OnLift(InputAction.CallbackContext context);
-        void OnPitchRoll(InputAction.CallbackContext context);
+        void OnMove(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
         void OnCamRotation(InputAction.CallbackContext context);
     }

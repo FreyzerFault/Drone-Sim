@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Drone Settings", menuName = "Settings/Drone Settings", order = 1)]
@@ -10,12 +8,17 @@ public class DroneSettingsSO : ScriptableObject
     // Limit Physic values
     public class SaturationValues {
         // Max params of the propellers
-        public float MaxRotationSpeed = 10000;
-        public float MaxTorque = 10;
+        public float maxRotationSpeed = 10000;
+        public float maxTorque = 1;
         
         // Depends on drone's surface facing velocity direction (angle of attack)
-        public float MinDragCoefficient = 0.01f;
-        public float MaxDragCoefficient = 0.25f;
+        public float minDragCoefficient = 0.35f;
+        public float maxDragCoefficient = 0.80f;
+        
+        // Movement params
+        public float maxPitch = 30;
+        public float maxRoll = 30;
+        public float yawPower = 4;
     }
     
     public SaturationValues saturationValues = new SaturationValues();

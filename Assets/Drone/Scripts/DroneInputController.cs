@@ -16,6 +16,8 @@ public class DroneInputController : MonoBehaviour
         Vector2 move = value.Get<Vector2>();
         droneController.roll = move.x;
         droneController.pitch = move.y;
+        
+        Debug.Log(move);
     }
 
     private void OnRotate(InputValue value)

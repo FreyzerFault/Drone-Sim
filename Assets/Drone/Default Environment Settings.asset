@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32afaa4f9cb40b144bd06fe29479279e, type: 3}
   m_Name: Default Environment Settings
   m_EditorClassIdentifier: 
+  atmosphericSettings:
+    airDensity: 1.22
+    windForce: {x: 0, y: 0, z: 0}
