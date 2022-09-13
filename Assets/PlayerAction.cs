@@ -62,6 +62,24 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Reset"",
+                    ""type"": ""Button"",
+                    ""id"": ""19d3464d-7c2c-40a5-b693-6c3419242ae1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleMotor"",
+                    ""type"": ""Button"",
+                    ""id"": ""bc595d69-21eb-487a-9b9b-901495eac7f8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -416,6 +434,39 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1dbef0b4-0fb7-45c3-a40e-99da5ff8b185"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reset"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0586cc3-8ebd-413f-bf59-6031f30e261a"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reset"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fdbbe5a6-23dd-46a6-ad19-c1de5211361f"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleMotor"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -428,6 +479,8 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         m_Gameplay_Move = m_Gameplay.FindAction("Move", throwIfNotFound: true);
         m_Gameplay_Rotate = m_Gameplay.FindAction("Rotate", throwIfNotFound: true);
         m_Gameplay_CamRotation = m_Gameplay.FindAction("CamRotation", throwIfNotFound: true);
+        m_Gameplay_Reset = m_Gameplay.FindAction("Reset", throwIfNotFound: true);
+        m_Gameplay_ToggleMotor = m_Gameplay.FindAction("ToggleMotor", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -491,6 +544,8 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Move;
     private readonly InputAction m_Gameplay_Rotate;
     private readonly InputAction m_Gameplay_CamRotation;
+    private readonly InputAction m_Gameplay_Reset;
+    private readonly InputAction m_Gameplay_ToggleMotor;
     public struct GameplayActions
     {
         private @PlayerAction m_Wrapper;
@@ -499,6 +554,8 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Gameplay_Move;
         public InputAction @Rotate => m_Wrapper.m_Gameplay_Rotate;
         public InputAction @CamRotation => m_Wrapper.m_Gameplay_CamRotation;
+        public InputAction @Reset => m_Wrapper.m_Gameplay_Reset;
+        public InputAction @ToggleMotor => m_Wrapper.m_Gameplay_ToggleMotor;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -520,6 +577,12 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @CamRotation.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCamRotation;
                 @CamRotation.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCamRotation;
                 @CamRotation.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCamRotation;
+                @Reset.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnReset;
+                @Reset.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnReset;
+                @Reset.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnReset;
+                @ToggleMotor.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnToggleMotor;
+                @ToggleMotor.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnToggleMotor;
+                @ToggleMotor.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnToggleMotor;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -536,6 +599,12 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @CamRotation.started += instance.OnCamRotation;
                 @CamRotation.performed += instance.OnCamRotation;
                 @CamRotation.canceled += instance.OnCamRotation;
+                @Reset.started += instance.OnReset;
+                @Reset.performed += instance.OnReset;
+                @Reset.canceled += instance.OnReset;
+                @ToggleMotor.started += instance.OnToggleMotor;
+                @ToggleMotor.performed += instance.OnToggleMotor;
+                @ToggleMotor.canceled += instance.OnToggleMotor;
             }
         }
     }
@@ -546,5 +615,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
         void OnCamRotation(InputAction.CallbackContext context);
+        void OnReset(InputAction.CallbackContext context);
+        void OnToggleMotor(InputAction.CallbackContext context);
     }
 }

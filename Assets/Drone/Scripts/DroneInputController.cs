@@ -27,4 +27,14 @@ public class DroneInputController : MonoBehaviour
     {
         droneController.liftInput = value.Get<float>();
     }
+
+    private void OnReset(InputValue value)
+    {
+        droneController.ResetRotation();
+    }
+
+    private void OnToggleMotor(InputValue value)
+    {
+        droneController.enabled = !droneController.enabled;
+    }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DroneController : MonoBehaviour
@@ -11,7 +9,7 @@ public class DroneController : MonoBehaviour
     public Rigidbody rb;
 
     public float smoothTime = 0.01f;
-    public float lerpTime = 4;
+    public float lerpSpeed = 4;
     
     // Rotors of the drone (have to be associated to the four rotors of the drone, with the order V1,O1,V2,O2)
     public Rotor rotorCW1;
@@ -19,104 +17,93 @@ public class DroneController : MonoBehaviour
     public Rotor rotorCCW1;
     public Rotor rotorCCW2;
     
-    
     [Range(-1,1)] public float yawInput = 0;
     [Range(-1,1)] public float pitchInput = 0;
     [Range(-1,1)] public float rollInput = 0;
     [Range(-1,1)] public float liftInput = 0;
 
+    public bool noInput => yawInput == 0 && pitchInput == 0 && rollInput == 0 && liftInput == 0;
+
     public Quaternion rotationInput;
-    
 
     public float Weight => rb.mass * Physics.gravity.magnitude;
     
+    public DroneSettingsSO.Curves Curves => droneSettings.curves;
+
+    public float HoverPower { get => Weight / droneSettings.saturationValues.maxThrottle / 4; }
+    
     private void Awake()
     {
+        ResetRotors();
         rb = GetComponent<Rigidbody>();
+        
+        rb.mass = droneSettings.parameters.mass;
+        rb.drag = droneSettings.parameters.maxDragCoefficient;
+        rb.angularDrag = droneSettings.parameters.angularDrag;
+        rb.maxAngularVelocity = droneSettings.parameters.maxAngularSpeed;
+        
+        // Adjust lift curve to hover at 0.5
+        // droneSettings.curves.liftCurve.MoveKey(1, new Keyframe(0, -1 + HoverPower));
+        // droneSettings.curves.liftCurve.keys[0].outWeight = HoverPower;
+        // droneSettings.curves.liftCurve.keys[2].inWeight = HoverPower;
     }
 
-
-    private float pitchVel = 0, yawVel = 0, rollVel = 0;
-    private float pitch = 0, yaw = 0, roll = 0;
-    private float targetYaw = 0;
     private void FixedUpdate()
     {
-        // MOVING
-        float targetPitch = pitchInput * droneSettings.saturationValues.maxPitch;
-        targetYaw += yawInput * droneSettings.saturationValues.yawPower;
-        float targetRoll = rollInput * droneSettings.saturationValues.maxRoll;
-
-        Quaternion currentRot = transform.localRotation;
-
-        // pitch = Mathf.SmoothDampAngle(pitch, targetPitch, ref pitchVel, smoothTime, Mathf.Infinity, Time.fixedDeltaTime);
-        // yaw =  Mathf.SmoothDampAngle(yaw, targetYaw, ref yawVel, smoothTime, Mathf.Infinity, Time.fixedDeltaTime);
-        // roll = Mathf.SmoothDampAngle(roll, targetRoll, ref rollVel, smoothTime, Mathf.Infinity, Time.fixedDeltaTime);
-
-        pitch = Mathf.Lerp(pitch, targetPitch, Time.fixedDeltaTime * lerpTime);
-        yaw = Mathf.Lerp(yaw, targetYaw, Time.fixedDeltaTime * lerpTime);
-        roll = Mathf.Lerp(roll, targetRoll, Time.fixedDeltaTime * lerpTime);
-        
-        rotationInput = Quaternion.Euler(-pitch, yaw, roll);
-
-        rb.MoveRotation(rotationInput);
-        
-        // LIFT
-        Vector3 up = transform.up;
-        up.x = up.z = 0;
-        float diff = 1 - up.magnitude;
-        float targetDiff = Physics.gravity.magnitude * diff;
-        
-        Vector3 engineForce = transform.up * ((rb.mass * Physics.gravity.magnitude + targetDiff) + liftInput * droneSettings.saturationValues.maxLift);
-        rb.AddForce(engineForce, ForceMode.Force);
-        
-        // Set stationary power to all rotors
-        // SetRotorsPower(0.5f, 0.5f, 0.5f, 0.5f);
+        ResetRotors();
         
         // Propeller Forces
-        ApplyLift(liftInput);
-        ApplyPitch(pitchInput);
-        ApplyRoll(rollInput);
-        ApplyYaw(yawInput);
-        //Hover();
+        HandleRotors();
+        
+        // If no input, tries to hover
+        // if (noInput)
+        //     Hover();
 
         // External Forces
-        ApplyDrag();
+        //ApplyDrag();
     }
 
+    #region Rotors
+
+    private void HandleRotors()
+    {
+        ApplyLift(Curves.liftCurve.Evaluate(liftInput));
+        ApplyPitch(Curves.pitchCurve.Evaluate(pitchInput));
+        ApplyRoll(Curves.rollCurve.Evaluate(rollInput));
+        ApplyYaw(Curves.yawCurve.Evaluate(yawInput));
+    }
+
+    // Set rotors to 0.5 for hovering when drone is horizontal
+    private void ResetRotors() => SetRotorsPower(HoverPower);
+    
+    // Set power to each rotor [0,1]
+    private void SetRotorsPower(float cw1, float cw2, float ccw1, float ccw2)
+    {
+        rotorCW1.power = Mathf.Clamp01(cw1);
+        rotorCW2.power = Mathf.Clamp01(cw2);
+        rotorCCW1.power = Mathf.Clamp01(ccw1);
+        rotorCCW2.power = Mathf.Clamp01(ccw2);
+    }
+    private void SetRotorsPower(float value) => SetRotorsPower(value, value, value, value);
+
+    // Add power to each rotor, the result is clamped [0,1]
+    private void AddRotorsPower(float cw1, float cw2, float ccw1, float ccw2)
+    {
+        rotorCW1.power += cw1;
+        rotorCW2.power += cw2;
+        rotorCCW1.power += ccw1;
+        rotorCCW2.power += ccw2;
+        
+        rotorCW1.power = Mathf.Clamp01(rotorCW1.power);
+        rotorCW2.power = Mathf.Clamp01(rotorCW2.power);
+        rotorCCW1.power = Mathf.Clamp01(rotorCCW1.power);
+        rotorCCW2.power = Mathf.Clamp01(rotorCCW2.power);
+    }
+    private void AddRotorsPower(float value) => AddRotorsPower(value, value, value, value);
+
+    #endregion
 
     #region Physics
-
-    private void SetRotorsPower(float CW1, float CW2, float CCW1, float CCW2)
-    {
-        rotorCW1.power = CW1;
-        rotorCW2.power = CW2;
-        rotorCCW1.power = CCW1;
-        rotorCCW2.power = CCW2;
-        
-        rotorCW1.power = Mathf.Clamp01(rotorCW1.power);
-        rotorCW2.power = Mathf.Clamp01(rotorCW2.power);
-        rotorCCW1.power = Mathf.Clamp01(rotorCCW1.power);
-        rotorCCW2.power = Mathf.Clamp01(rotorCCW2.power);
-    }
-    
-    private void AddRotorsPower(float CW1, float CW2, float CCW1, float CCW2)
-    {
-        rotorCW1.power += CW1;
-        rotorCW2.power += CW2;
-        rotorCCW1.power += CCW1;
-        rotorCCW2.power += CCW2;
-        
-        rotorCW1.power = Mathf.Clamp01(rotorCW1.power);
-        rotorCW2.power = Mathf.Clamp01(rotorCW2.power);
-        rotorCCW1.power = Mathf.Clamp01(rotorCCW1.power);
-        rotorCCW2.power = Mathf.Clamp01(rotorCCW2.power);
-    }
-    
-    private void AddRotorsPower(float value)
-    {
-        AddRotorsPower(value, value, value, value);
-    }
-
 
     /// <summary>
     /// Hover the Drone
@@ -124,28 +111,31 @@ public class DroneController : MonoBehaviour
     /// </summary>
     private void Hover()
     {
-        Vector3 rotation = transform.localEulerAngles;
-        Vector3 angularVelocity = transform.worldToLocalMatrix * rb.angularVelocity;
-        
-        // Fix rotation
-        if (rotation.x > 180)
-            rotation.x -= 360;
-        if (rotation.z > 180)
-            rotation.z -= 360;
-        
-        // Back to Hover position
-        float pitchBack = Mathf.InverseLerp(0, droneSettings.saturationValues.maxPitch, Math.Abs(rotation.x));
-        float rollBack = Mathf.InverseLerp(0, droneSettings.saturationValues.maxRoll, Math.Abs(rotation.z));
-        
-        ApplyPitch(pitchBack * (rotation.x > 0 ? 1 : -1));
-        ApplyRoll(rollBack * (rotation.z > 0 ? -1 : 1));
-        
-        // Slow angular Vel
-        float pitchVel = Mathf.InverseLerp(0, 2, Mathf.Abs(angularVelocity.x));
-        float rollVel = Mathf.InverseLerp(0, 2, Mathf.Abs(angularVelocity.z));
-        
-        ApplyPitch(pitchVel * (angularVelocity.x > 0 ? 1 : -1));
-        ApplyRoll(rollVel * (angularVelocity.z > 0 ? -1 : 1));
+        // Set power at (mg / maxThrottle) ( / 4, because we have 4 rotors)
+        SetRotorsPower(HoverPower);
+
+        // Vector3 rotation = transform.localEulerAngles;
+        // Vector3 angularVelocity = transform.worldToLocalMatrix * rb.angularVelocity;
+        //
+        // // Fix rotation
+        // if (rotation.x > 180)
+        //     rotation.x -= 360;
+        // if (rotation.z > 180)
+        //     rotation.z -= 360;
+        //
+        // // Back to Hover position
+        // float pitchBack = Mathf.InverseLerp(0, droneSettings.saturationValues.maxPitch, Math.Abs(rotation.x));
+        // float rollBack = Mathf.InverseLerp(0, droneSettings.saturationValues.maxRoll, Math.Abs(rotation.z));
+        //
+        // ApplyPitch(pitchBack * (rotation.x > 0 ? 1 : -1));
+        // ApplyRoll(rollBack * (rotation.z > 0 ? -1 : 1));
+        //
+        // // Slow angular Vel
+        // float pitchVel = Mathf.InverseLerp(0, 2, Mathf.Abs(angularVelocity.x));
+        // float rollVel = Mathf.InverseLerp(0, 2, Mathf.Abs(angularVelocity.z));
+        //
+        // ApplyPitch(pitchVel * (angularVelocity.x > 0 ? 1 : -1));
+        // ApplyRoll(rollVel * (angularVelocity.z > 0 ? -1 : 1));
     }
 
     /// <summary>
@@ -161,7 +151,7 @@ public class DroneController : MonoBehaviour
             value
             );
     }
-    
+
     /// <summary>
     /// PITCH of the Drone
     /// <para>Pitch Forward -> Increase Back and decrease Front</para>
@@ -169,17 +159,16 @@ public class DroneController : MonoBehaviour
     /// </summary>
     private void ApplyPitch(float value)
     {
-        float pitchPower = value / 4;
         AddRotorsPower(
-            -pitchPower, 
-            pitchPower, 
-            pitchPower, 
-            -pitchPower
+            -value, 
+            value, 
+            value, 
+            -value
         );
         
         //AddRotorsPower(Mathf.Sin(transform.localRotation.eulerAngles.x));
     }
-    
+
     /// <summary>
     /// ROLL of the Drone
     /// <para>Roll Right -> Increase Left and decrease Right</para>
@@ -187,12 +176,11 @@ public class DroneController : MonoBehaviour
     /// </summary>
     private void ApplyRoll(float value)
     {
-        float rollPower = -value / 4;
         AddRotorsPower(
-            -rollPower, 
-            rollPower, 
-            -rollPower, 
-            rollPower
+            value, 
+            -value, 
+            value, 
+            -value
             );
     }
 
@@ -203,19 +191,18 @@ public class DroneController : MonoBehaviour
     /// </summary>
     private void ApplyYaw(float value)
     {
-        float yawPower = -value / 4;
         AddRotorsPower(
-            yawPower, 
-            yawPower, 
-            -yawPower,
-            -yawPower
+            -value, 
+            -value, 
+            value,
+            value
         );
     }
-    
+
     private void ApplyDrag()
     {
-        float minDrag = droneSettings.saturationValues.minDragCoefficient;
-        float maxDrag = droneSettings.saturationValues.maxDragCoefficient;
+        float minDrag = droneSettings.parameters.minDragCoefficient;
+        float maxDrag = droneSettings.parameters.maxDragCoefficient;
         
         // Drag depends on angle of attack 0-90 ([X, Z] axis rotation)
         // Angle 0 -> min drag 
@@ -245,18 +232,13 @@ public class DroneController : MonoBehaviour
 
         // DEBUG
         drag = -velHorizontal.normalized * dragH + -velVertical.normalized * dragV;
-        angleOfAttack = attackAngleNormalized;
-        vDrag = verticalDragCoefficient;
-        hDrag = horizontalDragCoefficient;
     }
 
     #endregion
 
+    #region Gizmos
+
     public Vector3 drag;
-    public float angleOfAttack;
-    
-    public float vDrag;
-    public float hDrag;
     
     private void OnDrawGizmos()
     {
@@ -267,6 +249,19 @@ public class DroneController : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position, transform.position + drag);
         //Gizmos.DrawLine(transform.position, transform.position + rb.velocity);
-        
+    }
+
+    #endregion
+
+    public void ResetRotation()
+    {
+        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+        transform.position = transform.position + Vector3.up * 0.1f;
+        rb.velocity = Vector3.zero;
+    }
+
+    private void OnDisable()
+    {
+        SetRotorsPower(0);
     }
 }
