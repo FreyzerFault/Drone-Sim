@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saturationValues:
     maxRotationSpeed: 5000
-    maxTorque: 10
+    maxTorque: 6
     maxThrottle: 15
     maxLift: 50
     maxPitch: 60

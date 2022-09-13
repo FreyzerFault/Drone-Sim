@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: PID_Pitch
   m_EditorClassIdentifier: 
   Kp: 1
-  Ki: 0.01
-  Kd: 100
+  Ki: 5
+  Kd: 0.1
   useP: 1
-  useI: 0
-  useD: 0
+  useI: 1
+  useD: 1

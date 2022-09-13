@@ -26,6 +26,9 @@ public class PID_Controller : ScriptableObject
     private float PIDi = 0;
     private float PIDd = 0;
 
+    private int zeroErrorTime = 5;
+    private float time;
+    
     public void Reset()
     {
         currentError = previousError = previousError2Frames = integralError = 0;
@@ -37,6 +40,14 @@ public class PID_Controller : ScriptableObject
         float deltaTime = Time.inFixedTimeStep ? Time.fixedDeltaTime : Time.deltaTime; 
         currentError = error;
         
+        // Reset I if so much time with 0 error
+        time += deltaTime;
+        if (time >= zeroErrorTime)
+        {
+            time = 0;
+            Reset();
+        }
+
         if (useP)
         {
             // Error Presente
@@ -51,14 +62,14 @@ public class PID_Controller : ScriptableObject
             integralError += error * deltaTime;
             PIDi = Ki * integralError;
         }
-        else PIDp = 0;
+        else PIDi = 0;
         
         if (useD)
         {
             // Derivada del Error / Tiempo para predecir el Futuro
             PIDd = Kd * (error - previousError) / deltaTime;
         }
-        else PIDp = 0;
+        else PIDd = 0;
 
         previousError2Frames = previousError;
         previousError = error;

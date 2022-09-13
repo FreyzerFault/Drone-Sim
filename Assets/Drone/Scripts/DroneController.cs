@@ -296,16 +296,19 @@ public class DroneController : MonoBehaviour
     
     private void PIDstabilization()
     {
-        float pitchError = gyro.PitchError;
-        float rollError = gyro.RollError;
+        if (pitchInput != 0 || rollInput != 0)
+            return;
 
-        fixPitch = -PID_pitch.GetPID(pitchError * pitchError) / 2;
-        fixRoll = -PID_roll.GetPID(rollError * rollError) / 2;
+        float pitchError = gyro.PitchError / droneSettings.saturationValues.maxPitch;
+        float rollError = gyro.RollError / droneSettings.saturationValues.maxRoll;
+
         
-        Debug.Log("PitchError: " + pitchError + " RollError: " + rollError);
+
+        fixPitch = -PID_pitch.GetPID(pitchError * pitchError * (pitchError > 0 ? 1 : -1)) / 2;
+        fixRoll = PID_roll.GetPID(rollError * rollError * (rollError > 0 ? 1 : -1)) / 2;
         
-        //ApplyPitch(fixPitch);
-        //ApplyRoll(fixRoll);
+        ApplyPitch(fixPitch);
+        ApplyRoll(fixRoll);
     }
 
     #endregion
