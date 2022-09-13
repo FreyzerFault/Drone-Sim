@@ -165,7 +165,7 @@ public class Rotor : MonoBehaviour {
     /// </summary>
     private void ApplyTorque()
     {
-        drone.rb.AddRelativeTorque(transform.forward * -Torque);
+        drone.rb.AddTorque(transform.forward * -Torque);
     }
 
     #endregion

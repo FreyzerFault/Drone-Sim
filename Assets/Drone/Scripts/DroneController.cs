@@ -1,4 +1,5 @@
 using System;
+using System.IO.Pipes;
 using UnityEngine;
 
 public class DroneController : MonoBehaviour
@@ -8,6 +9,13 @@ public class DroneController : MonoBehaviour
     
     public Rigidbody rb;
 
+    private Gyroscope gyro;
+    
+    public PID_Controller PID_pitch;
+    public PID_Controller PID_roll;
+    public bool usePID = true;
+    
+    
     public float smoothTime = 0.01f;
     public float lerpSpeed = 4;
     
@@ -36,18 +44,26 @@ public class DroneController : MonoBehaviour
     {
         ResetRotors();
         rb = GetComponent<Rigidbody>();
+
+        gyro = GetComponent<Gyroscope>();
+        gyro.maxPitch = droneSettings.saturationValues.maxPitch;
+        gyro.maxRoll = droneSettings.saturationValues.maxRoll;
+        
+        PID_pitch.Reset();
+        PID_roll.Reset();
         
         rb.mass = droneSettings.parameters.mass;
         rb.drag = droneSettings.parameters.maxDragCoefficient;
         rb.angularDrag = droneSettings.parameters.angularDrag;
         rb.maxAngularVelocity = droneSettings.parameters.maxAngularSpeed;
-        
+        rb.centerOfMass = Vector3.zero;
+
         // Adjust lift curve to hover at 0.5
         // droneSettings.curves.liftCurve.MoveKey(1, new Keyframe(0, -1 + HoverPower));
         // droneSettings.curves.liftCurve.keys[0].outWeight = HoverPower;
         // droneSettings.curves.liftCurve.keys[2].inWeight = HoverPower;
     }
-
+    
     private void FixedUpdate()
     {
         ResetRotors();
@@ -55,6 +71,10 @@ public class DroneController : MonoBehaviour
         // Propeller Forces
         HandleRotors();
         
+        // PID Stabilization
+        if (usePID)
+            PIDstabilization();
+
         // If no input, tries to hover
         // if (noInput)
         //     Hover();
@@ -76,7 +96,44 @@ public class DroneController : MonoBehaviour
     // Set rotors to 0.5 for hovering when drone is horizontal
     private void ResetRotors() => SetRotorsPower(HoverPower);
     
-    // Set power to each rotor [0,1]
+    private Vector2 PowerRange => new Vector2(
+        Mathf.Min(rotorCW1.power, rotorCW2.power, rotorCCW1.power, rotorCCW2.power),
+        Mathf.Max(rotorCW1.power, rotorCW2.power, rotorCCW1.power, rotorCCW2.power)
+        );
+
+    /// <summary>
+    /// Maintain the Rotors Power between 0 and 1 keeping the range between then
+    /// </summary>
+    private void MaintainPowerRange01()
+    {
+        Vector2 range = PowerRange;
+        
+        if (range.x < 0)
+        {
+            rotorCW1.power += -range.x;
+            rotorCW2.power += -range.x;
+            rotorCCW1.power += -range.x;
+            rotorCCW2.power += -range.x;
+        }
+
+        if (range.y > 1)
+        {
+            rotorCW1.power += 1 - range.y;
+            rotorCW2.power += 1 - range.y;
+            rotorCCW1.power += 1 - range.y;
+            rotorCCW2.power += 1 - range.y;
+        }
+    }
+
+    private void ClampPower01()
+    {
+        rotorCW1.power = Mathf.Clamp01(rotorCW1.power);
+        rotorCW2.power = Mathf.Clamp01(rotorCW2.power);
+        rotorCCW1.power = Mathf.Clamp01(rotorCCW1.power);
+        rotorCCW2.power = Mathf.Clamp01(rotorCCW2.power);
+    }
+
+        // Set power to each rotor [0,1]
     private void SetRotorsPower(float cw1, float cw2, float ccw1, float ccw2)
     {
         rotorCW1.power = Mathf.Clamp01(cw1);
@@ -94,10 +151,8 @@ public class DroneController : MonoBehaviour
         rotorCCW1.power += ccw1;
         rotorCCW2.power += ccw2;
         
-        rotorCW1.power = Mathf.Clamp01(rotorCW1.power);
-        rotorCW2.power = Mathf.Clamp01(rotorCW2.power);
-        rotorCCW1.power = Mathf.Clamp01(rotorCCW1.power);
-        rotorCCW2.power = Mathf.Clamp01(rotorCCW2.power);
+        MaintainPowerRange01();
+        //ClampPower01();
     }
     private void AddRotorsPower(float value) => AddRotorsPower(value, value, value, value);
 
@@ -165,8 +220,6 @@ public class DroneController : MonoBehaviour
             value, 
             -value
         );
-        
-        //AddRotorsPower(Mathf.Sin(transform.localRotation.eulerAngles.x));
     }
 
     /// <summary>
@@ -232,6 +285,27 @@ public class DroneController : MonoBehaviour
 
         // DEBUG
         drag = -velHorizontal.normalized * dragH + -velVertical.normalized * dragV;
+    }
+
+    #endregion
+
+    #region PID
+
+    public float fixPitch = 0;
+    public float fixRoll = 0;
+    
+    private void PIDstabilization()
+    {
+        float pitchError = gyro.PitchError;
+        float rollError = gyro.RollError;
+
+        fixPitch = -PID_pitch.GetPID(pitchError * pitchError) / 2;
+        fixRoll = -PID_roll.GetPID(rollError * rollError) / 2;
+        
+        Debug.Log("PitchError: " + pitchError + " RollError: " + rollError);
+        
+        //ApplyPitch(fixPitch);
+        //ApplyRoll(fixRoll);
     }
 
     #endregion
