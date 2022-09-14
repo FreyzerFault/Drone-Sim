@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DroneSim;
 
 /// <summary>
 /// Magnetometer sensor class

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DroneSim;
 
 // GYRO SENSOR
 public class Gyro : MonoBehaviour {

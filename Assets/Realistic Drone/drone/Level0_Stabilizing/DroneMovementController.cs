@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using DroneSim;
 
 
 public class DroneMovementController : MonoBehaviour {
@@ -291,22 +292,23 @@ public class DroneMovementController : MonoBehaviour {
     {
         //calculates the error and extracts the measurements from the sensors 
         float distanceToPoint = DroneSettings.keepOnAbsRange(targetZ, 30f);
-        float acc = this.acc.getLinearAcceleration().z;
-        float vel = this.acc.getLocalLinearVelocity().z;
+        // float acc = this.acc.getLinearAcceleration().z;
+        // float vel = this.acc.getLocalLinearVelocity().z;
         float yawVel = this.mag.getYawVel();
 
         //calculates idealVelocity and idealAcceleration, we'll use this to extract an error that will be given to the PID
         float idealVel = distanceToPoint * (testing ? constAxisVel : DroneSettings.constAxisIdealVelocity);
         idealVel = DroneSettings.keepOnAbsRange(idealVel, DroneSettings.saturationValues.maxHorizontalVel);
-        float idealAcc = (idealVel - vel) * (testing ? constAxisAcc : DroneSettings.constAxisIdealAcceler);
-        idealAcc = DroneSettings.keepOnAbsRange(idealAcc, 3f);
+        // float idealAcc = (idealVel - vel) * (testing ? constAxisAcc : DroneSettings.constAxisIdealAcceler);
+        // idealAcc = DroneSettings.keepOnAbsRange(idealAcc, 3f);
 
         //Error used by the PID
-        float Err = (idealAcc - acc);
-        Err *= 1 - Mathf.Clamp01(Math.Abs(idealYaw - mag.getYaw()));
+        // float Err = (idealAcc - acc);
+        // Err *= 1 - Mathf.Clamp01(Math.Abs(idealYaw - mag.getYaw()));
 
         //dS.addLine(new float[] { Err, distanceToPoint, vel, idealVel, acc, idealAcc  });      // use this to save the data to the DataSaver class
-        return zPID.getU(Err, Time.deltaTime);                
+        // return zPID.getU(Err, Time.deltaTime);
+        return 0;
     }
 
     /// <summary>
@@ -318,20 +320,21 @@ public class DroneMovementController : MonoBehaviour {
     {
         //calculates the error and extracts the measurements from the sensors
         float distanceToPoint = DroneSettings.keepOnAbsRange(targetX, 30f);
-        float acc = this.acc.getLinearAcceleration().x;
-        float vel = this.acc.getLocalLinearVelocity().x;
+        // float acc = this.acc.getLinearAcceleration().x;
+        // float vel = this.acc.getLocalLinearVelocity().x;
 
         //calculates idealVelocity and idealAcceleration, we'll use this to extract an error that will be given to the PID
         float idealVel = distanceToPoint * (testing ? constAxisVel : DroneSettings.constAxisIdealVelocity);
         idealVel = DroneSettings.keepOnAbsRange(idealVel, DroneSettings.saturationValues.maxHorizontalVel);
-        float idealAcc = (idealVel - vel) * (testing ? constAxisAcc : DroneSettings.constAxisIdealAcceler);
-        idealAcc = DroneSettings.keepOnAbsRange(idealAcc, 3f);
+        // float idealAcc = (idealVel - vel) * (testing ? constAxisAcc : DroneSettings.constAxisIdealAcceler);
+        // idealAcc = DroneSettings.keepOnAbsRange(idealAcc, 3f);
 
         //Error used by the PID
-        float Err = (idealAcc - acc);
-        Err *= 1 - Mathf.Clamp01(Math.Abs(idealYaw - mag.getYaw()));
+        // float Err = (idealAcc - acc);
+        // Err *= 1 - Mathf.Clamp01(Math.Abs(idealYaw - mag.getYaw()));
 
-        return xPID.getU(Err, Time.deltaTime);
+        // return xPID.getU(Err, Time.deltaTime);
+        return 0;
     }
 
     #endregion

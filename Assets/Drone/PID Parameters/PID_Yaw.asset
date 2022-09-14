@@ -12,6 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3957c9cfe09b4df45b0dba7ac639cb6f, type: 3}
   m_Name: PID_Yaw
   m_EditorClassIdentifier: 
-  Kp: 20
-  Ki: 1
-  Kd: 5000
+  pGain: 0.5
+  iGain: 1
+  dGain: 0.001
+  useP: 1
+  useI: 0
+  useD: 1
+  integralError: 0
+  PIDp: -0.00000018831268
+  PIDi: 0
+  PIDd: -4.869307e-10
+  maxIntegralSum: 1

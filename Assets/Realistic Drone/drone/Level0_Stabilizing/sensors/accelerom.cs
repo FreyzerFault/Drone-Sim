@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 // Accelerometer Sensor
-public class Accelerometer : MonoBehaviour {
+public class accelerom : MonoBehaviour {
 
     private Vector3 localLinearVelocity;
     public Vector3 getLocalLinearVelocity() { return noiseVel.getNoise(localLinearVelocity); }

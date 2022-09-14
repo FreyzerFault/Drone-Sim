@@ -1,38 +1,42 @@
 using UnityEngine;
 
-public class DronCamera3rdP : MonoBehaviour
+namespace DroneSim
 {
-    public DroneController drone;
-    
-    public float distanceOrbit;
-    public float heightOrbit;
-    
-    private void Awake()
+    public class DronCamera3rdP : MonoBehaviour
     {
-        if (drone == null)
-            drone = transform.parent.GetChild(0).GetComponent<DroneController>();
-    }
+        public DroneController drone;
 
-    Vector3 smoothVel = Vector3.zero;
+        public float distanceOrbit;
+        public float heightOrbit;
 
-    private void LateUpdate()
-    {
-        Vector3 dronePos = drone.transform.position;
-        Vector3 droneForward = drone.transform.forward;
+        private void Awake()
+        {
+            if (drone == null)
+                drone = transform.parent.GetChild(0).GetComponent<DroneController>();
+        }
 
-        
-        Vector3 targetPos = dronePos
-            - Vector3.ProjectOnPlane(droneForward, Vector3.up).normalized * distanceOrbit
-            + Vector3.up * heightOrbit;
+        Vector3 smoothVel = Vector3.zero;
 
-        transform.position =
-            Vector3.SmoothDamp(
-                transform.position,
-                targetPos,
-                ref smoothVel, 0.01f
-            );
+        private void LateUpdate()
+        {
+            Vector3 dronePos = drone.transform.position;
+            Vector3 droneForward = drone.transform.forward;
 
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dronePos + droneForward - transform.position), 0.1f);
+            Vector3 targetPos = dronePos
+                                - Vector3.ProjectOnPlane(droneForward, Vector3.up).normalized * distanceOrbit
+                                + Vector3.up * heightOrbit;
+
+            transform.position =
+                Vector3.SmoothDamp(
+                    transform.position,
+                    targetPos,
+                    ref smoothVel, 0.01f
+                );
+
+
+            transform.rotation = Quaternion.Slerp(transform.rotation,
+                Quaternion.LookRotation(dronePos + droneForward - transform.position), 0.1f);
+        }
     }
 }

@@ -1,188 +1,194 @@
 ﻿using UnityEngine;
 
-public class Rotor : MonoBehaviour {
+namespace DroneSim
+{
+    public class Rotor : MonoBehaviour
+    {
 
-    // Drone (parent)
-    public DroneController drone;
-    
-    // Animation Active
-    public bool animationActivated = false;
+        // Drone (parent)
+        public DroneController drone;
+        private Rigidbody drone_rb;
 
-    private MeshRenderer meshRenderer;
-    private MeshRenderer blurMeshRenderer;
-    public Texture2D[] blurTextures;
-    
-    private AudioSource audioSource;
-    
-    // Orientation
-    public bool counterclockwise = false;
+        // Animation Active
+        public bool animationActivated = false;
 
-    // Rotor Engine Power [0,1]
-    public float power;
-    public bool smoothAnimation = true;
-    
-    private float lastPower;
-    private float smoothPower;
-    private float smoothStep = 0.1f;
+        private MeshRenderer meshRenderer;
+        private MeshRenderer blurMeshRenderer;
+        public Texture2D[] blurTextures;
 
-    public float Power => smoothAnimation ? smoothPower : power;
+        private AudioSource audioSource;
 
-    #region Physics Parameters
+        // Orientation
+        public bool counterclockwise = false;
 
-    // Torque = Rotational Force applied to propeller by rotor (CW > 0, CCW < 0)
-    public float Torque => Power * MaxTorque * (counterclockwise ? -1 : 1);
-    
-    // Throttle = upward force (Power = 0.5 => Hover => Throttle = Gravity)
-    public float Throttle => Power * MaxThrottle;
+        // Rotor Engine Power [0,1]
+        public float power;
+        public bool smoothAnimation = true;
 
-    
-    private float MaxRotationSpeed => drone.droneSettings.saturationValues.maxRotationSpeed;
-    private float MaxTorque => drone.droneSettings.saturationValues.maxTorque;
-    private float MaxThrottle => drone.droneSettings.saturationValues.maxThrottle;
-    
-    #endregion
-    
-    
-    
-    void Awake()
-    {        
-        Transform t = transform;
-        if (t.parent != null && t.parent.GetComponent<DroneController>())
+        private float lastPower;
+        private float smoothPower;
+        private float smoothStep = 0.1f;
+
+        public float Power => smoothAnimation ? smoothPower : power;
+
+        #region Physics Parameters
+
+        // Torque = Rotational Force applied to propeller by rotor (CW > 0, CCW < 0)
+        public float Torque => Power * MaxTorque * (counterclockwise ? -1 : 1);
+
+        // Throttle = upward force (Power = 0.5 => Hover => Throttle = Gravity)
+        public float Throttle => Power * MaxThrottle;
+
+
+        private float MaxRotationSpeed => drone.droneSettings.saturationValues.maxRotationSpeed;
+        private float MaxTorque => drone.droneSettings.saturationValues.maxTorque;
+        private float MaxThrottle => drone.droneSettings.saturationValues.maxThrottle;
+
+        #endregion
+
+
+
+        void Awake()
         {
-            drone = t.parent.GetComponent<DroneController>();
-            drone.rb = drone.GetComponent<Rigidbody>();
+            Transform t = transform;
+            if (t.parent != null && t.parent.GetComponent<DroneController>())
+            {
+                drone = t.parent.GetComponent<DroneController>();
+                drone_rb = drone.GetComponent<Rigidbody>();
+            }
+
+            meshRenderer = GetComponent<MeshRenderer>();
+            blurMeshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
+
+            audioSource = GetComponent<AudioSource>();
+
+            lastPower = power;
+            smoothPower = power;
         }
 
-        meshRenderer = GetComponent<MeshRenderer>();
-        blurMeshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
+        void Update()
+        {
+            // Smooth Power value
+            if (smoothAnimation)
+            {
+                // CLAMP Power [0,1]
+                power = Mathf.Clamp01(power);
 
-        audioSource = GetComponent<AudioSource>();
+                // Smooth change in power
+                float powerDiff = power - lastPower;
+                if (Mathf.Abs(powerDiff) > smoothStep)
+                    smoothPower = lastPower + (smoothStep * (powerDiff > 0 ? 1 : -1));
+                else
+                    smoothPower = power;
 
-        lastPower = power;
-        smoothPower = power;
-    }
+                lastPower = smoothPower;
+            }
+            else
+                smoothPower = power;
 
-    void Update()
-    {
-        if (smoothAnimation)
+            // Animation
+            if (animationActivated)
+            {
+                AnimatePropeller(smoothPower);
+                SetTexture(smoothPower);
+            }
+
+            // Audio
+            SetAudio(smoothPower);
+        }
+
+        void FixedUpdate()
         {
             // CLAMP Power [0,1]
             power = Mathf.Clamp01(power);
 
-            // Smooth change in power
-            float powerDiff = power - lastPower;
-            if (Mathf.Abs(powerDiff) > smoothStep)
-                smoothPower = lastPower + (smoothStep * (powerDiff > 0 ? 1 : -1));
-            else
-                smoothPower = power;
-
-            lastPower = smoothPower;
+            // Force upwards to drone from rotor point
+            ApplyThrottle();
+            ApplyTorque();
         }
-        else
-            smoothPower = power;
 
-        // Animation
-        if (animationActivated)
+
+        #region Animation
+
+        /// <summary>
+        /// Rotate depending on power
+        /// </summary>
+        /// <param name="power_t"></param>
+        private void AnimatePropeller(float power_t)
         {
-            AnimatePropeller(smoothPower);
-            SetTexture(smoothPower);
+            float maxRotationSpeed = drone.droneSettings.saturationValues.maxRotationSpeed;
+            transform.Rotate(0, 0,
+                Mathf.Lerp(0, maxRotationSpeed, power_t * 2) * Time.deltaTime * (counterclockwise ? -1 : 1)
+            );
         }
-        
-        // Audio
-        SetAudio(smoothPower);
-    }
-    
-    void FixedUpdate()
-    {
-        // CLAMP Power [0,1]
-        power = Mathf.Clamp01(power);
-        
-        // Force upwards to drone from rotor point
-        ApplyThrottle();
-        ApplyTorque();
-    }
 
-
-    #region Animation
-
-    /// <summary>
-    /// Rotate depending on power
-    /// </summary>
-    /// <param name="power"></param>
-    private void AnimatePropeller(float power)
-    {
-        float maxRotationSpeed = drone.droneSettings.saturationValues.maxRotationSpeed;
-        transform.Rotate(0, 0, 
-            Mathf.Lerp(0, maxRotationSpeed, power * 2) * Time.deltaTime * (counterclockwise ? -1 : 1)
-        );
-    }
-
-    /// <summary>
-    /// Change texture dynamicaly depending on power
-    /// </summary>
-    /// <param name="power"></param>
-    private void SetTexture(float power)
-    {
-        float minRotationForBlur = 0.5f;
-        // If power < 0.5, hide propeller and show blur propeller quad
-        meshRenderer.enabled = power < minRotationForBlur;
-        blurMeshRenderer.enabled = power >= minRotationForBlur;
-
-        // Switch between blur textures by power
-        if (power > minRotationForBlur)
+        /// <summary>
+        /// Change texture dynamicaly depending on power
+        /// </summary>
+        /// <param name="power_t"></param>
+        private void SetTexture(float power_t)
         {
-            blurMeshRenderer.sharedMaterial.mainTexture = power < 0.7f ? blurTextures[0] : blurTextures[1];
+            float minRotationForBlur = 0.5f;
+            // If power < 0.5, hide propeller and show blur propeller quad
+            meshRenderer.enabled = power_t < minRotationForBlur;
+            blurMeshRenderer.enabled = power_t >= minRotationForBlur;
+
+            // Switch between blur textures by power
+            if (power_t > minRotationForBlur)
+            {
+                blurMeshRenderer.sharedMaterial.mainTexture = power_t < 0.7f ? blurTextures[0] : blurTextures[1];
+            }
         }
+
+        /// <summary>
+        /// Change audio params dynamicaly depending on power
+        /// </summary>
+        /// <param name="power_t"></param>
+        private void SetAudio(float power_t)
+        {
+            float powerSqr = power_t * power_t;
+            audioSource.volume = Mathf.Lerp(0, .5f, powerSqr);
+            audioSource.pitch = Mathf.Lerp(0.9f, 1.1f, powerSqr);
+        }
+
+        #endregion
+
+        #region Physics
+
+        /// <summary>
+        /// Throttle = upward force caused by air flowing down
+        /// </summary>
+        private void ApplyThrottle()
+        {
+            drone_rb.AddForceAtPosition(transform.forward * Throttle, transform.position);
+        }
+
+        /// <summary>
+        /// Torque is based in 3º law of Newton
+        /// <para>Action-Reaction principle: For every action there is an equal and opposite reaction</para>
+        /// <para>Torque applied to propeller will apply a inverse torque to drone</para>
+        /// </summary>
+        private void ApplyTorque()
+        {
+            drone_rb.AddTorque(transform.forward * -Torque);
+        }
+
+        #endregion
+
+
+        #region Gizmos
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.Lerp(Color.red, Color.green, power);
+
+            Gizmos.DrawLine(transform.position, transform.position + transform.forward * (power));
+
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawLine(transform.position, transform.position + transform.forward * Torque);
+        }
+
+        #endregion
+
     }
-    
-    /// <summary>
-    /// Change audio params dynamicaly depending on power
-    /// </summary>
-    /// <param name="power"></param>
-    private void SetAudio(float power)
-    {
-        float powerSqr = power * power;
-        audioSource.volume = Mathf.Lerp(0, .5f, powerSqr);
-        audioSource.pitch = Mathf.Lerp(0.9f, 1.1f, powerSqr);
-    }
-
-    #endregion
-
-    #region Physics
-
-    /// <summary>
-    /// Throttle = upward force caused by air flowing down
-    /// </summary>
-    private void ApplyThrottle()
-    {
-        drone.rb.AddForceAtPosition(transform.forward * Throttle, transform.position);
-    }
-    
-    /// <summary>
-    /// Torque is based in 3º law of Newton
-    /// <para>Action-Reaction principle: For every action there is an equal and opposite reaction</para>
-    /// <para>Torque applied to propeller will apply a inverse torque to drone</para>
-    /// </summary>
-    private void ApplyTorque()
-    {
-        drone.rb.AddTorque(transform.forward * -Torque);
-    }
-
-    #endregion
-
-
-    #region Gizmos
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.Lerp(Color.red, Color.green, power);
-        
-        Gizmos.DrawLine(transform.position, transform.position + transform.forward * (power));
-        
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawLine(transform.position, transform.position + transform.forward * Torque);
-    }
-
-    #endregion
-    
 }

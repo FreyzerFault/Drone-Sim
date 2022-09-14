@@ -1,40 +1,43 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class DroneInputController : MonoBehaviour
+namespace DroneSim
 {
-    
-    private DroneController droneController;
+    public class DroneInputController : MonoBehaviour
+    {
 
-    private void Awake()
-    {
-        droneController = GetComponent<DroneController>();
-    }
+        private DroneController droneController;
 
-    private void OnMove(InputValue value)
-    {
-        Vector2 move = value.Get<Vector2>();
-        droneController.rollInput = move.x;
-        droneController.pitchInput = move.y;
-    }
+        private void Awake()
+        {
+            droneController = GetComponent<DroneController>();
+        }
 
-    private void OnRotate(InputValue value)
-    {
-        droneController.yawInput = value.Get<float>();
-    }
-    
-    private void OnLift(InputValue value)
-    {
-        droneController.liftInput = value.Get<float>();
-    }
+        private void OnMove(InputValue value)
+        {
+            Vector2 move = value.Get<Vector2>();
+            droneController.rollInput = move.x;
+            droneController.pitchInput = move.y;
+        }
 
-    private void OnReset(InputValue value)
-    {
-        droneController.ResetRotation();
-    }
+        private void OnRotate(InputValue value)
+        {
+            droneController.yawInput = value.Get<float>();
+        }
 
-    private void OnToggleMotor(InputValue value)
-    {
-        droneController.enabled = !droneController.enabled;
+        private void OnLift(InputValue value)
+        {
+            droneController.liftInput = value.Get<float>();
+        }
+
+        private void OnReset(InputValue value)
+        {
+            droneController.ResetRotation();
+        }
+
+        private void OnToggleMotor(InputValue value)
+        {
+            droneController.enabled = !droneController.enabled;
+        }
     }
 }

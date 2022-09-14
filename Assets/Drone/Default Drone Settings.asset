@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saturationValues:
     maxRotationSpeed: 5000
-    maxTorque: 6
-    maxThrottle: 15
+    maxTorque: 3
+    maxThrottle: 10
     maxLift: 50
     maxPitch: 60
     maxRoll: 60
@@ -24,7 +24,7 @@ MonoBehaviour:
     mass: 2
     minDragCoefficient: 0.1
     maxDragCoefficient: 0.5
-    angularDrag: 8
+    angularDrag: 2
     maxAngularSpeed: 10
   curves:
     liftCurve:

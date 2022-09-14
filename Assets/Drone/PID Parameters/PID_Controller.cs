@@ -7,9 +7,9 @@ public class PID_Controller : ScriptableObject
     #region Parameters
 
     // Constants
-    public float Kp = 20f;
-    public float Ki = 1f;
-    public float Kd = 5000f;
+    public float pGain = 1f;
+    public float iGain = 1f;
+    public float dGain = 1f;
 
     #endregion
 
@@ -20,14 +20,13 @@ public class PID_Controller : ScriptableObject
     private float currentError = 0;
     private float previousError = 0;
     private float previousError2Frames = 0;
-    private float integralError = 0;
+    public float integralError = 0;
     
-    private float PIDp = 0;
-    private float PIDi = 0;
-    private float PIDd = 0;
+    public float PIDp = 0;
+    public float PIDi = 0;
+    public float PIDd = 0;
 
-    private int zeroErrorTime = 5;
-    private float time;
+    public float maxIntegralSum = 1;
     
     public void Reset()
     {
@@ -40,18 +39,13 @@ public class PID_Controller : ScriptableObject
         float deltaTime = Time.inFixedTimeStep ? Time.fixedDeltaTime : Time.deltaTime; 
         currentError = error;
         
-        // Reset I if so much time with 0 error
-        time += deltaTime;
-        if (time >= zeroErrorTime)
-        {
-            time = 0;
-            Reset();
-        }
+        // Clamp I SUM to [-max,max] to avoid accumulating too much error
+        
 
         if (useP)
         {
             // Error Presente
-            PIDp = Kp * error;
+            PIDp = pGain * error;
         }
         else PIDp = 0;
         
@@ -59,15 +53,15 @@ public class PID_Controller : ScriptableObject
         if (useI)
         {
             // Error Presente
-            integralError += error * deltaTime;
-            PIDi = Ki * integralError;
+            integralError = Mathf.Clamp(integralError + error * deltaTime, -maxIntegralSum, maxIntegralSum);
+            PIDi = iGain * integralError;
         }
         else PIDi = 0;
         
         if (useD)
         {
             // Derivada del Error / Tiempo para predecir el Futuro
-            PIDd = Kd * (error - previousError) / deltaTime;
+            PIDd = dGain * (error - previousError) / deltaTime;
         }
         else PIDd = 0;
 
