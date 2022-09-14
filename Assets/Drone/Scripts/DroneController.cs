@@ -13,6 +13,8 @@ namespace DroneSim
         private DroneStabilizer stabilizer;
         public bool stabilizePitchAndRoll = true;
         public bool stabilizeYaw = true;
+        public bool stabilizeBreak = true;
+        public bool stabilizeHeight = true;
         
         
         public float smoothTime = 0.01f;
@@ -71,6 +73,11 @@ namespace DroneSim
 
             
             // STABILIZER
+            Stabilize();
+        }
+
+        private void Stabilize()
+        {
             if (stabilizePitchAndRoll)
             {
                 ApplyPitch(stabilizer.GetPitchCorrection());
@@ -79,6 +86,26 @@ namespace DroneSim
             // Siempre que no se este introduciendo input para el yaw
             if (stabilizeYaw && yawInput == 0)
                 ApplyYaw(stabilizer.GetYawCorrection());
+            
+            // Break when no horizontal input
+            if (stabilizeBreak)
+            {
+                if (pitchInput == 0 && rollInput == 0)
+                {
+                    Vector2 correction = stabilizer.GetBreakPitchRoll();
+                    ApplyPitch(correction.x);
+                    ApplyRoll(correction.y);
+                }
+                else
+                {
+                    stabilizer.PID_breakPitch.Reset();
+                    stabilizer.PID_breakRoll.Reset();
+                }
+            }
+
+            // Height Correction to Hover when no lift input
+            if (stabilizeHeight && liftInput == 0 && pitchInput == 0 && rollInput == 0) 
+                ApplyLift(stabilizer.GetHeightCorrection());
         }
 
         #region Rotors

@@ -17,14 +17,15 @@ MonoBehaviour:
     maxTorque: 3
     maxThrottle: 10
     maxLift: 50
-    maxPitch: 60
-    maxRoll: 60
+    maxPitch: 40
+    maxRoll: 40
     yawPower: 10
   parameters:
     mass: 2
     minDragCoefficient: 0.1
     maxDragCoefficient: 0.5
     angularDrag: 2
+    maxSpeed: 20
     maxAngularSpeed: 10
   curves:
     liftCurve:

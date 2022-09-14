@@ -2010,8 +2010,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3773f6dc905767449252afd65c497c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enginePower: 1
-  animator: {fileID: 0}
 --- !u!4 &761734924 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 04a24b5e91096bd4e8ae6fba35c4dbf8, type: 3}
@@ -3369,8 +3367,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3773f6dc905767449252afd65c497c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enginePower: -1
-  animator: {fileID: 0}
 --- !u!1001 &1359420774
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3568,8 +3564,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3773f6dc905767449252afd65c497c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enginePower: -1
-  animator: {fileID: 0}
 --- !u!1 &1417904556 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 125174, guid: 4dd5fccded1f45d41ab95e29d4cc4170, type: 3}
@@ -3662,8 +3656,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3773f6dc905767449252afd65c497c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enginePower: 1
-  animator: {fileID: 0}
 --- !u!4 &1469665763 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 9ae7f9f9eacff4142b21eb85ae606fdc, type: 3}
@@ -6456,8 +6448,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: Drone
       objectReference: {fileID: 0}
+    - target: {fileID: 6330405645997655268, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
+      propertyPath: PID_height
+      value: 
+      objectReference: {fileID: 11400000, guid: d70510c788efb524887119f5cb592f94, type: 2}
+    - target: {fileID: 6330405645997655268, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
+      propertyPath: PID_breakRoll
+      value: 
+      objectReference: {fileID: 11400000, guid: d94f06670dff79c4b87375e62a92b007, type: 2}
+    - target: {fileID: 6330405645997655268, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
+      propertyPath: PID_breakPitch
+      value: 
+      objectReference: {fileID: 11400000, guid: 00e87cb05f43d9b458a8a479c7978986, type: 2}
+    - target: {fileID: 6330405645997655268, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
+      propertyPath: PID_breakHeight
+      value: 
+      objectReference: {fileID: 11400000, guid: d70510c788efb524887119f5cb592f94, type: 2}
     - target: {fileID: 6724672218753143662, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
       propertyPath: stabilizeYaw
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724672218753143662, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
+      propertyPath: stabilizeBreak
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724672218753143662, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
+      propertyPath: stabilizeHeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724672218753143662, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
+      propertyPath: stabilizePitchAndRoll
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

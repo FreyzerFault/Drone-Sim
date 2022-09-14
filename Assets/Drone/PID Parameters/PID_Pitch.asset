@@ -19,7 +19,7 @@ MonoBehaviour:
   useI: 0
   useD: 1
   integralError: 0
-  PIDp: 0.01803378
+  PIDp: 0
   PIDi: 0
-  PIDd: -0.0054103136
+  PIDd: 0
   maxIntegralSum: 2

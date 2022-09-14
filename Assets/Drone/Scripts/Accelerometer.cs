@@ -10,7 +10,7 @@ public class Accelerometer : MonoBehaviour
     private Vector3 prevVelocity = Vector3.zero;
     private Vector3 prevAngularVelocity = Vector3.zero;
 
-    public Vector3 Velocity => rb.velocity;
+    public Vector3 Velocity => transform.worldToLocalMatrix * rb.velocity;
     public Vector3 AngularVelocity => rb.angularVelocity;
     
     private void Awake()

@@ -35,6 +35,7 @@ namespace DroneSim
 
             public float angularDrag = 0.5f;
 
+            public float maxSpeed = 10;
             public float maxAngularSpeed = 10;
         }
 
