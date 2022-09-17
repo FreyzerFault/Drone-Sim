@@ -11,8 +11,7 @@ namespace DroneSim
 
         private void Awake()
         {
-            if (drone == null)
-                drone = transform.parent.GetChild(0).GetComponent<DroneController>();
+            drone = GameObject.FindGameObjectWithTag("Player").GetComponent<DroneController>();
         }
 
         Vector3 smoothVel = Vector3.zero;

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace DroneSim
@@ -9,7 +8,7 @@ namespace DroneSim
 
         private void Awake()
         {
-            if (drone == null) drone = transform.parent.GetChild(0).GetComponent<DroneController>();
+            drone = GameObject.FindGameObjectWithTag("Player").GetComponent<DroneController>();
         }
 
         private void LateUpdate()

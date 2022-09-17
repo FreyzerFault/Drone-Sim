@@ -17,16 +17,17 @@ MonoBehaviour:
     maxTorque: 3
     maxThrottle: 10
     maxLift: 50
-    maxPitch: 40
-    maxRoll: 40
+    maxPitch: 80
+    maxRoll: 80
     yawPower: 10
+    maxSpeed: 30
+    maxLiftSpeed: 10
+    maxAngularSpeed: 10
   parameters:
     mass: 2
     minDragCoefficient: 0.1
     maxDragCoefficient: 0.5
     angularDrag: 2
-    maxSpeed: 20
-    maxAngularSpeed: 10
   curves:
     liftCurve:
       serializedVersion: 2
@@ -133,29 +134,29 @@ MonoBehaviour:
       - serializedVersion: 3
         time: -1.0083351
         value: -1
-        inSlope: 4.151038
-        outSlope: 4.151038
+        inSlope: 7.7911787
+        outSlope: 7.7911787
         tangentMode: 0
         weightedMode: 2
         inWeight: 0
-        outWeight: 0.14938001
+        outWeight: 0.041494455
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: -0.0056683947
-        outSlope: -0.0010299763
+        inSlope: 0.0019710881
+        outSlope: -0.019062122
         tangentMode: 1
         weightedMode: 3
-        inWeight: 0.70123994
-        outWeight: 0.64854133
+        inWeight: 0.33608875
+        outWeight: 0.28034657
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 2.607703
-        outSlope: 2.607703
+        inSlope: 5.4016714
+        outSlope: 5.4016714
         tangentMode: 0
         weightedMode: 1
-        inWeight: 0.27614605
+        inWeight: 0.075312555
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2

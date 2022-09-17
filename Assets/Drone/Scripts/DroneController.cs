@@ -1,4 +1,4 @@
-using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace DroneSim
@@ -7,40 +7,43 @@ namespace DroneSim
     {
         public DroneSettingsSO droneSettings;
         public EnvironmentSettingsSO environmentSettings;
-
+        
         private Rigidbody rb;
+        
+        [DoNotSerialize]
+        public DroneStabilizer stabilizer;
 
-        private DroneStabilizer stabilizer;
-        public bool stabilizePitchAndRoll = true;
-        public bool stabilizeYaw = true;
-        public bool stabilizeBreak = true;
-        public bool stabilizeHeight = true;
         
-        
-        public float smoothTime = 0.01f;
-        public float lerpSpeed = 4;
-        
+        public RectTransform pitchRollPad;
+        private float rectWidth = 0;
+
         // Rotors of the drone (have to be associated to the four rotors of the drone, with the order V1,O1,V2,O2)
         public Rotor rotorCW1;
         public Rotor rotorCW2;
         public Rotor rotorCCW1;
         public Rotor rotorCCW2;
-        
+
         [Range(-1,1)] public float yawInput = 0;
         [Range(-1,1)] public float pitchInput = 0;
         [Range(-1,1)] public float rollInput = 0;
         [Range(-1,1)] public float liftInput = 0;
-
+        
         public bool noInput => yawInput == 0 && pitchInput == 0 && rollInput == 0 && liftInput == 0;
+        
+        // Final values
+        private float yaw = 0;
+        private float pitch = 0;
+        private float roll = 0;
+        private float lift = 0;
 
-        public Quaternion rotationInput;
 
         public float Weight => rb.mass * Physics.gravity.magnitude;
         
         public DroneSettingsSO.Curves Curves => droneSettings.curves;
 
         public float HoverPower => Weight / droneSettings.saturationValues.maxThrottle / 4;
-
+        
+        
         private void Awake()
         {
             stabilizer = GetComponent<DroneStabilizer>();
@@ -49,15 +52,19 @@ namespace DroneSim
             rb.mass = droneSettings.parameters.mass;
             rb.drag = droneSettings.parameters.maxDragCoefficient;
             rb.angularDrag = droneSettings.parameters.angularDrag;
-            rb.maxAngularVelocity = droneSettings.parameters.maxAngularSpeed;
+            rb.maxAngularVelocity = droneSettings.saturationValues.maxAngularSpeed;
             rb.centerOfMass = Vector3.zero;
-
-            // Adjust lift curve to hover at 0.5
-            // droneSettings.curves.liftCurve.MoveKey(1, new Keyframe(0, -1 + HoverPower));
-            // droneSettings.curves.liftCurve.keys[0].outWeight = HoverPower;
-            // droneSettings.curves.liftCurve.keys[2].inWeight = HoverPower;
             
             ResetRotors();
+
+            rectWidth = pitchRollPad.transform.parent.GetComponent<RectTransform>().rect.width / 2;
+        }
+
+        private void Update()
+        {
+            pitchRollPad.transform.localPosition = new Vector2(roll * rectWidth, pitch * rectWidth);
+            
+            
         }
 
         private void FixedUpdate()
@@ -65,57 +72,62 @@ namespace DroneSim
             ResetRotors();
             
             // ROTOR FORCES
+            if (stabilizer.enabled)
+                Stabilize();
+            else
+            {
+                lift = Curves.liftCurve.Evaluate(liftInput);
+                roll = Curves.liftCurve.Evaluate(rollInput);
+                pitch = Curves.liftCurve.Evaluate(pitchInput);
+                yaw = Curves.liftCurve.Evaluate(yawInput);
+            }
+            
             HandleRotors();
             
             
             // EXTERNAL FORCES
             //ApplyDrag();
-
-            
-            // STABILIZER
-            Stabilize();
         }
 
+        bool isReseted;
         private void Stabilize()
         {
-            if (stabilizePitchAndRoll)
-            {
-                ApplyPitch(stabilizer.GetPitchCorrection());
-                ApplyRoll(stabilizer.GetRollCorrection());
-            }
-            // Siempre que no se este introduciendo input para el yaw
-            if (stabilizeYaw && yawInput == 0)
-                ApplyYaw(stabilizer.GetYawCorrection());
+            Vector3 targetRotation = new Vector3(
+                Curves.pitchCurve.Evaluate(pitchInput) * droneSettings.saturationValues.maxPitch,
+                0,
+                Curves.rollCurve.Evaluate(rollInput) * droneSettings.saturationValues.maxRoll
+            );
+            Vector3 targetVelocity = new Vector3(
+                0,
+                Curves.liftCurve.Evaluate(liftInput) * droneSettings.saturationValues.maxLiftSpeed,
+                0
+                );
+            Vector3 targetAngularVelocity = new Vector3(
+                0, 
+                Curves.yawCurve.Evaluate(yawInput) * droneSettings.saturationValues.maxAngularSpeed, 
+                0);
             
-            // Break when no horizontal input
-            if (stabilizeBreak)
-            {
-                if (pitchInput == 0 && rollInput == 0)
-                {
-                    Vector2 correction = stabilizer.GetBreakPitchRoll();
-                    ApplyPitch(correction.x);
-                    ApplyRoll(correction.y);
-                }
-                else
-                {
-                    stabilizer.PID_breakPitch.Reset();
-                    stabilizer.PID_breakRoll.Reset();
-                }
-            }
-
-            // Height Correction to Hover when no lift input
-            if (stabilizeHeight && liftInput == 0 && pitchInput == 0 && rollInput == 0) 
-                ApplyLift(stabilizer.GetHeightCorrection());
+            // Get PID results in [-1,1]
+            stabilizer.StabilizeParams(targetRotation, targetVelocity, targetAngularVelocity, ref lift, ref pitch, ref roll, ref yaw);
+            
+            if (lift is < -1 or > 1 || pitch is < -1 or > 1 || roll is < -1 or > 1 || yaw is < -1 or > 1)
+                Debug.Log("Some PID results may not be in Range [-1,1]\n" +
+                          "Lift: " + lift + " Pitch: " + pitch + " Roll: " + roll + " Yaw: " + yaw);
         }
 
         #region Rotors
 
+        /// <summary>
+        /// Distribute lift, pitch, roll and yaw to the rotors
+        /// </summary>
         private void HandleRotors()
         {
-            ApplyLift(Curves.liftCurve.Evaluate(liftInput));
-            ApplyPitch(Curves.pitchCurve.Evaluate(pitchInput));
-            ApplyRoll(Curves.rollCurve.Evaluate(rollInput));
-            ApplyYaw(Curves.yawCurve.Evaluate(yawInput));
+            AddRotorsPower(
+                lift - pitch + roll - yaw,
+                lift + pitch - roll - yaw,
+                lift + pitch + roll + yaw,
+                lift - pitch - roll + yaw
+            );
         }
 
         // Set rotors to 0.5 for hovering when drone is horizontal
@@ -185,98 +197,6 @@ namespace DroneSim
 
         #region Physics
 
-        /// <summary>
-        /// Hover the Drone
-        /// <para>Stabilize drone</para>
-        /// </summary>
-        private void Hover()
-        {
-            // Set power at (mg / maxThrottle) ( / 4, because we have 4 rotors)
-            SetRotorsPower(HoverPower);
-
-            // Vector3 rotation = transform.localEulerAngles;
-            // Vector3 angularVelocity = transform.worldToLocalMatrix * rb.angularVelocity;
-            //
-            // // Fix rotation
-            // if (rotation.x > 180)
-            //     rotation.x -= 360;
-            // if (rotation.z > 180)
-            //     rotation.z -= 360;
-            //
-            // // Back to Hover position
-            // float pitchBack = Mathf.InverseLerp(0, droneSettings.saturationValues.maxPitch, Math.Abs(rotation.x));
-            // float rollBack = Mathf.InverseLerp(0, droneSettings.saturationValues.maxRoll, Math.Abs(rotation.z));
-            //
-            // ApplyPitch(pitchBack * (rotation.x > 0 ? 1 : -1));
-            // ApplyRoll(rollBack * (rotation.z > 0 ? -1 : 1));
-            //
-            // // Slow angular Vel
-            // float pitchVel = Mathf.InverseLerp(0, 2, Mathf.Abs(angularVelocity.x));
-            // float rollVel = Mathf.InverseLerp(0, 2, Mathf.Abs(angularVelocity.z));
-            //
-            // ApplyPitch(pitchVel * (angularVelocity.x > 0 ? 1 : -1));
-            // ApplyRoll(rollVel * (angularVelocity.z > 0 ? -1 : 1));
-        }
-
-        /// <summary>
-        /// LIFT of the Drone
-        /// <para>Increase all rotors equally</para>
-        /// </summary>
-        private void ApplyLift(float value)
-        {
-            AddRotorsPower(
-                value,
-                value,
-                value,
-                value
-                );
-        }
-
-        /// <summary>
-        /// PITCH of the Drone
-        /// <para>Pitch Forward -> Increase Back and decrease Front</para>
-        /// <para>Pitch Backward -> Increase Front and decrease Back</para>
-        /// </summary>
-        public void ApplyPitch(float value)
-        {
-            AddRotorsPower(
-                -value, 
-                value, 
-                value, 
-                -value
-            );
-        }
-
-        /// <summary>
-        /// ROLL of the Drone
-        /// <para>Roll Right -> Increase Left and decrease Right</para>
-        /// <para>Roll Left -> Increase Right and decrease Left</para>
-        /// </summary>
-        public void ApplyRoll(float value)
-        {
-            AddRotorsPower(
-                value, 
-                -value, 
-                value, 
-                -value
-                );
-        }
-
-        /// <summary>
-        /// YAW of the Drone
-        /// <para>Yaw CW -> Increase CW rotors and decrease CCW</para>
-        /// <para>Yaw CCW -> Increase CCW rotors and decrease CW</para>
-        /// </summary>
-        public void ApplyYaw(float value)
-        {
-            AddRotorsPower(
-                -value, 
-                -value, 
-                value,
-                value
-            );
-        }
-
         private void ApplyDrag()
         {
             float minDrag = droneSettings.parameters.minDragCoefficient;
@@ -334,13 +254,15 @@ namespace DroneSim
         public void ResetRotation()
         {
             transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
-            transform.position = transform.position + Vector3.up * 0.1f;
+            transform.position += Vector3.up * 0.1f;
             rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
         }
 
         private void OnDisable()
         {
             SetRotorsPower(0);
         }
-        }
+
+    }
 }

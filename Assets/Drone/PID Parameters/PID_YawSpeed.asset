@@ -9,17 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3957c9cfe09b4df45b0dba7ac639cb6f, type: 3}
-  m_Name: PID_BreakPitch
+  m_Script: {fileID: 11500000, guid: 1a0fc09f7c705f748a69f691f195300c, type: 3}
+  m_Name: PID_YawSpeed
   m_EditorClassIdentifier: 
-  pGain: 40
-  iGain: 1
-  dGain: 10
+  pGain: 2
+  iGain: 0.01
+  dGain: 0.1
   useP: 1
   useI: 0
   useD: 1
-  integralError: 0
-  PIDp: -0.0027570105
-  PIDi: 0
-  PIDd: -0.00014499892
-  maxIntegralSum: 1
+  iSum: 0.23018992
+  error: -0.0007443772

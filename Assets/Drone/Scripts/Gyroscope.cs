@@ -5,17 +5,16 @@ namespace DroneSim
     public class Gyroscope : MonoBehaviour
     {
         public Quaternion Rotation => transform.rotation;
-        public Vector3 EulerRotation => normalizeAngles(transform.rotation.eulerAngles);
+        public Vector3 EulerRotation => transform.rotation.eulerAngles.normalizeAngles();
 
-        public float maxPitch = 30;
-        public float maxRoll = 30;
+        public float Pitch => transform.localRotation.eulerAngles.x.normalizeAngle();
+        public float Roll => transform.localRotation.eulerAngles.z.normalizeAngle();
+    }
 
-        // Error
-        public float PitchError => normalizeAngle(transform.rotation.eulerAngles.x);
-        public float RollError => normalizeAngle(transform.rotation.eulerAngles.z);
-
+    public static class ExtensionMethods
+    {
         // Normalize angle [-180,180]
-        private float normalizeAngle(float angle)
+        public static float normalizeAngle(this float angle)
         {
             if (angle > 180)
                 angle -= 360;
@@ -25,25 +24,13 @@ namespace DroneSim
             return angle;
         }
 
-        private Vector3 normalizeAngles(Vector3 eulerRotation)
+        public static Vector3 normalizeAngles(this Vector3 eulerRotation)
         {
-            eulerRotation.x = normalizeAngle(eulerRotation.x);
-            eulerRotation.y = normalizeAngle(eulerRotation.y);
-            eulerRotation.z = normalizeAngle(eulerRotation.z);
-            return eulerRotation;
+            return new Vector3(
+                eulerRotation.x.normalizeAngle(),
+                eulerRotation.y.normalizeAngle(),
+                eulerRotation.z.normalizeAngle()
+                );
         }
-
-        #region Debug
-
-        public float pitchError;
-        public float rollError;
-
-        private void FixedUpdate()
-        {
-            pitchError = -PitchError / maxPitch;
-            rollError = RollError / maxRoll;
-        }
-
-        #endregion
     }
 }

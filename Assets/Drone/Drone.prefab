@@ -9,20 +9,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1521157075194656831}
-  - component: {fileID: 5941920997564773328}
   - component: {fileID: 5941920997571913778}
-  - component: {fileID: 5941920997564811302}
-  - component: {fileID: 5941920997564755604}
-  - component: {fileID: 5941920997564803936}
-  - component: {fileID: 5941920997564795578}
   - component: {fileID: 6724672218753143662}
   - component: {fileID: 6330405645997655268}
+  - component: {fileID: 4758075807791414279}
   - component: {fileID: 3789306698041084051}
   - component: {fileID: 2619820502047753114}
-  - component: {fileID: 4758075807791414279}
   - component: {fileID: 8766455200799276158}
   m_Layer: 7
-  m_Name: Drone Yellow
+  m_Name: Drone
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3209865575176536708}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 31.088768, y: 0.000002861023, z: -8.202936}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -48,40 +43,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5941920997564773328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3209865575176536708}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcb2f49d4e00c124fbf1c47f434dd2ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gyro: {fileID: 0}
-  acc: {fileID: 0}
-  bar: {fileID: 5941920997564755604}
-  gps: {fileID: 5941920997564803936}
-  mag: {fileID: 5941920997564795578}
-  helixV1: {fileID: 5941920997564747344}
-  helixV2: {fileID: 5941920997564818642}
-  helixO1: {fileID: 5941920997564802948}
-  helixO2: {fileID: 5941920997564793060}
-  idealPitch: 0
-  idealRoll: 0
-  idealYaw: 0
-  targetX: 0
-  targetY: 0
-  targetZ: 0
-  target: {fileID: 0}
-  stayOnFixedPoint: 0
-  pV1: 1
-  pV2: 1
-  pO1: 1
-  pO2: 1
-  save: 0
 --- !u!54 &5941920997571913778
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -98,55 +59,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &5941920997564811302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3209865575176536708}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f53df808306eb5044a5387fa41ac5f10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  globalLinearVelocity: {x: 0, y: 0, z: 0}
---- !u!114 &5941920997564755604
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3209865575176536708}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01d7c529803bfd340a2be79c764ce3fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5941920997564803936
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3209865575176536708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 670b032d8c218a248b39c4ae5cff4f13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5941920997564795578
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3209865575176536708}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3708300539e7cfe428d15d5cd68e7598, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6724672218753143662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,9 +73,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   droneSettings: {fileID: 11400000, guid: 45c0fe19979f84f4299471c870c85f52, type: 2}
   environmentSettings: {fileID: 11400000, guid: 22c124c3937569f47af34e5ea2da3289, type: 2}
-  stabilization: 1
-  smoothTime: 0.1
-  lerpSpeed: 4
+  stabilizer: {fileID: 6330405645997655268}
+  pitchRollPad: {fileID: 0}
   rotorCW1: {fileID: 5941920997564747344}
   rotorCW2: {fileID: 5941920997564818642}
   rotorCCW1: {fileID: 5941920997564802948}
@@ -172,7 +83,6 @@ MonoBehaviour:
   pitchInput: 0
   rollInput: 0
   liftInput: 0
-  rotationInput: {x: 0, y: 0, z: 0, w: 0}
   drag: {x: 0, y: 0, z: 0}
 --- !u!114 &6330405645997655268
 MonoBehaviour:
@@ -186,9 +96,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d392f1c6fc382f04cb22051fd6f0568c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PID_pitch: {fileID: 11400000, guid: 2a0179255b30ba746bb6bdceca7228f5, type: 2}
-  PID_roll: {fileID: 11400000, guid: 683abc2faff77df4b9fd02bc57038e3d, type: 2}
-  PID_yaw: {fileID: 11400000, guid: 9b12dff350e87a244820860adea93b21, type: 2}
+  stabilizePitchAndRoll: 1
+  stabilizeYaw: 1
+  stabilizeBreak: 1
+  stabilizeLiftVelocity: 1
+--- !u!114 &4758075807791414279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3209865575176536708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5ac716ea2daf57448f69ec028b98bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  joystickL: {fileID: 0}
+  joystickR: {fileID: 0}
 --- !u!114 &3789306698041084051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,10 +126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a46a963ecfb4f374ea5ec7b1296996a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxPitch: 30
-  maxRoll: 30
-  pitchError: 0
-  rollError: 0
 --- !u!114 &2619820502047753114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,18 +140,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceleration: {x: 0, y: 0, z: 0}
   angularAcceleration: {x: 0, y: 0, z: 0}
---- !u!114 &4758075807791414279
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3209865575176536708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5ac716ea2daf57448f69ec028b98bb7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8766455200799276158
 MonoBehaviour:
   m_ObjectHideFlags: 0
