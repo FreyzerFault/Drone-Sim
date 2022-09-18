@@ -118,7 +118,7 @@ namespace DroneSim
         {
             float maxRotationSpeed = drone.droneSettings.saturationValues.maxRotationSpeed;
             transform.Rotate(0, 0,
-                Mathf.Lerp(0, maxRotationSpeed, power_t * 2) * Time.deltaTime * (counterclockwise ? -1 : 1)
+                Mathf.Lerp(0, maxRotationSpeed, Mathf.Pow(power_t, 0.1f)) * Time.deltaTime * (counterclockwise ? -1 : 1)
             );
         }
 
@@ -128,15 +128,19 @@ namespace DroneSim
         /// <param name="power_t"></param>
         private void SetTexture(float power_t)
         {
-            float minRotationForBlur = 0.5f;
+            float minRotationForBlur = 0.1f;
             // If power < 0.5, hide propeller and show blur propeller quad
             meshRenderer.enabled = power_t < minRotationForBlur;
             blurMeshRenderer.enabled = power_t >= minRotationForBlur;
 
             // Switch between blur textures by power
-            if (power_t > minRotationForBlur)
+            if (power_t >= minRotationForBlur)
             {
-                blurMeshRenderer.sharedMaterial.mainTexture = power_t < 0.7f ? blurTextures[0] : blurTextures[1];
+                Texture2D tex = blurTextures[0];
+                if (power_t >= 0.6f)
+                    tex = blurTextures[1];
+                
+                blurMeshRenderer.sharedMaterial.mainTexture = tex;
             }
         }
 

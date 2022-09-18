@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a0fc09f7c705f748a69f691f195300c, type: 3}
   m_Name: PID_LiftSpeed
   m_EditorClassIdentifier: 
-  pGain: 5
+  pGain: 10
   iGain: 0.1
   dGain: 0.1
   useP: 1
-  useI: 0
+  useI: 1
   useD: 1
-  iSum: 0
-  error: 0
+  iSum: -0.000065415305
+  error: -0.0014237469

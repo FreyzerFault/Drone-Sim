@@ -44,12 +44,7 @@ namespace DroneSim
             // LIFT Speed Correction
             if (stabilizeLiftVelocity)
             {
-                lift = GetPIDcorrection(
-                    "ySpeed",
-                    targetVelocity.y,
-                    Velocity.y, 
-                    DroneSettings.saturationValues.maxLiftSpeed
-                    );
+                StabilizeLift(targetVelocity.y, ref lift);
 
                 if (targetVelocity.x == 0 && targetVelocity.z == 0 && !isReseted)
                 {
@@ -64,43 +59,71 @@ namespace DroneSim
             
             // YAW Speed Correction
             if (stabilizeYaw)
-                yaw = GetPIDcorrection(
-                    "yawSpeed",
-                    targetAngularVelocity.y,
-                    accMeter.AngularVelocity.y,
-                    DroneSettings.saturationValues.maxAngularSpeed
-                );
+                StabilizeYaw(targetAngularVelocity.y, ref yaw);
             else
                 yaw = targetAngularVelocity.y / DroneSettings.saturationValues.maxAngularSpeed;
 
-            // PITCH and ROLL Correction
+
+            // SPEED BREAK Correction to 0
+            if (drone.pitchInput == 0 && drone.rollInput == 0 && stabilizeBreak)
+            {
+                // Use Cascade PID Controller:
+                // Get the PID by Speed [X,Z] -> get Angle PID [Roll,Pitch]
+                Vector2 speedPID = StabilizeSpeedH(Vector2.zero);
+
+                // Output is a target angle, overwrite the input
+                targetRotation = new Vector3(
+                    speedPID.y * DroneSettings.saturationValues.maxPitch,   // Pitch
+                    targetRotation.y,                                           // Yaw
+                    speedPID.x * DroneSettings.saturationValues.maxRoll     // Roll
+                );
+            }
+            
+            // PITCH & ROLL Correction
             if (stabilizePitchAndRoll)
             {
-                pitch = GetPIDcorrection("pitch", targetRotation.x, EulerRotation.x, DroneSettings.saturationValues.maxPitch);
-                roll = GetPIDcorrection("roll", targetRotation.z, -EulerRotation.z, DroneSettings.saturationValues.maxRoll);
+                StabilizeRollPitch(targetRotation, ref roll, ref pitch);
             }
             else
             {
-                roll = targetVelocity.x / DroneSettings.saturationValues.maxSpeed;
-                pitch = targetVelocity.z / DroneSettings.saturationValues.maxSpeed;
+                roll = targetRotation.z / DroneSettings.saturationValues.maxRoll;
+                pitch = targetRotation.x / DroneSettings.saturationValues.maxPitch;
             }
-            
-            // SPEED BREAK Correction
-            if (stabilizeBreak && drone.pitchInput == 0 && drone.rollInput == 0)
-            {
-                // Use Cascade PID Controller:
-                // 1º - Get the PID by Speed for Angle
-                float xSpeedPID = GetPIDcorrectionSqr("xSpeed", 0, Velocity.x, DroneSettings.saturationValues.maxSpeed);
-                float zSpeedPID = GetPIDcorrectionSqr("zSpeed", 0, Velocity.z, DroneSettings.saturationValues.maxSpeed);
 
-                // Output is a target angle
-                float targetRoll = xSpeedPID * DroneSettings.saturationValues.maxRoll;
-                float targetPitch = zSpeedPID * DroneSettings.saturationValues.maxPitch;
-                
-                // 2º - Get the PID by Angle for rotor power
-                roll = GetPIDcorrection("roll", targetRoll, -EulerRotation.z, DroneSettings.saturationValues.maxRoll);
-                pitch = GetPIDcorrection("pitch", targetPitch, EulerRotation.x, DroneSettings.saturationValues.maxPitch);
-            }
+        }
+
+        private void StabilizeRollPitch(Vector3 targetRotation, ref float roll, ref float pitch)
+        {
+            pitch = GetPIDcorrection("pitch", targetRotation.x, EulerRotation.x, DroneSettings.saturationValues.maxPitch);
+            roll = GetPIDcorrection("roll", targetRotation.z, -EulerRotation.z, DroneSettings.saturationValues.maxRoll);
+        }
+
+        private void StabilizeYaw(float targetAngularSpeedY, ref float yaw)
+        {
+            yaw = GetPIDcorrection(
+                "yawSpeed",
+                targetAngularSpeedY,
+                accMeter.AngularVelocity.y,
+                DroneSettings.saturationValues.maxAngularSpeed
+            );
+        }
+        
+        private void StabilizeLift(float targetLiftSpeed, ref float lift)
+        {
+            lift = GetPIDcorrection(
+                "ySpeed",
+                targetLiftSpeed,
+                Velocity.y, 
+                DroneSettings.saturationValues.maxLiftSpeed
+            );
+        }
+
+        private Vector2 StabilizeSpeedH(Vector2 targetSpeed)
+        {
+            return new Vector2(
+                GetPIDcorrectionSqr("xSpeed", targetSpeed.x, Velocity.x, DroneSettings.saturationValues.maxSpeed),
+                GetPIDcorrectionSqr("zSpeed", targetSpeed.y, Velocity.z, DroneSettings.saturationValues.maxSpeed)
+                );
         }
 
         public void ToggleStabilization()
@@ -191,7 +214,8 @@ namespace DroneSim
         /// <returns>PID correction in [-1,1]</returns>
         public float GetPIDcorrection(String pidName, float target, float current, float maxValue = 1)
         {
-            float error = (target - current) / maxValue;
+            // / 2 to get the diff in [-1,1] => [-1,1]
+            float error = (target - current) / maxValue / 2;
 
             return PID_Controller.GetPIDresult(PID[pidName], error);
         }

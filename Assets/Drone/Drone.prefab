@@ -74,7 +74,8 @@ MonoBehaviour:
   droneSettings: {fileID: 11400000, guid: 45c0fe19979f84f4299471c870c85f52, type: 2}
   environmentSettings: {fileID: 11400000, guid: 22c124c3937569f47af34e5ea2da3289, type: 2}
   stabilizer: {fileID: 6330405645997655268}
-  pitchRollPad: {fileID: 0}
+  pitchRollOutputPoint: {fileID: 0}
+  liftYawOutputPoint: {fileID: 0}
   rotorCW1: {fileID: 5941920997564747344}
   rotorCW2: {fileID: 5941920997564818642}
   rotorCCW1: {fileID: 5941920997564802948}
@@ -100,6 +101,7 @@ MonoBehaviour:
   stabilizeYaw: 1
   stabilizeBreak: 1
   stabilizeLiftVelocity: 1
+  PIDConfigurations: []
 --- !u!114 &4758075807791414279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,6 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceleration: {x: 0, y: 0, z: 0}
   angularAcceleration: {x: 0, y: 0, z: 0}
+  debuggingUI: {fileID: 0}
 --- !u!114 &8766455200799276158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -551,8 +554,8 @@ MonoBehaviour:
   drone: {fileID: 6724672218753143662}
   animationActivated: 1
   blurTextures:
-  - {fileID: 2800000, guid: 5d71e30febe908949a93dafb077b4ec9, type: 3}
-  - {fileID: 2800000, guid: 0d0e2aad9fc8ad04ba15c42753f8b797, type: 3}
+  - {fileID: 2800000, guid: a3ac4bae1835cd14aaa93ab75c41317e, type: 3}
+  - {fileID: 2800000, guid: 985fe3c4fbc3d2f44b7d783a4b0afa33, type: 3}
   counterclockwise: 0
   power: 0
   smoothAnimation: 1
@@ -1176,8 +1179,8 @@ MonoBehaviour:
   drone: {fileID: 6724672218753143662}
   animationActivated: 1
   blurTextures:
-  - {fileID: 2800000, guid: 5d71e30febe908949a93dafb077b4ec9, type: 3}
-  - {fileID: 2800000, guid: 0d0e2aad9fc8ad04ba15c42753f8b797, type: 3}
+  - {fileID: 2800000, guid: a3ac4bae1835cd14aaa93ab75c41317e, type: 3}
+  - {fileID: 2800000, guid: 985fe3c4fbc3d2f44b7d783a4b0afa33, type: 3}
   counterclockwise: 1
   power: 0
   smoothAnimation: 1
@@ -1951,8 +1954,8 @@ MonoBehaviour:
   drone: {fileID: 6724672218753143662}
   animationActivated: 1
   blurTextures:
-  - {fileID: 2800000, guid: 5d71e30febe908949a93dafb077b4ec9, type: 3}
-  - {fileID: 2800000, guid: 0d0e2aad9fc8ad04ba15c42753f8b797, type: 3}
+  - {fileID: 2800000, guid: a3ac4bae1835cd14aaa93ab75c41317e, type: 3}
+  - {fileID: 2800000, guid: 985fe3c4fbc3d2f44b7d783a4b0afa33, type: 3}
   counterclockwise: 1
   power: 0
   smoothAnimation: 1
@@ -3250,8 +3253,8 @@ MonoBehaviour:
   drone: {fileID: 6724672218753143662}
   animationActivated: 1
   blurTextures:
-  - {fileID: 2800000, guid: 5d71e30febe908949a93dafb077b4ec9, type: 3}
-  - {fileID: 2800000, guid: 0d0e2aad9fc8ad04ba15c42753f8b797, type: 3}
+  - {fileID: 2800000, guid: a3ac4bae1835cd14aaa93ab75c41317e, type: 3}
+  - {fileID: 2800000, guid: 985fe3c4fbc3d2f44b7d783a4b0afa33, type: 3}
   counterclockwise: 0
   power: 0
   smoothAnimation: 1

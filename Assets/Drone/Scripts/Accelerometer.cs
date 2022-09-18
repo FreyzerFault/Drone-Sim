@@ -55,8 +55,9 @@ namespace DroneSim
         
         private void DebuggingUpdate()
         {
+            float TOLERANCE = 0.0001f;
             Vector3 velocity = Quaternion.Euler(0, -transform.rotation.eulerAngles.y.normalizeAngle(), 0) * Velocity;
-            debuggingUI.LiftSpeed = Velocity.y;
+            debuggingUI.LiftSpeed = Mathf.Abs(Velocity.y) < TOLERANCE ? 0 : Velocity.y;
             debuggingUI.HorizontalSpeedX = velocity.x;
             debuggingUI.HorizontalSpeedZ = velocity.z;
             debuggingUI.YawSpeed = AngularVelocity.y;

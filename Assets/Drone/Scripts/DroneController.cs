@@ -14,7 +14,8 @@ namespace DroneSim
         public DroneStabilizer stabilizer;
 
         
-        public RectTransform pitchRollPad;
+        public RectTransform pitchRollOutputPoint;
+        public RectTransform liftYawOutputPoint;
         private float rectWidth = 0;
 
         // Rotors of the drone (have to be associated to the four rotors of the drone, with the order V1,O1,V2,O2)
@@ -57,14 +58,13 @@ namespace DroneSim
             
             ResetRotors();
 
-            rectWidth = pitchRollPad.transform.parent.GetComponent<RectTransform>().rect.width / 2;
+            rectWidth = pitchRollOutputPoint.transform.parent.GetComponent<RectTransform>().rect.width / 2;
         }
 
         private void Update()
         {
-            pitchRollPad.transform.localPosition = new Vector2(roll * rectWidth, pitch * rectWidth);
-            
-            
+            pitchRollOutputPoint.transform.localPosition = new Vector2(roll * rectWidth, pitch * rectWidth);
+            liftYawOutputPoint.transform.localPosition = new Vector2(yaw * rectWidth, lift * rectWidth);
         }
 
         private void FixedUpdate()
@@ -72,6 +72,8 @@ namespace DroneSim
             ResetRotors();
             
             // ROTOR FORCES
+            yaw = lift = pitch = roll = 0;
+            
             if (stabilizer.enabled)
                 Stabilize();
             else

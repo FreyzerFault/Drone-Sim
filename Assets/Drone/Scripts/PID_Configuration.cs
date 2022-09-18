@@ -48,6 +48,12 @@ public static class PID_Controller
     // Result is in [-1,1]
     public static float GetPIDresult(PID_Configuration config, float error)
     {
+        if (error > 1 || error < -1)
+        {
+            Debug.LogError("Error is out of range [-1,1]: " + config.name + " = " +  error);
+            return 0;
+        }
+        
         float deltaTime = Time.inFixedTimeStep ? Time.fixedDeltaTime : Time.deltaTime;
         float p = 0, i = 0, d = 0;
         
