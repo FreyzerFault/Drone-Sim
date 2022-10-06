@@ -8120,7 +8120,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 734308484331808269, guid: b98cf9e09531bf74e899f3091b05b851, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3019058946229877835, guid: b98cf9e09531bf74e899f3091b05b851, type: 3}
       propertyPath: m_RootOrder
@@ -8403,7 +8403,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 487415639999717619, guid: b6f238b18e19ef448bb25eb2407185d5, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5698464991842830073, guid: b6f238b18e19ef448bb25eb2407185d5, type: 3}
       propertyPath: drone
