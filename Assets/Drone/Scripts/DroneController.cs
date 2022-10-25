@@ -58,13 +58,17 @@ namespace DroneSim
             
             ResetRotors();
 
-            rectWidth = pitchRollOutputPoint.transform.parent.GetComponent<RectTransform>().rect.width / 2;
+            if (pitchRollOutputPoint != null)
+                rectWidth = pitchRollOutputPoint.transform.parent.GetComponent<RectTransform>().rect.width / 2;
         }
 
         private void Update()
         {
-            pitchRollOutputPoint.transform.localPosition = new Vector2(roll * rectWidth, pitch * rectWidth);
-            liftYawOutputPoint.transform.localPosition = new Vector2(yaw * rectWidth, lift * rectWidth);
+            if (pitchRollOutputPoint != null)
+                pitchRollOutputPoint.transform.localPosition = new Vector2(roll * rectWidth, pitch * rectWidth);
+            
+            if (liftYawOutputPoint != null)
+                liftYawOutputPoint.transform.localPosition = new Vector2(yaw * rectWidth, lift * rectWidth);
         }
 
         private void FixedUpdate()
