@@ -3,11 +3,11 @@ using UnityEngine.UI;
 
 public class UIGridRenderer : Graphic
 {
-    [HideInInspector] public Vector2Int gridSize = new Vector2Int(10, 10);
-    [HideInInspector] public float thickness = 1;
+    public Vector2Int gridSize = new Vector2Int(10, 10);
+    public float thickness = 1;
 
-    [HideInInspector] public float width;
-    [HideInInspector] public float height;
+    public float width;
+    public float height;
     
     private float cellWidth;
     private float cellHeight;
@@ -78,12 +78,12 @@ public class UIGridRenderer : Graphic
         vh.AddTriangle(offset + 5, offset + 4, offset + 0);
         
         //TOP
-        vh.AddTriangle(offset + 1, offset + 2, offset + 6);
-        vh.AddTriangle(offset + 6, offset + 5, offset + 1);
+        // vh.AddTriangle(offset + 1, offset + 2, offset + 6);
+        // vh.AddTriangle(offset + 6, offset + 5, offset + 1);
         
         // RIGHT
-        vh.AddTriangle(offset + 2, offset + 3, offset + 7);
-        vh.AddTriangle(offset + 7, offset + 6, offset + 2);
+        // vh.AddTriangle(offset + 2, offset + 3, offset + 7);
+        // vh.AddTriangle(offset + 7, offset + 6, offset + 2);
         
         // BOTTOM
         vh.AddTriangle(offset + 3,  offset + 0,  offset + 4);

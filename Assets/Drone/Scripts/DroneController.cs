@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -43,7 +44,8 @@ namespace DroneSim
         public DroneSettingsSO.Curves Curves => droneSettings.curves;
 
         public float HoverPower => Weight / droneSettings.saturationValues.maxThrottle / 4;
-        
+
+        public GameObject debuggingUI;
         
         private void Awake()
         {
@@ -93,6 +95,9 @@ namespace DroneSim
             
             // EXTERNAL FORCES
             //ApplyDrag();
+            
+            
+            UpdateDebug();
         }
 
         bool isReseted;
@@ -257,6 +262,21 @@ namespace DroneSim
 
         #endregion
 
+        #region Debugging
+
+        private void UpdateDebug()
+        {
+            if (debuggingUI == null)
+                return;
+            
+            FunctionRenderer[] functions = debuggingUI.GetComponentsInChildren<FunctionRenderer>();
+            functions[0].PlotPoint(Time.timeSinceLevelLoad, transform.localPosition.y);
+            functions[1].PlotPoint(Time.timeSinceLevelLoad, stabilizer.accMeter.Velocity.y);
+            functions[2].PlotPoint(Time.timeSinceLevelLoad, stabilizer.accMeter.acceleration.y);
+        }
+
+        #endregion
+        
         public void ResetRotation()
         {
             transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);

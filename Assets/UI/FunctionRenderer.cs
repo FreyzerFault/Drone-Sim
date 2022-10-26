@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 [ExecuteAlways]
@@ -22,42 +21,52 @@ public class FunctionRenderer : MonoBehaviour
     public float dx = 1;
     public float dy = 1;
 
-    public void Start()
+    [HideInInspector] public FunctionTagsRenderer tagRenderer;
+
+    private void Awake()
     {
+        tagRenderer = GetComponent<FunctionTagsRenderer>();
+        
         if (grid == null) grid = GetComponentInChildren<UIGridRenderer>();
         if (line == null) line = GetComponentInChildren<UILineRenderer>();
-
-        grid.gridSize = gridSize;
-        
-        grid.thickness = gridThickness;
-        line.thickness = lineThickness;
-        
-        RectTransform rectT = GetComponent<RectTransform>();
-        grid.width = line.width = rectT.rect.width;
-        grid.height = line.height = rectT.rect.height;
-
-        line.rangeX = rangeX;
-        line.rangeY = rangeY;
-        
-        PlotFunction(x => x * x * x * x * x);
     }
 
-    private void Update()
+    public void Start()
     {
         grid.gridSize = gridSize;
         
         grid.thickness = gridThickness;
         line.thickness = lineThickness;
         
-        RectTransform rectT = GetComponent<RectTransform>();
-        grid.width = line.width = rectT.rect.width;
-        grid.height = line.height = rectT.rect.height;
+        Rect rect = grid.GetComponent<RectTransform>().rect;
+        grid.width = line.width = rect.width;
+        grid.height = line.height = rect.height;
 
         line.rangeX = rangeX;
         line.rangeY = rangeY;
 
         line.dx = dx;
         line.dy = dy;
+        
+        //PlotFunction(x => -4 + 2*x + 1/2 * 2 * x * x);
+    }
+
+    private void Update()
+    {
+        // grid.gridSize = gridSize;
+        //
+        // grid.thickness = gridThickness;
+        // line.thickness = lineThickness;
+        //
+        // RectTransform rectT = GetComponent<RectTransform>();
+        // grid.width = line.width = rectT.rect.width;
+        // grid.height = line.height = rectT.rect.height;
+        //
+        // line.rangeX = rangeX;
+        // line.rangeY = rangeY;
+        //
+        // line.dx = dx;
+        // line.dy = dy;
     }
 
     public void PlotPoint(Vector2 point) => line.PlotPoint(point);
@@ -66,6 +75,8 @@ public class FunctionRenderer : MonoBehaviour
     public void PlotFunction(Func<float, float> function)
     {
         line.Clear();
+
+        if (dx <= 0) return;
         
         for (float x = rangeX.x; x <= rangeX.y; x += dx)
         {

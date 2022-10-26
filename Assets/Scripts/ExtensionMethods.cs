@@ -26,4 +26,11 @@ public static class ExtensionMethods
     {
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
+    
+    public static void ClearChildren(this Transform transform) 
+    {
+        int childCount = transform.childCount;
+        for (int i = 0; i < childCount; i++)
+            GameObject.DestroyImmediate(transform.GetChild(0).gameObject);
+    }
 }

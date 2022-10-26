@@ -21,8 +21,8 @@ namespace DroneSim
         public Vector3 AngularVelocity => rb.angularVelocity;
         
 
-        public Debugging debuggingUI;
-    
+        public GameObject debuggingUI;
+
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
@@ -55,18 +55,17 @@ namespace DroneSim
         
         private void DebuggingUpdate()
         {
-            if (debuggingUI != null)
+            Debugging debugging = debuggingUI.GetComponent<Debugging>();
+            if (debugging != null)
             {
                 float TOLERANCE = 0.0001f;
                 Vector3 velocity = Quaternion.Euler(0, -transform.rotation.eulerAngles.y.normalizeAngle(), 0) *
                                    Velocity;
-                debuggingUI.LiftSpeed = Mathf.Abs(Velocity.y) < TOLERANCE ? 0 : Velocity.y;
-                debuggingUI.HorizontalSpeedX = velocity.x;
-                debuggingUI.HorizontalSpeedZ = velocity.z;
-                debuggingUI.YawSpeed = AngularVelocity.y;
+                debugging.LiftSpeed = Mathf.Abs(Velocity.y) < TOLERANCE ? 0 : Velocity.y;
+                debugging.HorizontalSpeedX = velocity.x;
+                debugging.HorizontalSpeedZ = velocity.z;
+                debugging.YawSpeed = AngularVelocity.y;
             }
-            
-            
         }
 
         #endregion

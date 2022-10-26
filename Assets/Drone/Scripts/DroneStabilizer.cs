@@ -8,8 +8,8 @@ namespace DroneSim
     {
         private DroneController drone;
     
-        private Gyroscope gyro;
-        private Accelerometer accMeter;
+        [HideInInspector] public Gyroscope gyro;
+        [HideInInspector] public Accelerometer accMeter;
         
         
         public bool stabilizePitchAndRoll = true;

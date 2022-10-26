@@ -9,10 +9,10 @@ public class UILineRenderer : Graphic
 {
     public List<Vector2> points;
 
-    [HideInInspector] public float width;
-    [HideInInspector] public float height;
+    public float width;
+    public float height;
     
-    [HideInInspector] public float thickness = 10f;
+    public float thickness = 10f;
     
     [HideInInspector] public Vector2 rangeX = new Vector2(-1, 1);
     [HideInInspector] public Vector2 rangeY = new Vector2(-1, 1);
@@ -30,6 +30,8 @@ public class UILineRenderer : Graphic
 
         points.Add(point);
         points.Sort((Vector2 a, Vector2 b) => a.x < b.x ? -1 : 1);
+        
+        SetVerticesDirty();
     }
 
     public bool InRange(Vector2 p)
@@ -81,5 +83,10 @@ public class UILineRenderer : Graphic
     }
 
 
-    public void Clear() => points.Clear();
+    public void Clear()
+    {
+        points.Clear();
+        
+        //SetVerticesDirty();
+    }
 }
