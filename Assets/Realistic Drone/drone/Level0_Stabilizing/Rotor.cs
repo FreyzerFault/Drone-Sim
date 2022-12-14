@@ -68,7 +68,7 @@ namespace DroneSim
 
         void Update()
         {
-            // Smooth Power value
+            // Smooth Power value for animation and audio
             if (smoothAnimation)
             {
                 // CLAMP Power [0,1]
@@ -184,12 +184,12 @@ namespace DroneSim
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.Lerp(Color.red, Color.green, power);
+            // Gizmos.color = Color.Lerp(Color.red, Color.green, power);
+            //
+            // Gizmos.DrawLine(transform.position, transform.position + transform.forward * (power));
 
-            Gizmos.DrawLine(transform.position, transform.position + transform.forward * (power));
-
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawLine(transform.position, transform.position + transform.forward * Torque);
+            // Gizmos.color = Color.magenta;
+            // Gizmos.DrawLine(transform.position, transform.position + transform.forward * Torque);
         }
 
         #endregion

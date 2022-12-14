@@ -7,11 +7,10 @@ namespace DroneSim
     public class DroneStabilizer : MonoBehaviour
     {
         private DroneController drone;
-    
-        [HideInInspector] public Gyroscope gyro;
-        [HideInInspector] public Accelerometer accMeter;
-        
-        
+
+        public Gyroscope Gyro => drone.gyro;
+        public Accelerometer AccMeter => drone.accelerometer;
+
         public bool stabilizePitchAndRoll = true;
         public bool stabilizeYaw = true;
         public bool stabilizeBreak = true;
@@ -23,8 +22,8 @@ namespace DroneSim
         
         public Dictionary<String, PID_Configuration> PID;
 
-        public Vector3 Velocity => Quaternion.Euler(0, -gyro.EulerRotation.y, 0) * accMeter.Velocity;
-        public Vector3 EulerRotation => gyro.EulerRotation;
+        public Vector3 Velocity => Quaternion.Euler(0, -Gyro.EulerRotation.y, 0) * AccMeter.Velocity;
+        public Vector3 EulerRotation => Gyro.EulerRotation;
         
         public DroneSettingsSO DroneSettings => drone.droneSettings;
     
@@ -32,14 +31,49 @@ namespace DroneSim
         {
             drone = GetComponent<DroneController>();
 
-            accMeter = GetComponent<Accelerometer>();
-            gyro = GetComponent<Gyroscope>();
             
             SetupPIDs();
         }
 
         private bool isReseted;
-        public void StabilizeParams(Vector3 targetRotation, Vector3 targetVelocity, Vector3 targetAngularVelocity, ref float lift, ref float pitch, ref float roll, ref float yaw)
+
+        // Control pitch and roll to target an Angle Of Attack (X = Pitch, Y = Roll)
+        public Vector2 StabilizeAngleOfAttack(Vector2 targetAngle)
+        {
+            Vector2 currentAngle = new Vector2(EulerRotation.x, EulerRotation.z);
+            float pitch = GetPIDcorrection("pitch", targetAngle.x, currentAngle.x, DroneSettings.saturationValues.maxAngleOfAttack);
+            float roll = GetPIDcorrection("roll", targetAngle.y, -currentAngle.y, DroneSettings.saturationValues.maxAngleOfAttack);
+
+            return new Vector2(pitch, roll);
+        }
+        
+        // Control pitch, roll and yaw to target an Angular Velocity (X = Pitch, Y = Yaw, Z = Roll)
+        public Vector3 StabilizeAngularVelocity(Vector3 targetAngularVelocity)
+        {
+            float responseTime = 1; // in Seconds
+            
+            Vector3 currentAngVel = AccMeter.LocalAngularVelocity;
+            float pitch = GetPIDcorrection("pitch", targetAngularVelocity.x, currentAngVel.x, DroneSettings.saturationValues.maxAngularSpeed);
+            float yaw = GetPIDcorrection("yaw", targetAngularVelocity.y, currentAngVel.y, DroneSettings.saturationValues.maxAngularSpeed);
+            float roll = GetPIDcorrection("roll", targetAngularVelocity.z, -currentAngVel.z, DroneSettings.saturationValues.maxAngularSpeed);
+
+            Vector3 angularVelCorrection = new Vector3(pitch, yaw, roll) * DroneSettings.saturationValues.maxAngularSpeed;
+            
+            // Para pasar Velocidad Angular a la Fuerza que hay que aplicar en los motores, aplicamos formulas de dinamica:
+            // Velocidad Angular: w = vR
+            // Fuerza: F = ma = mv/t = mwR/t
+            // Asi se podra conseguir una Velocidad Angular correcta independientemente de la masa y el radio del dron.
+            Vector3 angularForce = angularVelCorrection * (drone.Mass * drone.Radius / responseTime);
+
+            // Max angular force = 2 rotores al maximo
+            angularForce /= DroneSettings.saturationValues.maxThrottle / 2;
+            angularForce = new Vector3(Mathf.Clamp(angularForce.x, -1, 1), Mathf.Clamp(angularForce.y, -1, 1),
+                Mathf.Clamp(angularForce.z, -1, 1));
+
+            return angularForce;
+        }
+        
+        public void StabilizeParams(Vector3 targetAngle, Vector3 targetVelocity, Vector3 targetAngularVelocity, ref float lift, ref float pitch, ref float roll, ref float yaw)
         {
             // LIFT Speed Correction
             if (stabilizeLiftVelocity)
@@ -55,13 +89,14 @@ namespace DroneSim
                     isReseted = false;
             }
             else
-                lift = targetVelocity.y / DroneSettings.saturationValues.maxLiftSpeed;
+                lift = drone.Curves.liftCurve.Evaluate(drone.liftInput);
             
             // YAW Speed Correction
             if (stabilizeYaw)
                 StabilizeYaw(targetAngularVelocity.y, ref yaw);
             else
-                yaw = targetAngularVelocity.y / DroneSettings.saturationValues.maxAngularSpeed;
+                yaw = drone.Curves.yawCurve.Evaluate(drone.yawInput);
+                // yaw = targetAngularVelocity.y / DroneSettings.saturationValues.maxAngularSpeed;
 
 
             // SPEED BREAK Correction to 0
@@ -72,38 +107,38 @@ namespace DroneSim
                 Vector2 speedPID = StabilizeSpeedH(Vector2.zero);
 
                 // Output is a target angle, overwrite the input
-                targetRotation = new Vector3(
-                    speedPID.y * DroneSettings.saturationValues.maxPitch,   // Pitch
-                    targetRotation.y,                                           // Yaw
-                    speedPID.x * DroneSettings.saturationValues.maxRoll     // Roll
+                targetAngle = new Vector3(
+                    speedPID.y * DroneSettings.saturationValues.maxAngleOfAttack,   // Pitch
+                    targetAngle.y,                                                  // Yaw
+                    speedPID.x * DroneSettings.saturationValues.maxAngleOfAttack    // Roll
                 );
             }
             
             // PITCH & ROLL Correction
             if (stabilizePitchAndRoll)
             {
-                StabilizeRollPitch(targetRotation, ref roll, ref pitch);
+                StabilizeAngleOfAttack(targetAngle, ref roll, ref pitch);
             }
             else
             {
-                roll = targetRotation.z / DroneSettings.saturationValues.maxRoll;
-                pitch = targetRotation.x / DroneSettings.saturationValues.maxPitch;
+                pitch = drone.Curves.liftCurve.Evaluate(drone.pitchInput);
+                roll = drone.Curves.liftCurve.Evaluate(drone.rollInput);
             }
 
         }
 
-        private void StabilizeRollPitch(Vector3 targetRotation, ref float roll, ref float pitch)
+        private void StabilizeAngleOfAttack(Vector3 targetRotation, ref float roll, ref float pitch)
         {
-            pitch = GetPIDcorrection("pitch", targetRotation.x, EulerRotation.x, DroneSettings.saturationValues.maxPitch);
-            roll = GetPIDcorrection("roll", targetRotation.z, -EulerRotation.z, DroneSettings.saturationValues.maxRoll);
+            pitch = GetPIDcorrection("pitch", targetRotation.x, EulerRotation.x, DroneSettings.saturationValues.maxAngleOfAttack);
+            roll = GetPIDcorrection("roll", targetRotation.z, -EulerRotation.z, DroneSettings.saturationValues.maxAngleOfAttack);
         }
 
         private void StabilizeYaw(float targetAngularSpeedY, ref float yaw)
         {
             yaw = GetPIDcorrection(
-                "yawSpeed",
+                "yaw",
                 targetAngularSpeedY,
-                accMeter.AngularVelocity.y,
+                AccMeter.AngularVelocity.y,
                 DroneSettings.saturationValues.maxAngularSpeed
             );
         }
@@ -141,17 +176,17 @@ namespace DroneSim
         // [roll, pitch] [x,y]
         public Vector2 GetRollPitchCorrection(Vector2 targetRotation)
         {
-            float rollError = targetRotation.x + gyro.Roll / DroneSettings.saturationValues.maxRoll;
-            float pitchError = targetRotation.y - gyro.Pitch / DroneSettings.saturationValues.maxPitch;
+            float rollError = targetRotation.x + Gyro.Roll / DroneSettings.saturationValues.maxAngleOfAttack;
+            float pitchError = targetRotation.y - Gyro.Pitch / DroneSettings.saturationValues.maxAngleOfAttack;
 
             return new Vector2(PID_Controller.GetPIDresult(PID["roll"], rollError), PID_Controller.GetPIDresult(PID["pitch"], pitchError));
         }
         
         public Vector2 GetRollPitchCorrectionBySpeed(Vector2 targetSpeed)
         {
-            Vector3 velocity = accMeter.Velocity;
+            Vector3 velocity = AccMeter.Velocity;
             
-            velocity = Quaternion.Euler(0, -gyro.EulerRotation.y, 0) * velocity;
+            velocity = Quaternion.Euler(0, -Gyro.EulerRotation.y, 0) * velocity;
             
             float xSpeedError = targetSpeed.x - velocity.x;
             float zSpeedError = targetSpeed.y - velocity.z;
@@ -161,7 +196,7 @@ namespace DroneSim
         
         public float GetPitchCorrection() {
             
-            float pitchError = gyro.Pitch / DroneSettings.saturationValues.maxPitch;
+            float pitchError = Gyro.Pitch / DroneSettings.saturationValues.maxAngleOfAttack;
             
             float pitchCorrection = -PID_Controller.GetPIDresult(PID["pitch"], pitchError * pitchError * (pitchError > 0 ? 1 : -1)) / 2;
 
@@ -171,7 +206,7 @@ namespace DroneSim
 
         public float GetRollCorrection()
         {
-            float rollError = gyro.Roll / DroneSettings.saturationValues.maxRoll;
+            float rollError = Gyro.Roll / DroneSettings.saturationValues.maxAngleOfAttack;
             
             float rollCorrection = PID_Controller.GetPIDresult(PID["roll"], rollError * rollError * (rollError > 0 ? 1 : -1))/ 2;
 
@@ -183,7 +218,7 @@ namespace DroneSim
         {
             PID_Configuration pid = PID["yawSpeed"];
             
-            float angularSpeed = accMeter.AngularVelocity.y;
+            float angularSpeed = AccMeter.AngularVelocity.y;
             
             float angSpeedError = targetAngularSpeed - angularSpeed;
 
@@ -196,12 +231,12 @@ namespace DroneSim
             PID_Configuration pid = PID["ySpeed"];
             
             // Try to break velocity to 0 -> error = Velocity Horizontal
-            float liftSpeed = accMeter.Velocity.y;
+            float liftSpeed = AccMeter.Velocity.y;
             
             float ySpeedError = targetLiftSpeed - liftSpeed;
 
             return PID_Controller.GetPIDresult(pid, ySpeedError);
-            // return PID_Controller.GetPID(PID["ySpeed"], ySpeedError) * (1 + gyro.Pitch / DroneSettings.saturationValues.maxPitch + gyro.Roll / DroneSettings.saturationValues.maxRoll);
+            // return PID_Controller.GetPID(PID["ySpeed"], ySpeedError) * (1 + Gyro.Pitch / DroneSettings.saturationValues.maxPitch + Gyro.Roll / DroneSettings.saturationValues.maxRoll);
         }
         
         /// <summary>
@@ -214,17 +249,18 @@ namespace DroneSim
         /// <returns>PID correction in [-1,1]</returns>
         public float GetPIDcorrection(String pidName, float target, float current, float maxValue = 1)
         {
-            // / 2 to get the diff in [-1,1] => [-1,1]
-            float error = (target - current) / maxValue / 2;
+            // error / max * 2 to get the diff in [-max, max] => [-1,1]
+            float error = (target - current) / (maxValue * 2);
 
             return PID_Controller.GetPIDresult(PID[pidName], error);
         }
         
         public float GetPIDcorrectionSqr(String pidName, float target, float current, float maxValue = 1)
         {
-            float error = (target - current) / maxValue;
+            // error / max * 2 to get the diff in [-max, max] => [-1,1]
+            float error = (target - current) / (maxValue * 2);
             
-            error *= error * (error > 0 ? 1 : -1);
+            error *= Math.Abs(error);
 
             return PID_Controller.GetPIDresult(PID[pidName], error);
         }

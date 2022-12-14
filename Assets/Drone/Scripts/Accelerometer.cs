@@ -16,10 +16,12 @@ namespace DroneSim
         private Vector3 prevAngularVelocity = Vector3.zero;
 
         // Local Velocity Vector
-        public Vector3 LocalVelocity => transform.worldToLocalMatrix * rb.velocity;
         public Vector3 Velocity => rb.velocity;
+        public Vector3 LocalVelocity => transform.worldToLocalMatrix * rb.velocity;
+
         public Vector3 AngularVelocity => rb.angularVelocity;
-        
+        public Vector3 LocalAngularVelocity => transform.worldToLocalMatrix * rb.angularVelocity;
+
 
         public GameObject debuggingUI;
 
@@ -55,17 +57,17 @@ namespace DroneSim
         
         private void DebuggingUpdate()
         {
-            Debugging debugging = debuggingUI.GetComponent<Debugging>();
-            if (debugging != null)
-            {
-                float TOLERANCE = 0.0001f;
-                Vector3 velocity = Quaternion.Euler(0, -transform.rotation.eulerAngles.y.normalizeAngle(), 0) *
-                                   Velocity;
-                debugging.LiftSpeed = Mathf.Abs(Velocity.y) < TOLERANCE ? 0 : Velocity.y;
-                debugging.HorizontalSpeedX = velocity.x;
-                debugging.HorizontalSpeedZ = velocity.z;
-                debugging.YawSpeed = AngularVelocity.y;
-            }
+            Debugging debugging = GetComponent<DroneController>().debuggingUI.GetComponent<Debugging>();
+            
+            if (debugging == null) return;
+            
+            float TOLERANCE = 0.0001f;
+            Vector3 velocity = Quaternion.Euler(0, -transform.rotation.eulerAngles.y.normalizeAngle(), 0) *
+                               Velocity;
+            debugging.LiftSpeed = Mathf.Abs(Velocity.y) < TOLERANCE ? 0 : Velocity.y;
+            debugging.HorizontalSpeedX = velocity.x;
+            debugging.HorizontalSpeedZ = velocity.z;
+            debugging.YawSpeed = AngularVelocity.y;
         }
 
         #endregion

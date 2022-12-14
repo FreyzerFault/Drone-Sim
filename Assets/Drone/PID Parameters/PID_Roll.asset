@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a0fc09f7c705f748a69f691f195300c, type: 3}
   m_Name: PID_Roll
   m_EditorClassIdentifier: 
-  pGain: 1
-  iGain: 0.1
-  dGain: 0.1
+  pGain: 1.08
+  iGain: 0.06
+  dGain: 0.19
   useP: 1
   useI: 0
   useD: 1

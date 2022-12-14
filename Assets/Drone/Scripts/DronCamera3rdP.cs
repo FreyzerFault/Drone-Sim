@@ -4,14 +4,14 @@ namespace DroneSim
 {
     public class DronCamera3rdP : MonoBehaviour
     {
-        public DroneController drone;
+        public Transform drone;
 
         public float distanceOrbit;
         public float heightOrbit;
 
         private void Awake()
         {
-            drone = GameObject.FindGameObjectWithTag("Player").GetComponent<DroneController>();
+            drone = GameObject.FindGameObjectWithTag("Player").transform;
         }
 
         Vector3 smoothVel = Vector3.zero;
@@ -30,12 +30,12 @@ namespace DroneSim
                 Vector3.SmoothDamp(
                     transform.position,
                     targetPos,
-                    ref smoothVel, 0.01f
+                    ref smoothVel, Time.deltaTime //* 0.01f
                 );
 
 
             transform.rotation = Quaternion.Slerp(transform.rotation,
-                Quaternion.LookRotation(dronePos + droneForward - transform.position), 0.1f);
+                Quaternion.LookRotation(dronePos + droneForward - transform.position), Time.deltaTime * 10f);
         }
     }
 }

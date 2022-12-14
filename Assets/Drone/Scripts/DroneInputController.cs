@@ -22,20 +22,22 @@ namespace DroneSim
 
         private void OnMove(InputValue value)
         {
+            //Vector2 move = value.Get<Vector2>();
             Vector2 move = circleToSquareInput(value.Get<Vector2>());
             droneController.rollInput = move.x;
             droneController.pitchInput = move.y;
             
-            joystickL.transform.localPosition = move * joystickSquareWidth;
+            joystickR.transform.localPosition = move * joystickSquareWidth;
         }
 
         private void OnLiftYaw(InputValue value)
         {
+            //Vector2 liftYaw = value.Get<Vector2>();
             Vector2 liftYaw = circleToSquareInput(value.Get<Vector2>());
             droneController.yawInput = liftYaw.x;
             droneController.liftInput = liftYaw.y;
             
-            joystickR.transform.localPosition = liftYaw * joystickSquareWidth;
+            joystickL.transform.localPosition = liftYaw * joystickSquareWidth;
         }
 
         private void OnReset(InputValue value)
@@ -50,7 +52,22 @@ namespace DroneSim
 
         private void OnChangeMode(InputValue value)
         {
-            droneController.stabilizer.ToggleStabilization();
+            droneController.SwitchMode((value.Get<float>() > 0));
+        }
+        
+        private void OnToggleHover(InputValue value)
+        {
+            droneController.hoverStabilization = !droneController.hoverStabilization;
+        }
+
+        private void OnSwitchCamera(InputValue value)
+        {
+            if (droneController.FPVCamera.gameObject.activeSelf)
+                GameManager.Camera = droneController.TPVCamera;
+            else if (droneController.TPVCamera.gameObject.activeSelf)
+                GameManager.Camera = droneController.StaticCamera;
+            else if (droneController.StaticCamera.gameObject.activeSelf)
+                GameManager.Camera = droneController.FPVCamera;
         }
 
         #endregion

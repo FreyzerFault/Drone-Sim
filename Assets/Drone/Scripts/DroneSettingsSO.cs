@@ -19,9 +19,8 @@ namespace DroneSim
 
 
             // Movement params
+            public float maxAngleOfAttack = 60;
             public float maxLift = 5;
-            public float maxPitch = 30;
-            public float maxRoll = 30;
             public float yawPower = 4;
             
             // Speed params
@@ -45,9 +44,12 @@ namespace DroneSim
         [Serializable]
         public class Curves
         {
+            // Por si es necesario separarlas
+            // public AnimationCurve pitchCurve;
+            // public AnimationCurve rollCurve;
+            
+            public AnimationCurve pitchRollCurve;
             public AnimationCurve liftCurve;
-            public AnimationCurve pitchCurve;
-            public AnimationCurve rollCurve;
             public AnimationCurve yawCurve;
         }
 
