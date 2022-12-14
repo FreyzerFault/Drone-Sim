@@ -34,10 +34,10 @@ namespace DroneSim
         #region Physics Parameters
 
         // Torque = Rotational Force applied to propeller by rotor (CW > 0, CCW < 0)
-        public float Torque => Power * MaxTorque * (counterclockwise ? -1 : 1);
+        public float Torque => power * MaxTorque * (counterclockwise ? -1 : 1);
 
         // Throttle = upward force (Power = 0.5 => Hover => Throttle = Gravity)
-        public float Throttle => Power * MaxThrottle;
+        public float Throttle => power * MaxThrottle;
 
 
         private float MaxRotationSpeed => drone.droneSettings.saturationValues.maxRotationSpeed;
@@ -77,7 +77,7 @@ namespace DroneSim
                 // Smooth change in power
                 float powerDiff = power - lastPower;
                 if (Mathf.Abs(powerDiff) > smoothStep)
-                    smoothPower = lastPower + (smoothStep * (powerDiff > 0 ? 1 : -1));
+                    smoothPower = lastPower + smoothStep * (powerDiff > 0 ? 1 : -1);
                 else
                     smoothPower = power;
 
@@ -174,6 +174,7 @@ namespace DroneSim
         /// </summary>
         private void ApplyTorque()
         {
+            
             drone_rb.AddTorque(transform.forward * -Torque);
         }
 

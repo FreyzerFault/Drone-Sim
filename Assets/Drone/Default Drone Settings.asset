@@ -26,8 +26,8 @@ MonoBehaviour:
   parameters:
     mass: 2
     minDragCoefficient: 0.1
-    maxDragCoefficient: 0.5
-    angularDrag: 2
+    maxDragCoefficient: 1
+    angularDrag: 3
   curves:
     pitchRollCurve:
       serializedVersion: 2
@@ -101,29 +101,29 @@ MonoBehaviour:
       - serializedVersion: 3
         time: -0.9916649
         value: -1
-        inSlope: 1.6333629
-        outSlope: 1.6333629
+        inSlope: 2.1166785
+        outSlope: 2.1166785
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0.14351921
+        outWeight: 0.11715694
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 0.18483083
-        outSlope: 0.18483083
+        inSlope: 0.123388395
+        outSlope: 0.123388395
         tangentMode: 0
         weightedMode: 3
-        inWeight: 0.34726834
-        outWeight: 0.3444103
+        inWeight: 0.7489494
+        outWeight: 0.67635447
       - serializedVersion: 3
         time: 1
         value: 0.9953232
-        inSlope: 1.7462237
-        outSlope: 1.7462237
+        inSlope: 2.55524
+        outSlope: 2.55524
         tangentMode: 0
         weightedMode: 2
-        inWeight: 0.13388902
+        inWeight: 0.09128463
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2

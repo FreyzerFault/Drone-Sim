@@ -32,8 +32,8 @@ Transform:
   m_GameObject: {fileID: 3209865575176536708}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5941920997574728874}
   - {fileID: 5941920997574812948}
@@ -52,8 +52,8 @@ Rigidbody:
   m_GameObject: {fileID: 3209865575176536708}
   serializedVersion: 2
   m_Mass: 2
-  m_Drag: 0
-  m_AngularDrag: 2
+  m_Drag: 1
+  m_AngularDrag: 3
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
@@ -71,11 +71,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b08c80e8e3b064419c9b62611a1cacd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FPVCamera: {fileID: 0}
+  TPVCamera: {fileID: 0}
+  StaticCamera: {fileID: 0}
+  flightMode: 0
+  hoverStabilization: 1
   droneSettings: {fileID: 11400000, guid: 45c0fe19979f84f4299471c870c85f52, type: 2}
   environmentSettings: {fileID: 11400000, guid: 22c124c3937569f47af34e5ea2da3289, type: 2}
   stabilizer: {fileID: 6330405645997655268}
-  pitchRollOutputPoint: {fileID: 0}
-  liftYawOutputPoint: {fileID: 0}
+  gyro: {fileID: 0}
+  accelerometer: {fileID: 0}
   rotorCW1: {fileID: 5941920997564747344}
   rotorCW2: {fileID: 5941920997564818642}
   rotorCCW1: {fileID: 5941920997564802948}
@@ -84,6 +89,9 @@ MonoBehaviour:
   pitchInput: 0
   rollInput: 0
   liftInput: 0
+  debuggingUI: {fileID: 0}
+  pitchRollOutputJoystick: {fileID: 0}
+  liftYawOutputJoystick: {fileID: 0}
   drag: {x: 0, y: 0, z: 0}
 --- !u!114 &6330405645997655268
 MonoBehaviour:
@@ -101,7 +109,19 @@ MonoBehaviour:
   stabilizeYaw: 1
   stabilizeBreak: 1
   stabilizeLiftVelocity: 1
-  PIDConfigurations: []
+  PIDConfigurations:
+  - name: roll
+    config: {fileID: 11400000, guid: a32c2c69cd7927c4fac912efbd347f60, type: 2}
+  - name: pitch
+    config: {fileID: 11400000, guid: 229f36c3c76cb294e8471973ea780c0a, type: 2}
+  - name: xSpeed
+    config: {fileID: 11400000, guid: 8abc851fb80e9d341ba7d085db11dfb1, type: 2}
+  - name: zSpeed
+    config: {fileID: 11400000, guid: 2a4aca750ba2938439b387992cb17441, type: 2}
+  - name: ySpeed
+    config: {fileID: 11400000, guid: d63768f2de8fc204f969cb369ac8d1fd, type: 2}
+  - name: yaw
+    config: {fileID: 11400000, guid: cfe4fb4fce8de234aae6e47b1c60ad6c, type: 2}
 --- !u!114 &4758075807791414279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -571,7 +591,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: a41d1b4b35af4154da0034220e2dbbfe, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.503
+  m_Volume: 0.309
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1196,7 +1216,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: a41d1b4b35af4154da0034220e2dbbfe, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.503
+  m_Volume: 0.309
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1971,7 +1991,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: a41d1b4b35af4154da0034220e2dbbfe, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.503
+  m_Volume: 0.309
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -3270,7 +3290,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: a41d1b4b35af4154da0034220e2dbbfe, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.503
+  m_Volume: 0.309
   m_Pitch: 1
   Loop: 1
   Mute: 0
