@@ -42,32 +42,53 @@ namespace DroneSim
 
         private void OnReset(InputValue value)
         {
+            if (GameManager.Instance.IsPaused) return;
+            
             droneController.ResetRotation();
         }
 
         private void OnToggleMotor(InputValue value)
         {
+            if (GameManager.Instance.IsPaused) return;
+            
             droneController.enabled = !droneController.enabled;
         }
 
         private void OnChangeMode(InputValue value)
         {
-            droneController.SwitchMode((value.Get<float>() > 0));
+            if (GameManager.Instance.IsPaused) return;
+
+            droneController.SwitchMode(value.Get<float>() > 0);
         }
         
         private void OnToggleHover(InputValue value)
         {
+            if (GameManager.Instance.IsPaused) return;
+            
             droneController.hoverStabilization = !droneController.hoverStabilization;
         }
 
         private void OnSwitchCamera(InputValue value)
         {
+            if (GameManager.Instance.IsPaused) return;
+            
             if (droneController.FPVCamera.gameObject.activeSelf)
                 GameManager.Camera = droneController.TPVCamera;
             else if (droneController.TPVCamera.gameObject.activeSelf)
                 GameManager.Camera = droneController.StaticCamera;
             else if (droneController.StaticCamera.gameObject.activeSelf)
                 GameManager.Camera = droneController.FPVCamera;
+        }
+        
+        
+        // PAUSE
+        private MenuToggle menuToggle;
+        public void OnPause(InputValue value)
+        {
+            if (menuToggle == null)
+                menuToggle = GameObject.FindGameObjectWithTag("MenuToggle").GetComponent<MenuToggle>();
+
+            menuToggle.Toggle();
         }
 
         #endregion

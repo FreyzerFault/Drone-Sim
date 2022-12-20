@@ -98,6 +98,42 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Point"",
+                    ""type"": ""Value"",
+                    ""id"": ""c672761b-9c39-4674-81b6-fff995aebd7c"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""ee6ac279-f27c-4d22-a299-c6310af90798"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Main Action"",
+                    ""type"": ""Button"",
+                    ""id"": ""e17830b9-2978-4053-a14d-41bd87ec3fc9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Secondary Action"",
+                    ""type"": ""Button"",
+                    ""id"": ""e7c457a2-005d-4d8c-9185-887748d72b95"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -507,6 +543,83 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""action"": ""SwitchCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4cefe9a4-c3ba-40ed-93bd-eb4e878587c8"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Point"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""85b050e4-e394-4bf0-b370-90c04e2467f9"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""46b32cf4-5366-4b8d-86e6-0b60eed39bb8"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4fb6928b-c4bf-49d4-8fdf-01c5a7dc3fc3"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Main Action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a74ff93f-d41a-4f9d-8ba8-3d6bd04d1f71"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Main Action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ad2528f1-b42c-4a56-9f61-e90d79e50d25"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Secondary Action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b6716a20-7ecb-4841-93c5-49f7a92a1661"",
+                    ""path"": ""<Keyboard>/backspace"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Secondary Action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -523,6 +636,10 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         m_Gameplay_ChangeMode = m_Gameplay.FindAction("ChangeMode", throwIfNotFound: true);
         m_Gameplay_ToggleHover = m_Gameplay.FindAction("ToggleHover", throwIfNotFound: true);
         m_Gameplay_SwitchCamera = m_Gameplay.FindAction("SwitchCamera", throwIfNotFound: true);
+        m_Gameplay_Point = m_Gameplay.FindAction("Point", throwIfNotFound: true);
+        m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
+        m_Gameplay_MainAction = m_Gameplay.FindAction("Main Action", throwIfNotFound: true);
+        m_Gameplay_SecondaryAction = m_Gameplay.FindAction("Secondary Action", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -590,6 +707,10 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_ChangeMode;
     private readonly InputAction m_Gameplay_ToggleHover;
     private readonly InputAction m_Gameplay_SwitchCamera;
+    private readonly InputAction m_Gameplay_Point;
+    private readonly InputAction m_Gameplay_Pause;
+    private readonly InputAction m_Gameplay_MainAction;
+    private readonly InputAction m_Gameplay_SecondaryAction;
     public struct GameplayActions
     {
         private @PlayerAction m_Wrapper;
@@ -602,6 +723,10 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         public InputAction @ChangeMode => m_Wrapper.m_Gameplay_ChangeMode;
         public InputAction @ToggleHover => m_Wrapper.m_Gameplay_ToggleHover;
         public InputAction @SwitchCamera => m_Wrapper.m_Gameplay_SwitchCamera;
+        public InputAction @Point => m_Wrapper.m_Gameplay_Point;
+        public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
+        public InputAction @MainAction => m_Wrapper.m_Gameplay_MainAction;
+        public InputAction @SecondaryAction => m_Wrapper.m_Gameplay_SecondaryAction;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -635,6 +760,18 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @SwitchCamera.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSwitchCamera;
                 @SwitchCamera.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSwitchCamera;
                 @SwitchCamera.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSwitchCamera;
+                @Point.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPoint;
+                @Point.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPoint;
+                @Point.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPoint;
+                @Pause.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
+                @MainAction.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMainAction;
+                @MainAction.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMainAction;
+                @MainAction.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMainAction;
+                @SecondaryAction.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSecondaryAction;
+                @SecondaryAction.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSecondaryAction;
+                @SecondaryAction.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSecondaryAction;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -663,6 +800,18 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @SwitchCamera.started += instance.OnSwitchCamera;
                 @SwitchCamera.performed += instance.OnSwitchCamera;
                 @SwitchCamera.canceled += instance.OnSwitchCamera;
+                @Point.started += instance.OnPoint;
+                @Point.performed += instance.OnPoint;
+                @Point.canceled += instance.OnPoint;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
+                @MainAction.started += instance.OnMainAction;
+                @MainAction.performed += instance.OnMainAction;
+                @MainAction.canceled += instance.OnMainAction;
+                @SecondaryAction.started += instance.OnSecondaryAction;
+                @SecondaryAction.performed += instance.OnSecondaryAction;
+                @SecondaryAction.canceled += instance.OnSecondaryAction;
             }
         }
     }
@@ -677,5 +826,9 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         void OnChangeMode(InputAction.CallbackContext context);
         void OnToggleHover(InputAction.CallbackContext context);
         void OnSwitchCamera(InputAction.CallbackContext context);
+        void OnPoint(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
+        void OnMainAction(InputAction.CallbackContext context);
+        void OnSecondaryAction(InputAction.CallbackContext context);
     }
 }
