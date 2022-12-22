@@ -1,0 +1,93 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Main%20Menu/Main%20Menu%20USS.uss?fileID=7433441132597879392&amp;guid=5203179ee050a7a4084d11889926768c&amp;type=3#Main Menu USS" />
+    <ui:VisualElement class="background" style="flex-direction: row; justify-content: flex-start; background-image: url(&apos;project://database/Assets/UI%20Toolkit/Main%20Menu/Screenshot.jpeg.png?fileID=2800000&amp;guid=91fced5bd69841a46bcb83f17b5b2093&amp;type=3#Screenshot.jpeg&apos;);">
+        <ui:VisualElement name="menu" class="menu-container">
+            <ui:VisualElement name="menu-header" class="menu-header">
+                <ui:VisualElement class="logo" />
+            </ui:VisualElement>
+            <ui:VisualElement name="button-menu" class="button-menu menu menu-body">
+                <ui:Button text="PLAY" display-tooltip-when-elided="true" name="play-button" class="menu-button" />
+                <ui:Button text="SELECT LEVEL" display-tooltip-when-elided="true" name="level-button" class="menu-button" />
+                <ui:Button text="SELECT DRONE" display-tooltip-when-elided="true" name="drone-button" class="menu-button" />
+                <ui:Button text="SETTINGS" display-tooltip-when-elided="true" name="settings-button" class="menu-button" />
+                <ui:Button text="STATS" display-tooltip-when-elided="true" name="stats-button" class="menu-button" />
+                <ui:Button text="QUIT" display-tooltip-when-elided="true" name="quit-button" class="menu-button" />
+            </ui:VisualElement>
+            <ui:VisualElement name="info" class="info" />
+        </ui:VisualElement>
+        <ui:VisualElement style="width: 100%; height: 100%;">
+            <ui:VisualElement name="level-selector" class="selector selector-closed-level">
+                <ui:Label text="Select Level" display-tooltip-when-elided="true" class="selector-title" />
+                <ui:VisualElement name="level-grid" class="selector-grid" style="flex-grow: 1; width: 100%;">
+                    <ui:Button display-tooltip-when-elided="true" name="level01" class="selectible-item">
+                        <ui:VisualElement class="selectible-bot">
+                            <ui:Label text="Level 1" display-tooltip-when-elided="true" name="level01-label" />
+                        </ui:VisualElement>
+                    </ui:Button>
+                    <ui:Button display-tooltip-when-elided="true" name="level02" text="Level 2" class="selectible-item">
+                        <ui:VisualElement class="selectible-bot">
+                            <ui:Label text="Level 2" display-tooltip-when-elided="true" name="level02-label" />
+                        </ui:VisualElement>
+                    </ui:Button>
+                    <ui:Button display-tooltip-when-elided="true" name="level03" text="Level 3" class="selectible-item">
+                        <ui:VisualElement class="selectible-bot">
+                            <ui:Label text="Level 3" display-tooltip-when-elided="true" name="level03-label" />
+                        </ui:VisualElement>
+                    </ui:Button>
+                    <ui:Button display-tooltip-when-elided="true" name="level04" text="Level 4" class="selectible-item">
+                        <ui:VisualElement class="selectible-bot">
+                            <ui:Label text="Level 4" display-tooltip-when-elided="true" name="level04-label" />
+                        </ui:VisualElement>
+                    </ui:Button>
+                    <ui:Button display-tooltip-when-elided="true" name="level05" text="Level 5" class="selectible-item">
+                        <ui:VisualElement class="selectible-bot">
+                            <ui:Label text="Level 5" display-tooltip-when-elided="true" name="level05-label" />
+                        </ui:VisualElement>
+                    </ui:Button>
+                    <ui:Button display-tooltip-when-elided="true" name="level06" text="Level 6" class="selectible-item">
+                        <ui:VisualElement class="selectible-bot">
+                            <ui:Label text="Level 6" display-tooltip-when-elided="true" name="level06-label" />
+                        </ui:VisualElement>
+                    </ui:Button>
+                </ui:VisualElement>
+                <ui:Button text="Back" display-tooltip-when-elided="true" class="back-button" />
+            </ui:VisualElement>
+            <ui:VisualElement name="drone-selector" class="selector selector-closed-drone">
+                <ui:Label text="Select Drone" display-tooltip-when-elided="true" class="selector-title" />
+                <ui:VisualElement name="drone-grid" class="selector-grid" style="flex-grow: 1; width: 100%;">
+                    <ui:Button display-tooltip-when-elided="true" name="drone01" class="selectible-item">
+                        <ui:VisualElement class="selectible-bot">
+                            <ui:Label text="Level 1" display-tooltip-when-elided="true" name="drone01-label" class="selectible-label" />
+                        </ui:VisualElement>
+                    </ui:Button>
+                    <ui:Button display-tooltip-when-elided="true" name="drone02" text="Level 2" class="selectible-item">
+                        <ui:VisualElement class="selectible-bot">
+                            <ui:Label text="Level 2" display-tooltip-when-elided="true" name="drone02-label" class="selectible-label" />
+                        </ui:VisualElement>
+                    </ui:Button>
+                    <ui:Button display-tooltip-when-elided="true" name="drone03" text="Level 3" class="selectible-item">
+                        <ui:VisualElement class="selectible-bot">
+                            <ui:Label text="Level 3" display-tooltip-when-elided="true" name="drone03-label" class="selectible-label" />
+                        </ui:VisualElement>
+                    </ui:Button>
+                    <ui:Button display-tooltip-when-elided="true" name="drone04" text="Level 4" class="selectible-item">
+                        <ui:VisualElement class="selectible-bot">
+                            <ui:Label text="Level 4" display-tooltip-when-elided="true" name="drone04-label" class="selectible-label" />
+                        </ui:VisualElement>
+                    </ui:Button>
+                    <ui:Button display-tooltip-when-elided="true" name="drone05" text="Level 5" class="selectible-item">
+                        <ui:VisualElement class="selectible-bot">
+                            <ui:Label text="Level 5" display-tooltip-when-elided="true" name="drone05-label" class="selectible-label" />
+                        </ui:VisualElement>
+                    </ui:Button>
+                    <ui:Button display-tooltip-when-elided="true" name="drone06" text="Level 6" class="selectible-item">
+                        <ui:VisualElement class="selectible-bot">
+                            <ui:Label text="Level 6" display-tooltip-when-elided="true" name="drone06-label" class="selectible-label" />
+                        </ui:VisualElement>
+                    </ui:Button>
+                </ui:VisualElement>
+                <ui:Button text="Back" display-tooltip-when-elided="true" class="back-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

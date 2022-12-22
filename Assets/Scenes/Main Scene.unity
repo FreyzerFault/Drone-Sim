@@ -4633,7 +4633,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1394740435
 Transform:
   m_ObjectHideFlags: 0
@@ -6057,6 +6057,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96e90af20e308d248b5a9e5e9a43cd4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mode: 0
+  prevMode: 0
 --- !u!4 &1751228116
 Transform:
   m_ObjectHideFlags: 0
@@ -8765,31 +8767,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1521157075194656831, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.91479105
       objectReference: {fileID: 0}
     - target: {fileID: 1521157075194656831, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 0.27218482
       objectReference: {fileID: 0}
     - target: {fileID: 1521157075194656831, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.22331563
       objectReference: {fileID: 0}
     - target: {fileID: 1521157075194656831, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0.19799724
       objectReference: {fileID: 0}
     - target: {fileID: 1521157075194656831, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 35.903
       objectReference: {fileID: 0}
     - target: {fileID: 1521157075194656831, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 21.798
       objectReference: {fileID: 0}
     - target: {fileID: 1521157075194656831, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: -17.286
       objectReference: {fileID: 0}
     - target: {fileID: 1524075645258716305, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
       propertyPath: m_Volume

@@ -65,7 +65,7 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-    public void Quit () 
+    public static void Quit () 
     {
         #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
