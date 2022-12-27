@@ -6,7 +6,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Select Level Menu
+  m_Name: Settings Menu
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: open
@@ -99,7 +99,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 6edc80ccdb4915a40a465f9506be4c1b, type: 2}
+  m_Motion: {fileID: 7400000, guid: 98f1291d4d0ef2e48ad3bf91cac516e0, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -151,7 +151,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 9f204216d98751d45a38bb0442e11464, type: 2}
+  m_Motion: {fileID: 7400000, guid: 4a5d79ac239b2034da71d2cd33c7cbeb, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

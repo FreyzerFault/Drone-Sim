@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 [Serializable]
 public enum GameMode {Drone, Pause}
@@ -56,6 +58,22 @@ public class GameManager : Singleton<GameManager>
             Camera.main.gameObject.SetActive(false);
             value.gameObject.SetActive(true);
         }
+    }
+
+    public static EventSystem SwitchEventSystem(EventSystem evSystem)
+    {
+        if (evSystem == EventSystem.current)
+            return evSystem;
+        
+        EventSystem lastES = EventSystem.current;
+
+        lastES.enabled = false;
+        evSystem.enabled = true;
+        EventSystem.current = evSystem;
+        
+        evSystem.firstSelectedGameObject.GetComponent<Selectable>().Select();
+        
+        return lastES;
     }
     
     public void ResetGame()
