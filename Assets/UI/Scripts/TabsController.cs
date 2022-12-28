@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Composites;
 using UnityEngine.UI;
 
 public class TabsController : MonoBehaviour
@@ -43,12 +40,10 @@ public class TabsController : MonoBehaviour
     {
         // Cerrar la anterior
         tabMenus[selectedTab].SetActive(false);
+        tabMenus[tab].SetActive(true);
+        
+        GetComponentsInChildren<Button>()[tab].GetComponent<Image>().color = Color.yellow;
         
         selectedTab = tab;
-        
-        EventSystem lastES = GameManager.SwitchEventSystem(tabEventSystem);
-        GetComponentsInChildren<Button>()[tab].Select();
-        tabMenus[tab].SetActive(true);
-        GameManager.SwitchEventSystem(lastES);
     }
 }
