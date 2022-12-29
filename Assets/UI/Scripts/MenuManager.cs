@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class MenuManager : Singleton<MenuManager>
@@ -13,8 +14,6 @@ public class MenuManager : Singleton<MenuManager>
     private SubMenu SettingsMenu => subMenus[2];
 
     private int menuOpened = -1;
-    
-    public TabsController settingsTabController;
 
     public int levelSelectedID;
     public int droneSelectedID;
@@ -28,6 +27,7 @@ public class MenuManager : Singleton<MenuManager>
     private void Start()
     {
         UpdateSelectedLevel(levelSelectedID);
+        UpdateSelectedDrone(droneSelectedID);
 
         for (int i = 0; i < subMenus.Count; i++)
         {
@@ -50,9 +50,6 @@ public class MenuManager : Singleton<MenuManager>
     public void ToggleSettingsMenu()
     {
         ToggleMenu(2);
-        
-        if (subMenus[2].isOpen)
-            settingsTabController.OpenTab(0);
     }
 
     // Abre o Cierra el Menu
@@ -103,4 +100,14 @@ public class MenuManager : Singleton<MenuManager>
         LevelMenu.firstSelected.animator.SetBool(Selected, true);
         levelSelectedID = id;
     }
+    
+    public void UpdateSelectedDrone(int id)
+    {
+        DroneMenu.firstSelected = DroneMenu.selectibles[id];
+        DroneMenu.selectibles[droneSelectedID].animator.SetBool(Selected, false);
+        DroneMenu.firstSelected.animator.SetBool(Selected, true);
+        droneSelectedID = id;
+    }
+
+    public void OnCancel() => CloseMenu();
 }
