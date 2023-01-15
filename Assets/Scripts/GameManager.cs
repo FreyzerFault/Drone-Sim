@@ -17,7 +17,7 @@ public class GameManager : Singleton<GameManager>
     
     public GameMode Mode { get => mode; private set => mode = value; }
     public GameMode PrevMode { get => prevMode; private set => prevMode = value; }
-    public bool IsPaused => mode == GameMode.Pause;
+    public bool GameIsPaused => mode == GameMode.Pause;
     
     public void SwitchMode(GameMode newMode)
     {

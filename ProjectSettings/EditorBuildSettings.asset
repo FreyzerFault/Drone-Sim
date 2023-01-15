@@ -9,9 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Main Menu.unity
     guid: c6826ace15207ec4c8735712efefdcc0
   - enabled: 1
-    path: Assets/Scenes/Main Scene.unity
+    path: Assets/Levels/Prototype/Prototype Level.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/Instituto.unity
+    path: Assets/Levels/Instituto/Instituto.unity
     guid: 43dbe778673d7b74eb6cf545053c8a7f
   m_configObjects: {}

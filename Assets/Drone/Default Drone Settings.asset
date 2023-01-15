@@ -13,15 +13,12 @@ MonoBehaviour:
   m_Name: Default Drone Settings
   m_EditorClassIdentifier: 
   saturationValues:
-    maxPower: 1
-    maxRotationSpeed: 5000
+    maxRotationSpeed: 4000
     maxTorque: 3
     maxThrottle: 15
     maxAngleOfAttack: 60
-    maxLift: 50
-    yawPower: 10
     maxSpeed: 30
-    maxLiftSpeed: 10
+    maxLiftSpeed: 15
     maxAngularSpeed: 60
   parameters:
     mass: 2

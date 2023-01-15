@@ -16,12 +16,18 @@ namespace DroneSim
         
         private void Awake()
         {
-            drone = GameObject.FindGameObjectWithTag("Player").GetComponent<DroneController>();
-            
+            drone = GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneController>();
+
+            distanceOrbit = Vector3.ProjectOnPlane(drone.transform.position - drone.TPVposition.position, Vector3.up).magnitude;
+            heightOrbit = Vector3.ProjectOnPlane(drone.transform.position - drone.TPVposition.position, drone.transform.forward).magnitude;
+
+
             transform.position = drone.transform.position
                                  - Vector3.ProjectOnPlane(drone.transform.forward, Vector3.up).normalized * distanceOrbit
                                  + Vector3.up * heightOrbit;
             transform.rotation = drone.transform.rotation;
+
+            targetPos = drone.transform.position;
         }
 
         Vector3 smoothVel = Vector3.zero;

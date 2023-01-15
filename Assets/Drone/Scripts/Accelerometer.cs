@@ -5,6 +5,7 @@ namespace DroneSim
 {
     public class Accelerometer : MonoBehaviour
     {
+        private DroneController drone;
         private Rigidbody rb;
 
         [HideInInspector]
@@ -17,22 +18,17 @@ namespace DroneSim
 
         // Local Velocity Vector
         public Vector3 Velocity => rb.velocity;
+        public Vector3 HorizontalVelocity => Quaternion.Euler(0, -drone.gyro.EulerRotation.y, 0) * rb.velocity;
         public Vector3 LocalVelocity => transform.worldToLocalMatrix * rb.velocity;
 
         public Vector3 AngularVelocity => rb.angularVelocity;
         public Vector3 LocalAngularVelocity => transform.worldToLocalMatrix * rb.angularVelocity;
-
-
-        public GameObject debuggingUI;
+        
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
-        }
-
-        private void Update()
-        {
-            DebuggingUpdate();
+            drone = GetComponent<DroneController>();
         }
 
         private void FixedUpdate()
@@ -51,26 +47,6 @@ namespace DroneSim
             prevVelocity = velocity;
             prevAngularVelocity = angularVelocity;
         }
-
-        #region Debug
-
-        
-        private void DebuggingUpdate()
-        {
-            Debugging debugging = GetComponent<DroneController>().debuggingUI.GetComponent<Debugging>();
-            
-            if (debugging == null) return;
-            
-            float TOLERANCE = 0.0001f;
-            Vector3 velocity = Quaternion.Euler(0, -transform.rotation.eulerAngles.y.normalizeAngle(), 0) *
-                               Velocity;
-            debugging.LiftSpeed = Mathf.Abs(Velocity.y) < TOLERANCE ? 0 : Velocity.y;
-            debugging.HorizontalSpeedX = velocity.x;
-            debugging.HorizontalSpeedZ = velocity.z;
-            debugging.YawSpeed = AngularVelocity.y;
-        }
-
-        #endregion
     }
 
 }

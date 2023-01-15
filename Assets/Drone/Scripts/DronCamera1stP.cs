@@ -7,24 +7,15 @@ namespace DroneSim
     {
         public DroneController drone;
 
-        public Vector3 positionOffset;
-        public float angle;
-
         private void Awake()
         {
-            drone = GameObject.FindGameObjectWithTag("Player").GetComponent<DroneController>();
-
-            positionOffset = transform.localPosition;
-            transform.localRotation = Quaternion.Euler(0, 0, 0);
+            drone = GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneController>();
         }
-
-        Vector3 smoothVel = Vector3.zero;
 
         private void LateUpdate()
         {
-            transform.position = drone.transform.position + drone.transform.forward * positionOffset.x +
-                                 drone.transform.up * positionOffset.y;
-            transform.rotation = drone.transform.rotation * Quaternion.Euler(angle, 0, 0);
+            transform.position = drone.FPVposition.position;
+            transform.rotation = drone.FPVposition.rotation;
         }
     }
 }

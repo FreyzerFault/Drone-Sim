@@ -12,7 +12,6 @@ namespace DroneSim
         public class SaturationValues
         {
             // Max params of the propellers
-            public float maxPower = 1;
             public float maxRotationSpeed = 10000;
             public float maxTorque = 1;
             public float maxThrottle = 1;
@@ -20,8 +19,6 @@ namespace DroneSim
 
             // Movement params
             public float maxAngleOfAttack = 60;
-            public float maxLift = 5;
-            public float yawPower = 4;
             
             // Speed params
             public float maxSpeed = 10;

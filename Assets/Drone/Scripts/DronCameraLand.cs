@@ -8,7 +8,7 @@ namespace DroneSim
 
         private void Awake()
         {
-            drone = GameObject.FindGameObjectWithTag("Player").GetComponent<DroneController>();
+            drone = GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneController>();
         }
 
         private void LateUpdate()

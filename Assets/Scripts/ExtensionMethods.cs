@@ -31,6 +31,6 @@ public static class ExtensionMethods
     {
         int childCount = transform.childCount;
         for (int i = 0; i < childCount; i++)
-            GameObject.DestroyImmediate(transform.GetChild(0).gameObject);
+            Object.DestroyImmediate(transform.GetChild(0).gameObject);
     }
 }

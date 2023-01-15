@@ -14,6 +14,8 @@ namespace DroneSim
             public Vector3 windForce;
         }
 
+        public float gravity = 9.81f;
+
         public AtmosphericSettings atmosphericSettings;
     }
 }

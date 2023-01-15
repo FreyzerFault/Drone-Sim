@@ -28,9 +28,18 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
             ""id"": ""ebfcd3db-0970-4083-b0f2-0bc329c727d2"",
             ""actions"": [
                 {
-                    ""name"": ""Move"",
+                    ""name"": ""PitchRoll"",
                     ""type"": ""Value"",
                     ""id"": ""b7edcbee-169d-4589-bfd3-832ca994e399"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""LiftYaw"",
+                    ""type"": ""Value"",
+                    ""id"": ""9824ae96-aa0c-4b3f-8a0d-f34bc29a8aa2"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -62,15 +71,6 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""LiftYaw"",
-                    ""type"": ""Value"",
-                    ""id"": ""9824ae96-aa0c-4b3f-8a0d-f34bc29a8aa2"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""ChangeMode"",
@@ -204,127 +204,6 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""WASD"",
-                    ""id"": ""01bae36c-94f6-43a7-95f3-2cad86574abb"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""e1326a1f-b88b-46b9-ad98-281486f4e0b9"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""cfbd722b-8f64-4079-815c-639f3fb8d1aa"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""24c55280-134d-4eb8-9fdf-979b1e4834be"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""367f6e6a-a69c-4c87-a452-63b40e45d8ac"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5c409348-c95e-4a8a-bf3f-22d977a1a8eb"",
-                    ""path"": ""<Gamepad>/rightStick"",
-                    ""interactions"": """",
-                    ""processors"": ""StickDeadzone"",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""Arrows"",
-                    ""id"": ""6bb11745-ec43-435a-abe1-6879f1430bad"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""3266c9b9-d3a3-473b-977e-619dce4bc458"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""7f2b9db5-d04f-40dc-aa5b-0012ad01379c"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""30f0c9bb-e2d9-413f-a2ee-37f0d6822664"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""f992b800-5dd1-46a9-9fdd-27ccb5b0e8c3"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
                     ""id"": ""1dbef0b4-0fb7-45c3-a40e-99da5ff8b185"",
                     ""path"": ""<Gamepad>/buttonNorth"",
@@ -367,127 +246,6 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""action"": ""ToggleMotor"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e0e168e8-ba85-445b-a740-6114d902dfeb"",
-                    ""path"": ""<Gamepad>/leftStick"",
-                    ""interactions"": """",
-                    ""processors"": ""StickDeadzone"",
-                    ""groups"": """",
-                    ""action"": ""LiftYaw"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""Keys SpaceShift QE"",
-                    ""id"": ""6f48ed7c-614f-4cc6-a5a5-b9317bf3323a"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LiftYaw"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""2b5d512e-ad23-4bd3-b795-38c8c95577dd"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LiftYaw"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""60b1dcbe-d71e-421f-85e9-45457424cd45"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LiftYaw"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""4f3e1856-cbf7-4118-a0a2-43aa26b72899"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LiftYaw"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""69170b0a-dc74-4f9f-a44e-28b3ee5b699d"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LiftYaw"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Triggers"",
-                    ""id"": ""eb789cab-59f8-4284-be84-6a1e8c087ba4"",
-                    ""path"": ""2DVector(mode=2)"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LiftYaw"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""ce0dc545-f86a-455a-8637-d48b1d5aa0c4"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LiftYaw"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""6bb40eff-fbcb-42ce-a243-3f72c34f4285"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LiftYaw"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""55dd1659-55a2-471b-b382-d74210a0274a"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LiftYaw"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""ca4d43ce-1a27-4bda-a745-db817ce5b16c"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LiftYaw"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""1D Axis"",
@@ -620,6 +378,248 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""action"": ""Secondary Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""01bae36c-94f6-43a7-95f3-2cad86574abb"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PitchRoll"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""e1326a1f-b88b-46b9-ad98-281486f4e0b9"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PitchRoll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""cfbd722b-8f64-4079-815c-639f3fb8d1aa"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PitchRoll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""24c55280-134d-4eb8-9fdf-979b1e4834be"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PitchRoll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""367f6e6a-a69c-4c87-a452-63b40e45d8ac"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PitchRoll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5c409348-c95e-4a8a-bf3f-22d977a1a8eb"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone"",
+                    ""groups"": """",
+                    ""action"": ""PitchRoll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Arrows"",
+                    ""id"": ""6bb11745-ec43-435a-abe1-6879f1430bad"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PitchRoll"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""3266c9b9-d3a3-473b-977e-619dce4bc458"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PitchRoll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""7f2b9db5-d04f-40dc-aa5b-0012ad01379c"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PitchRoll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""30f0c9bb-e2d9-413f-a2ee-37f0d6822664"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PitchRoll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""f992b800-5dd1-46a9-9fdd-27ccb5b0e8c3"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PitchRoll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e0e168e8-ba85-445b-a740-6114d902dfeb"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone"",
+                    ""groups"": """",
+                    ""action"": ""LiftYaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Keys SpaceShift QE"",
+                    ""id"": ""6f48ed7c-614f-4cc6-a5a5-b9317bf3323a"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LiftYaw"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""2b5d512e-ad23-4bd3-b795-38c8c95577dd"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LiftYaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""60b1dcbe-d71e-421f-85e9-45457424cd45"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LiftYaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""4f3e1856-cbf7-4118-a0a2-43aa26b72899"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LiftYaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""69170b0a-dc74-4f9f-a44e-28b3ee5b699d"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LiftYaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Triggers"",
+                    ""id"": ""eb789cab-59f8-4284-be84-6a1e8c087ba4"",
+                    ""path"": ""2DVector(mode=2)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LiftYaw"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""ce0dc545-f86a-455a-8637-d48b1d5aa0c4"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LiftYaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""6bb40eff-fbcb-42ce-a243-3f72c34f4285"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LiftYaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""55dd1659-55a2-471b-b382-d74210a0274a"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LiftYaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""ca4d43ce-1a27-4bda-a745-db817ce5b16c"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LiftYaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -628,11 +628,11 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
 }");
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
-        m_Gameplay_Move = m_Gameplay.FindAction("Move", throwIfNotFound: true);
+        m_Gameplay_PitchRoll = m_Gameplay.FindAction("PitchRoll", throwIfNotFound: true);
+        m_Gameplay_LiftYaw = m_Gameplay.FindAction("LiftYaw", throwIfNotFound: true);
         m_Gameplay_CamRotation = m_Gameplay.FindAction("CamRotation", throwIfNotFound: true);
         m_Gameplay_Reset = m_Gameplay.FindAction("Reset", throwIfNotFound: true);
         m_Gameplay_ToggleMotor = m_Gameplay.FindAction("ToggleMotor", throwIfNotFound: true);
-        m_Gameplay_LiftYaw = m_Gameplay.FindAction("LiftYaw", throwIfNotFound: true);
         m_Gameplay_ChangeMode = m_Gameplay.FindAction("ChangeMode", throwIfNotFound: true);
         m_Gameplay_ToggleHover = m_Gameplay.FindAction("ToggleHover", throwIfNotFound: true);
         m_Gameplay_SwitchCamera = m_Gameplay.FindAction("SwitchCamera", throwIfNotFound: true);
@@ -699,11 +699,11 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
     // Gameplay
     private readonly InputActionMap m_Gameplay;
     private IGameplayActions m_GameplayActionsCallbackInterface;
-    private readonly InputAction m_Gameplay_Move;
+    private readonly InputAction m_Gameplay_PitchRoll;
+    private readonly InputAction m_Gameplay_LiftYaw;
     private readonly InputAction m_Gameplay_CamRotation;
     private readonly InputAction m_Gameplay_Reset;
     private readonly InputAction m_Gameplay_ToggleMotor;
-    private readonly InputAction m_Gameplay_LiftYaw;
     private readonly InputAction m_Gameplay_ChangeMode;
     private readonly InputAction m_Gameplay_ToggleHover;
     private readonly InputAction m_Gameplay_SwitchCamera;
@@ -715,11 +715,11 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
     {
         private @PlayerAction m_Wrapper;
         public GameplayActions(@PlayerAction wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Move => m_Wrapper.m_Gameplay_Move;
+        public InputAction @PitchRoll => m_Wrapper.m_Gameplay_PitchRoll;
+        public InputAction @LiftYaw => m_Wrapper.m_Gameplay_LiftYaw;
         public InputAction @CamRotation => m_Wrapper.m_Gameplay_CamRotation;
         public InputAction @Reset => m_Wrapper.m_Gameplay_Reset;
         public InputAction @ToggleMotor => m_Wrapper.m_Gameplay_ToggleMotor;
-        public InputAction @LiftYaw => m_Wrapper.m_Gameplay_LiftYaw;
         public InputAction @ChangeMode => m_Wrapper.m_Gameplay_ChangeMode;
         public InputAction @ToggleHover => m_Wrapper.m_Gameplay_ToggleHover;
         public InputAction @SwitchCamera => m_Wrapper.m_Gameplay_SwitchCamera;
@@ -736,9 +736,12 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_GameplayActionsCallbackInterface != null)
             {
-                @Move.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMove;
-                @Move.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMove;
-                @Move.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMove;
+                @PitchRoll.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPitchRoll;
+                @PitchRoll.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPitchRoll;
+                @PitchRoll.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPitchRoll;
+                @LiftYaw.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLiftYaw;
+                @LiftYaw.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLiftYaw;
+                @LiftYaw.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLiftYaw;
                 @CamRotation.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCamRotation;
                 @CamRotation.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCamRotation;
                 @CamRotation.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCamRotation;
@@ -748,9 +751,6 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @ToggleMotor.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnToggleMotor;
                 @ToggleMotor.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnToggleMotor;
                 @ToggleMotor.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnToggleMotor;
-                @LiftYaw.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLiftYaw;
-                @LiftYaw.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLiftYaw;
-                @LiftYaw.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLiftYaw;
                 @ChangeMode.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChangeMode;
                 @ChangeMode.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChangeMode;
                 @ChangeMode.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChangeMode;
@@ -776,9 +776,12 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Move.started += instance.OnMove;
-                @Move.performed += instance.OnMove;
-                @Move.canceled += instance.OnMove;
+                @PitchRoll.started += instance.OnPitchRoll;
+                @PitchRoll.performed += instance.OnPitchRoll;
+                @PitchRoll.canceled += instance.OnPitchRoll;
+                @LiftYaw.started += instance.OnLiftYaw;
+                @LiftYaw.performed += instance.OnLiftYaw;
+                @LiftYaw.canceled += instance.OnLiftYaw;
                 @CamRotation.started += instance.OnCamRotation;
                 @CamRotation.performed += instance.OnCamRotation;
                 @CamRotation.canceled += instance.OnCamRotation;
@@ -788,9 +791,6 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @ToggleMotor.started += instance.OnToggleMotor;
                 @ToggleMotor.performed += instance.OnToggleMotor;
                 @ToggleMotor.canceled += instance.OnToggleMotor;
-                @LiftYaw.started += instance.OnLiftYaw;
-                @LiftYaw.performed += instance.OnLiftYaw;
-                @LiftYaw.canceled += instance.OnLiftYaw;
                 @ChangeMode.started += instance.OnChangeMode;
                 @ChangeMode.performed += instance.OnChangeMode;
                 @ChangeMode.canceled += instance.OnChangeMode;
@@ -818,11 +818,11 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
     public GameplayActions @Gameplay => new GameplayActions(this);
     public interface IGameplayActions
     {
-        void OnMove(InputAction.CallbackContext context);
+        void OnPitchRoll(InputAction.CallbackContext context);
+        void OnLiftYaw(InputAction.CallbackContext context);
         void OnCamRotation(InputAction.CallbackContext context);
         void OnReset(InputAction.CallbackContext context);
         void OnToggleMotor(InputAction.CallbackContext context);
-        void OnLiftYaw(InputAction.CallbackContext context);
         void OnChangeMode(InputAction.CallbackContext context);
         void OnToggleHover(InputAction.CallbackContext context);
         void OnSwitchCamera(InputAction.CallbackContext context);
