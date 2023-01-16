@@ -7,17 +7,11 @@ namespace DroneSim
     {
         private DroneController droneController;
 
-        private JoystickUI joystickUILeft;
-        private JoystickUI joystickUIRight;
+        [HideInInspector] public bool cheatsActivated = false;
         
         private void Awake()
         {
             droneController = GetComponent<DroneController>();
-
-            GameObject[] joysticks = GameObject.FindGameObjectsWithTag("Joystick");
-            if (joysticks.Length != 2) Debug.LogError("Joysticks are not found in UI");
-            joystickUILeft = joysticks[1].GetComponent<JoystickUI>();
-            joystickUIRight = joysticks[0].GetComponent<JoystickUI>();
         }
 
         #region InputMessages
@@ -27,8 +21,6 @@ namespace DroneSim
             Vector2 joystick = value.Get<Vector2>();
             droneController.rollInput = joystick.x;
             droneController.pitchInput = joystick.y;
-            
-            joystickUIRight.SetJoystickSquared(joystick);
         }
 
         private void OnLiftYaw(InputValue value)
@@ -36,8 +28,6 @@ namespace DroneSim
             Vector2 joystick = value.Get<Vector2>();
             droneController.yawInput = joystick.x;
             droneController.liftInput = joystick.y;
-            
-            joystickUILeft.SetJoystickSquared(joystick);
         }
 
         private void OnReset()
@@ -58,7 +48,10 @@ namespace DroneSim
         {
             if (GameManager.Instance.GameIsPaused) return;
 
-            droneController.SwitchMode(value.Get<float>() > 0);
+            if (cheatsActivated)
+                droneController.ActivateGodMode();
+            else
+                droneController.SwitchMode(value.Get<float>() > 0);
         }
         
         private void OnToggleHover()
@@ -72,12 +65,7 @@ namespace DroneSim
         {
             if (GameManager.Instance.GameIsPaused) return;
             
-            if (droneController.FPVCamera.gameObject.activeSelf)
-                GameManager.Camera = droneController.TPVCamera;
-            else if (droneController.TPVCamera.gameObject.activeSelf)
-                GameManager.Camera = droneController.StaticCamera;
-            else if (droneController.StaticCamera.gameObject.activeSelf)
-                GameManager.Camera = droneController.FPVCamera;
+            droneController.cameraManager.SwitchCamera();
         }
         
         
@@ -90,6 +78,8 @@ namespace DroneSim
 
             menuToggle.Toggle();
         }
+
+        public void OnHoldToCheats(InputValue value) => cheatsActivated = !cheatsActivated;
 
         #endregion
     }

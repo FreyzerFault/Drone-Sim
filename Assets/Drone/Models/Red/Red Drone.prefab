@@ -586,9 +586,7 @@ MonoBehaviour:
   rotorCCW2: {fileID: 423003314043910857}
   flightMode: 0
   hoverStabilization: 1
-  FPVCamera: {fileID: 0}
-  TPVCamera: {fileID: 0}
-  StaticCamera: {fileID: 0}
+  cameraManager: {fileID: 0}
   FPVposition: {fileID: 5254503704554890258}
   TPVposition: {fileID: 6397780914216751481}
   yawInput: 0
@@ -658,6 +656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5ac716ea2daf57448f69ec028b98bb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cheatsActivated: 0
 --- !u!114 &8643490654844851205
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -29,7 +29,7 @@ namespace DroneSim
             Angle,      // El input es un ángulo de ataque no mayor a un límite
             Horizon,    // El input es una frecuencia angular => El dron puede girar sin límite
             Manual,     // No se usa PID, puramente fuerzas en cada rotor
-            Static,     // El dron intentara mantener la posición y orientación por PID
+            GodMode,     // El dron intentara mantener la posición y orientación por PID
         }
         
         public FlightMode flightMode;
@@ -44,15 +44,15 @@ namespace DroneSim
         
         #region Cameras
 
-        public Camera FPVCamera;
-        public Camera TPVCamera;
-        public Camera StaticCamera;
+        public DroneCameraManager cameraManager;
 
         public Transform FPVposition;
         public Transform TPVposition;
 
         #endregion
-        
+
+
+        #region INPUTS - OUTPUTS
 
         [Range(-1,1)] public float yawInput = 0;
         [Range(-1,1)] public float pitchInput = 0;
@@ -68,6 +68,8 @@ namespace DroneSim
         private float roll = 0;
         private float lift = 0;
 
+        #endregion
+        
 
         #region Physic Parameters
         
@@ -87,9 +89,7 @@ namespace DroneSim
         #region Environment Parameters
         private static EnvironmentSettingsSO EnvironmentSettings => LevelManager.Instance.CurrentLevel.EnvironmentSettings;
         #endregion
-
-
-
+        
         private Rigidbody rb;
         
         
@@ -99,6 +99,8 @@ namespace DroneSim
             pidController = GetComponent<DronePIDController>();
             accelerometer = GetComponent<Accelerometer>();
             gyro = GetComponent<Gyroscope>();
+
+            cameraManager = GameObject.FindWithTag("Camera Manager").GetComponent<DroneCameraManager>();
             
             // Actualiza los parametros fisicos del Rigidbody
             UpdatePhysicParameters();
@@ -154,8 +156,8 @@ namespace DroneSim
                 case FlightMode.Manual:
                     ManualMode();
                     break;
-                case FlightMode.Static:
-                    StaticMode();
+                case FlightMode.GodMode:
+                    GodMode();
                     break;
             }
             
@@ -172,15 +174,15 @@ namespace DroneSim
             switch (flightMode)
             {
                 case FlightMode.Angle:
-                    flightMode = next ? FlightMode.Horizon : FlightMode.Static;
+                    flightMode = next ? FlightMode.Horizon : FlightMode.Manual;
                     break;
                 case FlightMode.Horizon:
                     flightMode = next ? FlightMode.Manual : FlightMode.Angle;
                     break;
                 case FlightMode.Manual:
-                    flightMode = next ? FlightMode.Static : FlightMode.Horizon;
+                    flightMode = next ? FlightMode.Angle : FlightMode.Horizon;
                     break;
-                case FlightMode.Static:
+                case FlightMode.GodMode:
                     flightMode = next ? FlightMode.Angle : FlightMode.Manual;
                     break;
             }
@@ -250,46 +252,46 @@ namespace DroneSim
             yaw = Curves.yawCurve.Evaluate(yawInput);
         }
 
-        private void StaticMode()
+        private void GodMode()
         {
             Vector3 targetRotation = new Vector3(
-                    Curves.pitchRollCurve.Evaluate(pitchInput) * droneSettings.saturationValues.maxAngleOfAttack,
-                    0,
-                    Curves.pitchRollCurve.Evaluate(rollInput) * droneSettings.saturationValues.maxAngleOfAttack
-                );
-                Vector3 targetVelocity = new Vector3(
-                    0,
-                    Curves.liftCurve.Evaluate(liftInput) * droneSettings.saturationValues.maxLiftSpeed,
-                    0
-                );
-                Vector3 targetAngularSpeed = new Vector3(
-                    0, 
-                    Curves.yawCurve.Evaluate(yawInput) * droneSettings.saturationValues.maxAngularSpeed, 
-                    0);
-        
-                // Ajusta la velocidad de LIFT y la angular de YAW
-                lift = pidController.AdjustLift(targetVelocity.y);
-                yaw = pidController.AdjustYaw(targetAngularSpeed.y);
-                
-                // Frena el dron cuando no hay inputs de pitch o roll
-                if (pitchInput == 0 && rollInput == 0)
-                {
-                    // Use Cascade PID Controller:
-                    // Get the PID by Horizontal Speed (0,0) -> get Angle of Attack PID [Roll,Pitch]
-                    Vector2 speedPID = pidController.AdjustHorizontalSpeed(Vector2.zero);
+                Curves.pitchRollCurve.Evaluate(pitchInput) * droneSettings.saturationValues.maxAngleOfAttack,
+                0,
+                Curves.pitchRollCurve.Evaluate(rollInput) * droneSettings.saturationValues.maxAngleOfAttack
+            );
+            Vector3 targetVelocity = new Vector3(
+                0,
+                Curves.liftCurve.Evaluate(liftInput) * droneSettings.saturationValues.maxLiftSpeed,
+                0
+            );
+            Vector3 targetAngularSpeed = new Vector3(
+                0, 
+                Curves.yawCurve.Evaluate(yawInput) * droneSettings.saturationValues.maxAngularSpeed, 
+                0);
+    
+            // Ajusta la velocidad de LIFT y la angular de YAW
+            lift = pidController.AdjustLift(targetVelocity.y);
+            yaw = pidController.AdjustYaw(targetAngularSpeed.y);
+            
+            // Frena el dron cuando no hay inputs de pitch o roll
+            if (pitchInput == 0 && rollInput == 0)
+            {
+                // Use Cascade PID Controller:
+                // Get the PID by Horizontal Speed (0,0) -> get Angle of Attack PID [Roll,Pitch]
+                Vector2 speedPID = pidController.AdjustHorizontalSpeed(Vector2.zero);
 
-                    // Overwrite the input target Angle
-                    targetRotation = new Vector3(
-                        speedPID.y * droneSettings.saturationValues.maxAngleOfAttack,   // Pitch
-                        targetRotation.y,                                                  // Yaw
-                        speedPID.x * droneSettings.saturationValues.maxAngleOfAttack    // Roll
-                    );
-                }
-                
-                // PITCH ROLL
-                Vector2 pitchRoll = pidController.AdjustAngleOfAttack(targetRotation);
-                pitch = pitchRoll.x;
-                roll = pitchRoll.y;
+                // Overwrite the input target Angle
+                targetRotation = new Vector3(
+                    speedPID.y * droneSettings.saturationValues.maxAngleOfAttack,   // Pitch
+                    targetRotation.y,                                                  // Yaw
+                    speedPID.x * droneSettings.saturationValues.maxAngleOfAttack    // Roll
+                );
+            }
+            
+            // PITCH ROLL
+            Vector3 pitchRoll = pidController.AdjustAngleOfAttack(targetRotation);
+            pitch = pitchRoll.x;
+            roll = pitchRoll.z;
         }
         
         #endregion
@@ -479,5 +481,11 @@ namespace DroneSim
         }
 
         private void OnDisable() => SetRotorsPower(0);
+
+        public void ActivateGodMode()
+        {
+            flightMode = FlightMode.GodMode;
+            OnFlightModeChange?.Invoke(true);
+        }
     }
 }

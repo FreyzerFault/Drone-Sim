@@ -134,6 +134,15 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HoldToCheats"",
+                    ""type"": ""Button"",
+                    ""id"": ""d739f884-fcfc-4c47-ac73-6677de25c4a0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -567,59 +576,15 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Triggers"",
-                    ""id"": ""eb789cab-59f8-4284-be84-6a1e8c087ba4"",
-                    ""path"": ""2DVector(mode=2)"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LiftYaw"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""ce0dc545-f86a-455a-8637-d48b1d5aa0c4"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LiftYaw"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""6bb40eff-fbcb-42ce-a243-3f72c34f4285"",
+                    ""name"": """",
+                    ""id"": ""598bcf6e-3526-4849-b5ef-c27c76ee1d20"",
                     ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""LiftYaw"",
+                    ""action"": ""HoldToCheats"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""55dd1659-55a2-471b-b382-d74210a0274a"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LiftYaw"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""ca4d43ce-1a27-4bda-a745-db817ce5b16c"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LiftYaw"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -640,6 +605,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
         m_Gameplay_MainAction = m_Gameplay.FindAction("Main Action", throwIfNotFound: true);
         m_Gameplay_SecondaryAction = m_Gameplay.FindAction("Secondary Action", throwIfNotFound: true);
+        m_Gameplay_HoldToCheats = m_Gameplay.FindAction("HoldToCheats", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -711,6 +677,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Pause;
     private readonly InputAction m_Gameplay_MainAction;
     private readonly InputAction m_Gameplay_SecondaryAction;
+    private readonly InputAction m_Gameplay_HoldToCheats;
     public struct GameplayActions
     {
         private @PlayerAction m_Wrapper;
@@ -727,6 +694,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
         public InputAction @MainAction => m_Wrapper.m_Gameplay_MainAction;
         public InputAction @SecondaryAction => m_Wrapper.m_Gameplay_SecondaryAction;
+        public InputAction @HoldToCheats => m_Wrapper.m_Gameplay_HoldToCheats;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -772,6 +740,9 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @SecondaryAction.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSecondaryAction;
                 @SecondaryAction.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSecondaryAction;
                 @SecondaryAction.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSecondaryAction;
+                @HoldToCheats.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHoldToCheats;
+                @HoldToCheats.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHoldToCheats;
+                @HoldToCheats.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHoldToCheats;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -812,6 +783,9 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @SecondaryAction.started += instance.OnSecondaryAction;
                 @SecondaryAction.performed += instance.OnSecondaryAction;
                 @SecondaryAction.canceled += instance.OnSecondaryAction;
+                @HoldToCheats.started += instance.OnHoldToCheats;
+                @HoldToCheats.performed += instance.OnHoldToCheats;
+                @HoldToCheats.canceled += instance.OnHoldToCheats;
             }
         }
     }
@@ -830,5 +804,6 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         void OnPause(InputAction.CallbackContext context);
         void OnMainAction(InputAction.CallbackContext context);
         void OnSecondaryAction(InputAction.CallbackContext context);
+        void OnHoldToCheats(InputAction.CallbackContext context);
     }
 }
