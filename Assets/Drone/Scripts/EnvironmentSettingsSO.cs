@@ -7,11 +7,12 @@ namespace DroneSim
 
     public class EnvironmentSettingsSO : ScriptableObject
     {
+        public float gravity = 9.81f;
+        
         [Header("Atmospheric Settings")]
         public float airDensity;
         public Vector3 windForce;
 
-        public float gravity = 9.81f;
 
         public void ApplySettings()
         {

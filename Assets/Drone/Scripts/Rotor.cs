@@ -34,15 +34,15 @@ namespace DroneSim
         #region Physics Parameters
 
         // Torque = Rotational Force applied to propeller by rotor (CW > 0, CCW < 0)
-        public float Torque => power * MaxTorque * (counterclockwise ? -1 : 1);
+        public float Torque => power * maxTorque * (counterclockwise ? -1 : 1);
 
         // Throttle = upward force (Power = 0.5 => Hover => Throttle = Gravity)
-        public float Throttle => power * MaxThrottle;
+        public float Throttle => power * maxThrottle;
 
 
-        private float MaxRotationSpeed => drone.droneSettings.saturationValues.maxRotationSpeed;
-        private float MaxTorque => drone.droneSettings.saturationValues.maxTorque;
-        private float MaxThrottle => drone.droneSettings.saturationValues.maxThrottle;
+        private float maxRotationSpeed => drone.droneSettings.maxRotationSpeed;
+        private float maxTorque => drone.droneSettings.maxTorque;
+        private float maxThrottle => drone.droneSettings.maxThrottle;
 
         #endregion
 
@@ -121,7 +121,7 @@ namespace DroneSim
         /// <param name="power_t"></param>
         protected void AnimatePropeller(float power_t)
         {
-            float maxRotationSpeed = drone.droneSettings.saturationValues.maxRotationSpeed;
+            float maxRotationSpeed = drone.droneSettings.maxRotationSpeed;
             float angle = Mathf.Lerp(0, maxRotationSpeed, Mathf.Pow(power_t, 0.1f)) * Time.deltaTime *
                           (counterclockwise ? -1 : 1);
             transform.RotateAround(transform.position, drone.transform.up, angle);

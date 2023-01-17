@@ -12,116 +12,114 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeabc3a67eedef34db1c47097bc2e05e, type: 3}
   m_Name: Default Drone Settings
   m_EditorClassIdentifier: 
-  saturationValues:
-    maxRotationSpeed: 4000
-    maxTorque: 3
-    maxThrottle: 15
-    maxAngleOfAttack: 60
-    maxSpeed: 30
-    maxLiftSpeed: 15
-    maxAngularSpeed: 60
-  parameters:
-    mass: 2
-    minDragCoefficient: 0.1
-    maxDragCoefficient: 1
-    angularDrag: 3
-  curves:
-    pitchRollCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: -0.9916649
-        value: -1
-        inSlope: 2.754333
-        outSlope: 2.754333
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.21008259
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0.18483083
-        outSlope: 0.18483083
-        tangentMode: 0
-        weightedMode: 3
-        inWeight: 0.34726834
-        outWeight: 0.3444103
-      - serializedVersion: 3
-        time: 1
-        value: 0.9953232
-        inSlope: 2.6052039
-        outSlope: 2.6052039
-        tangentMode: 0
-        weightedMode: 2
-        inWeight: 0.116666675
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    liftCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: -1.0083351
-        value: -1
-        inSlope: 1.4744638
-        outSlope: 1.4744638
-        tangentMode: 0
-        weightedMode: 2
-        inWeight: 0
-        outWeight: 0.28098243
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0.23540653
-        outSlope: 0.28595686
-        tangentMode: 1
-        weightedMode: 3
-        inWeight: 0.5537337
-        outWeight: 0.5546069
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1.2384071
-        outSlope: 1.2384071
-        tangentMode: 0
-        weightedMode: 1
-        inWeight: 0.3109348
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    yawCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: -0.9916649
-        value: -1
-        inSlope: 2.1166785
-        outSlope: 2.1166785
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.11715694
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0.123388395
-        outSlope: 0.123388395
-        tangentMode: 0
-        weightedMode: 3
-        inWeight: 0.7489494
-        outWeight: 0.67635447
-      - serializedVersion: 3
-        time: 1
-        value: 0.9953232
-        inSlope: 2.55524
-        outSlope: 2.55524
-        tangentMode: 0
-        weightedMode: 2
-        inWeight: 0.09128463
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
+  prefab: {fileID: 3209865575176536708, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
+  pitchRollCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.9916649
+      value: -1
+      inSlope: 2.754333
+      outSlope: 2.754333
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.21008259
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.18483083
+      outSlope: 0.18483083
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0.34726834
+      outWeight: 0.3444103
+    - serializedVersion: 3
+      time: 1
+      value: 0.9953232
+      inSlope: 2.6052039
+      outSlope: 2.6052039
+      tangentMode: 0
+      weightedMode: 2
+      inWeight: 0.116666675
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  liftCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.9916649
+      value: -1
+      inSlope: 2.754333
+      outSlope: 2.754333
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.21008259
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.18483083
+      outSlope: 0.18483083
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0.34726834
+      outWeight: 0.3444103
+    - serializedVersion: 3
+      time: 1
+      value: 0.9953232
+      inSlope: 2.6052039
+      outSlope: 2.6052039
+      tangentMode: 0
+      weightedMode: 2
+      inWeight: 0.116666675
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  yawCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -1
+      value: -0.5
+      inSlope: 0.89622444
+      outSlope: 0.89622444
+      tangentMode: 0
+      weightedMode: 2
+      inWeight: 0
+      outWeight: 0.20601177
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.019871254
+      outSlope: 0.026246186
+      tangentMode: 1
+      weightedMode: 3
+      inWeight: 0.9377996
+      outWeight: 0.90959156
+    - serializedVersion: 3
+      time: 1
+      value: 0.5
+      inSlope: 1.4022077
+      outSlope: 1.4022077
+      tangentMode: 0
+      weightedMode: 1
+      inWeight: 0.12145569
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  mass: 1
+  minDragCoefficient: 0.35
+  maxDragCoefficient: 0.8
+  angularDrag: 0.5
+  maxRotationSpeed: 10000
+  maxTorque: 1
+  maxThrottle: 1
+  maxAngleOfAttack: 60
+  maxSpeed: 10
+  maxLiftSpeed: 10
+  maxAngularSpeed: 10

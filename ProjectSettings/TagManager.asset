@@ -9,6 +9,7 @@ TagManager:
   - Drone
   - Camera Manager
   - Camera Icon
+  - Initial Point
   layers:
   - Default
   - TransparentFX

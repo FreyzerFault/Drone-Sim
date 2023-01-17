@@ -7,22 +7,19 @@ public class MenuManager : Singleton<MenuManager>
     public List<SubMenu> subMenus;
 
     private LevelMenu levelMenu;
+    private DroneMenu droneMenu;
     private SettingsMenu settingsMenu;
-    
-    private SubMenu DroneMenu => subMenus[1];
 
     private int menuOpened = -1;
     public int droneSelectedID;
 
     private static readonly int Open = Animator.StringToHash("open");
 
-    public bool isLevelSelectionOpen => levelMenu.GetComponent<Animator>().GetBool(Open);
-    public bool isDroneSelectionOpen => DroneMenu.GetComponent<Animator>().GetBool(Open);
+    public bool IsLevelSelectionOpen => levelMenu.GetComponent<Animator>().GetBool(Open);
+    public bool IsDroneSelectionOpen => droneMenu.GetComponent<Animator>().GetBool(Open);
 
     private void Start()
     {
-        UpdateSelectedDrone(droneSelectedID);
-
         for (int i = 0; i < subMenus.Count; i++)
         {
             int menuID = i;
@@ -31,6 +28,7 @@ public class MenuManager : Singleton<MenuManager>
         }
 
         levelMenu = (LevelMenu) subMenus[0];
+        droneMenu = (DroneMenu) subMenus[1];
         settingsMenu = (SettingsMenu) subMenus[2];
     }
 
@@ -64,25 +62,6 @@ public class MenuManager : Singleton<MenuManager>
     {
         if (menuOpened == -1) return true;
         return subMenus[menuOpened].Close();
-    }
-
-    public void SelectDrone(int newDroneID)
-    {
-        DroneMenu.GetComponentsInChildren<Button>()[droneSelectedID].animator.SetBool(Selected, false);
-        DroneMenu.GetComponentsInChildren<Button>()[newDroneID].animator.SetBool(Selected, true);
-        droneSelectedID = newDroneID;
-    }
-
-
-    
-    private static readonly int Selected = Animator.StringToHash("Selected");
-    
-    public void UpdateSelectedDrone(int id)
-    {
-        DroneMenu.firstSelected = DroneMenu.selectibles[id];
-        DroneMenu.selectibles[droneSelectedID].animator.SetBool(Selected, false);
-        DroneMenu.firstSelected.animator.SetBool(Selected, true);
-        droneSelectedID = id;
     }
 
     public void OnCancel() => CloseMenu();

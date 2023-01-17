@@ -17,8 +17,6 @@ namespace DroneSim
         private Dictionary<String, PID_Configuration> PIDConfigurationMap;
         private Dictionary<String, float> ErrorsLastFrame;
         private Dictionary<String, float> ErrorsSum;
-
-        private DroneSettingsSO.SaturationValues SaturationValues => drone.droneSettings.saturationValues;
     
         private void Awake()
         {
@@ -31,7 +29,7 @@ namespace DroneSim
         public Vector2 AdjustAngleOfAttack(Vector2 targetAngle)
         {
             Vector2 currentAngle = new Vector2(Gyro.EulerRotation.x, Gyro.EulerRotation.z);
-            float maxAngle = SaturationValues.maxAngleOfAttack;
+            float maxAngle = drone.droneSettings.maxAngleOfAttack;
             float pitch = GetPIDcorrection("pitch", targetAngle.x, currentAngle.x, maxAngle);
             float roll = GetPIDcorrection("roll", targetAngle.y, -currentAngle.y, maxAngle);
 
@@ -50,11 +48,11 @@ namespace DroneSim
             float responseTime = 1; // in Seconds
             
             Vector3 currentAngVel = AccMeter.LocalAngularVelocity;
-            float pitch = GetPIDcorrection("pitch", targetAngularVelocity.x, currentAngVel.x, SaturationValues.maxAngularSpeed);
-            float yaw = GetPIDcorrection("yaw", targetAngularVelocity.y, currentAngVel.y, SaturationValues.maxAngularSpeed);
-            float roll = GetPIDcorrection("roll", targetAngularVelocity.z, -currentAngVel.z, SaturationValues.maxAngularSpeed);
+            float pitch = GetPIDcorrection("pitch", targetAngularVelocity.x, currentAngVel.x, drone.droneSettings.maxAngularSpeed);
+            float yaw = GetPIDcorrection("yaw", targetAngularVelocity.y, currentAngVel.y, drone.droneSettings.maxAngularSpeed);
+            float roll = GetPIDcorrection("roll", targetAngularVelocity.z, -currentAngVel.z, drone.droneSettings.maxAngularSpeed);
 
-            Vector3 angularVelCorrection = new Vector3(pitch, yaw, roll) * SaturationValues.maxAngularSpeed;
+            Vector3 angularVelCorrection = new Vector3(pitch, yaw, roll) * drone.droneSettings.maxAngularSpeed;
             
             // Para pasar Velocidad Angular a la Fuerza que hay que aplicar en los motores, aplicamos formulas de dinamica:
             // Velocidad Angular: w = vR
@@ -63,7 +61,7 @@ namespace DroneSim
             Vector3 angularForce = angularVelCorrection * (drone.Mass * drone.Radius / responseTime);
 
             // Max angular force = 2 rotores al maximo
-            angularForce /= SaturationValues.maxThrottle / 2;
+            angularForce /= drone.droneSettings.maxThrottle / 2;
             angularForce = new Vector3(Mathf.Clamp(angularForce.x, -1, 1), Mathf.Clamp(angularForce.y, -1, 1),
                 Mathf.Clamp(angularForce.z, -1, 1));
 
@@ -77,7 +75,7 @@ namespace DroneSim
                 "yaw",
                 targetAngularSpeedY,
                 AccMeter.LocalAngularVelocity.y,
-                SaturationValues.maxAngularSpeed
+                drone.droneSettings.maxAngularSpeed
             );
         }
         
@@ -88,7 +86,7 @@ namespace DroneSim
                 "ySpeed",
                 targetLiftSpeed,
                 AccMeter.Velocity.y,
-                SaturationValues.maxLiftSpeed
+                drone.droneSettings.maxLiftSpeed
             );
         }
 
@@ -96,8 +94,8 @@ namespace DroneSim
         public Vector2 AdjustHorizontalSpeed(Vector2 targetSpeed)
         {
             return new Vector2(
-                GetPIDcorrection("xSpeed", targetSpeed.x, AccMeter.HorizontalVelocity.x, SaturationValues.maxSpeed),
-                GetPIDcorrection("zSpeed", targetSpeed.y, AccMeter.HorizontalVelocity.z, SaturationValues.maxSpeed)
+                GetPIDcorrection("xSpeed", targetSpeed.x, AccMeter.HorizontalVelocity.x, drone.droneSettings.maxSpeed),
+                GetPIDcorrection("zSpeed", targetSpeed.y, AccMeter.HorizontalVelocity.z, drone.droneSettings.maxSpeed)
                 );
         }
 

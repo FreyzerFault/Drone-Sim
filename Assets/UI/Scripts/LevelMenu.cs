@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem.HID;
 using UnityEngine.UI;
 
 public class LevelMenu : SubMenu
@@ -45,15 +44,12 @@ public class LevelMenu : SubMenu
     {
         if (newLevelID >= LevelManager.Instance.levels.Length)
             return;
-
-        if (newLevelID < LevelManager.Instance.levels.Length)
-        {
-            selectibles[LevelSelectedID].animator.SetBool(Selected, false);
-            selectibles[newLevelID].animator.SetBool(Selected, true);
-            firstSelected = selectibles[newLevelID];
+        
+        selectibles[LevelSelectedID].animator.SetBool(Selected, false);
+        selectibles[newLevelID].animator.SetBool(Selected, true);
+        firstSelected = selectibles[newLevelID];
             
-            LevelSelectedID = newLevelID;
-        }
+        LevelSelectedID = newLevelID;
     }
 
     //

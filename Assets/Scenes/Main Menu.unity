@@ -1387,8 +1387,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1679161861}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+      - m_Target: {fileID: 1895710380}
+        m_TargetAssemblyTypeName: DroneMenu, Assembly-CSharp
         m_MethodName: SelectDrone
         m_Mode: 3
         m_Arguments:
@@ -1696,6 +1696,7 @@ Transform:
   - {fileID: 141042956}
   - {fileID: 559797773}
   - {fileID: 1336354552}
+  - {fileID: 1633518196}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8632,7 +8633,7 @@ MonoBehaviour:
   - {fileID: 1351157231}
   - {fileID: 812449743}
   - {fileID: 1576025497}
-  defaultLevelImage: {fileID: 21300000, guid: e312f3cc420151f4fb708d05b7b4b109, type: 3}
+  defaultLevelImage: {fileID: 21300000, guid: 0e081accd238bec42bd681dd332d07ff, type: 3}
 --- !u!1 &1016589940
 GameObject:
   m_ObjectHideFlags: 0
@@ -9998,8 +9999,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1679161861}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+      - m_Target: {fileID: 1895710380}
+        m_TargetAssemblyTypeName: DroneMenu, Assembly-CSharp
         m_MethodName: SelectDrone
         m_Mode: 3
         m_Arguments:
@@ -11185,8 +11186,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1679161861}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+      - m_Target: {fileID: 1895710380}
+        m_TargetAssemblyTypeName: DroneMenu, Assembly-CSharp
         m_MethodName: SelectDrone
         m_Mode: 3
         m_Arguments:
@@ -13984,6 +13985,66 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1612787124}
   m_CullTransparentMesh: 1
+--- !u!1 &1633518195
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1633518196}
+  - component: {fileID: 1633518197}
+  m_Layer: 0
+  m_Name: Drone Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1633518196
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1633518195}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 268692046}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1633518197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1633518195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2136d2667987c594b867d6cf4fa22bc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drones:
+  - {fileID: 11400000, guid: acae8a2d0bbf5cd4f972d0330463b81a, type: 2}
+  - {fileID: 11400000, guid: 00886358d16e65849a3c6233fef0a078, type: 2}
+  - {fileID: 11400000, guid: cd3b7c59d9f1f5543b550c88a4475bb4, type: 2}
+  - {fileID: 11400000, guid: 0ce6745c57107d443841758390c0ee2a, type: 2}
+  - {fileID: 11400000, guid: a8726cb78624c2440bb65dfcfb1e5557, type: 2}
+  - {fileID: 11400000, guid: 97d35e8ea4f633c498aef20787091dcc, type: 2}
+  currentDroneIndex: 0
+  prefabs:
+  - {fileID: 1308554487435048426, guid: 3bcde8dd9ced6c04e92c985daf7e1d9c, type: 3}
+  - {fileID: 503184870776373947, guid: 61754726978e34242bfbf9a53b5a2c71, type: 3}
+  - {fileID: 3187740233918182754, guid: 10afe6958fa206847b3f388a44d6f9a3, type: 3}
+  - {fileID: 3209865575176536708, guid: 3b59896c4c84931439c019146485d6e5, type: 3}
+  - {fileID: 125174, guid: 4dd5fccded1f45d41ab95e29d4cc4170, type: 3}
+  - {fileID: 1749469876035402, guid: 8b826a7c5dffaf04d99fa3f39f8d9060, type: 3}
+  cameraManagerPrefab: {fileID: 722402238343195753, guid: 5d61df123d94dc344907bbf0833859a7, type: 3}
 --- !u!1 &1650571066
 GameObject:
   m_ObjectHideFlags: 0
@@ -14288,7 +14349,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   subMenus:
   - {fileID: 1013130933}
-  - {fileID: 1895710379}
+  - {fileID: 1895710380}
   - {fileID: 332710414}
   droneSelectedID: 1
 --- !u!114 &1679161862
@@ -16192,7 +16253,7 @@ GameObject:
   - component: {fileID: 1895710375}
   - component: {fileID: 1895710377}
   - component: {fileID: 1895710378}
-  - component: {fileID: 1895710379}
+  - component: {fileID: 1895710380}
   m_Layer: 5
   m_Name: Select Drone Menu
   m_TagString: Untagged
@@ -16307,22 +16368,22 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &1895710379
+--- !u!114 &1895710380
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1895710373}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2bd926763faa8f446b04f903135b632a, type: 3}
+  m_Script: {fileID: 11500000, guid: 68f0ee4b6e817e147a752d1290a3cee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isOpen: 0
   saveSelected: 1
   firstSelected: {fileID: 1194256879}
-  parentSelected: {fileID: 0}
+  parentSelected: {fileID: 271552254}
   selectibles:
   - {fileID: 1194256879}
   - {fileID: 234409377}
@@ -16330,6 +16391,7 @@ MonoBehaviour:
   - {fileID: 2033583535}
   - {fileID: 2109868363}
   - {fileID: 1924157262}
+  defaultDroneImage: {fileID: 21300000, guid: 0e081accd238bec42bd681dd332d07ff, type: 3}
 --- !u!1 &1924157258
 GameObject:
   m_ObjectHideFlags: 0
@@ -16463,8 +16525,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1679161861}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+      - m_Target: {fileID: 1895710380}
+        m_TargetAssemblyTypeName: DroneMenu, Assembly-CSharp
         m_MethodName: SelectDrone
         m_Mode: 3
         m_Arguments:
@@ -16986,8 +17048,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1679161861}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+      - m_Target: {fileID: 1895710380}
+        m_TargetAssemblyTypeName: DroneMenu, Assembly-CSharp
         m_MethodName: SelectDrone
         m_Mode: 3
         m_Arguments:
@@ -17664,8 +17726,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1679161861}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+      - m_Target: {fileID: 1895710380}
+        m_TargetAssemblyTypeName: DroneMenu, Assembly-CSharp
         m_MethodName: SelectDrone
         m_Mode: 3
         m_Arguments:
