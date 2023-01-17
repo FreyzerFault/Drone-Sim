@@ -7,15 +7,17 @@ namespace DroneSim
 
     public class EnvironmentSettingsSO : ScriptableObject
     {
-        [Serializable]
-        public class AtmosphericSettings
-        {
-            public float airDensity;
-            public Vector3 windForce;
-        }
+        [Header("Atmospheric Settings")]
+        public float airDensity;
+        public Vector3 windForce;
 
         public float gravity = 9.81f;
 
-        public AtmosphericSettings atmosphericSettings;
+        public void ApplySettings()
+        {
+            UpdateGravity(gravity);
+        }
+
+        public static void UpdateGravity(float newGravity) => Physics.gravity = new Vector3(0, -newGravity, 0); 
     }
 }

@@ -41,6 +41,7 @@ public class SettingsManager : SingletonPersistent<SettingsManager>
     {
         base.Awake();
         Load();
+        GameManager.OnQuitGame += Save;
     }
 
     public void ReturnToDefaultSettings()
@@ -92,6 +93,5 @@ public class SettingsManager : SingletonPersistent<SettingsManager>
         GodMode = PlayerPrefs.GetInt("GodMode", 0) == 1;
         
         onLoad?.Invoke();
-        Debug.Log("Settings Loaded");
     }
 }

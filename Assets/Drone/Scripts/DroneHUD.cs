@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using DroneSim;
 using TMPro;
@@ -12,9 +13,12 @@ public class DroneHUD : MonoBehaviour
 
     public Transform arrowLeft;
     public Transform arrowRight;
+    public Transform arrowUp;
+    public Transform arrowDown;
 
     public TMP_Text FlightMode;
     public TMP_Text HoverStabilization;
+    public Image cameraIcon;
 
     public Text liftSpeedT;
     public Text horizontalSpeedXT;
@@ -44,8 +48,11 @@ public class DroneHUD : MonoBehaviour
     private static readonly int Pulse = Animator.StringToHash("pulse");
     private static readonly int Right = Animator.StringToHash("right");
     private static readonly int Left = Animator.StringToHash("left");
+    private static readonly int Up = Animator.StringToHash("up");
+    private static readonly int Down = Animator.StringToHash("down");
 
     #endregion
+    
     
     private void Awake()
     {
@@ -56,14 +63,18 @@ public class DroneHUD : MonoBehaviour
         if (joysticks.Length != 2) Debug.LogError("Joysticks are not found in UI");
         joystickLeft = joysticks[1].GetComponent<JoystickUI>();
         joystickRight = joysticks[0].GetComponent<JoystickUI>();
-        
+    }
+
+    private void Start()
+    {
         // ANIMATIONS
         drone.OnFlightModeChange += UpdateFlightMode;
         drone.OnHoverStabilizationToggle += UpdateHoverStabilization;
-        
-        
+        drone.cameraManager.OnCameraSwitched += UpdateCameraIcon;
+
         FlightMode.text = drone.flightMode.ToString();
         UpdateHoverStabilization(drone.hoverStabilization);
+        UpdateCameraIcon();
     }
 
     private void Update()
@@ -84,12 +95,22 @@ public class DroneHUD : MonoBehaviour
     {
         // Animation
         HoverStabilization.GetComponent<Animator>().SetTrigger(Pulse);
+        arrowUp.GetComponent<Animator>().SetTrigger(Up);
+        arrowUp.GetComponent<Animator>().SetTrigger(Pulse);
         
         Color darkRed = Color.red;
         Vector3 drVector = new Vector3(darkRed.r, darkRed.g, darkRed.b);
         drVector *= .7f;
         darkRed = new Color(drVector.x, drVector.y, drVector.z, 1);
         HoverStabilization.color = isOn ? Color.green : darkRed;
+    }
+    
+    private void UpdateCameraIcon()
+    {
+        arrowDown.GetComponent<Animator>().SetTrigger(Down);
+        arrowDown.GetComponent<Animator>().SetTrigger(Pulse);
+        
+        cameraIcon.sprite = drone.cameraManager.ActiveCameraSprite;
     }
 
     private void UpdateFlightMode(bool next)

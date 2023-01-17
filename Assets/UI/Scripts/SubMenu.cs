@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,8 +14,10 @@ public class SubMenu : MonoBehaviour
     public Selectable firstSelected;
     public Selectable parentSelected;
 
-    public Selectable[] selectibles;
+    public List<Selectable> selectibles;
+    
     public static Selectable CurrentSelected => EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>();
+    public int SelectedIndex => selectibles.IndexOf(CurrentSelected);
     
     private Animator animator;
     
@@ -26,7 +30,10 @@ public class SubMenu : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
-        selectibles = GetComponentsInChildren<Selectable>();
+        selectibles = GetComponentsInChildren<Selectable>().ToList();
+        
+        // Carga el seleccionado por defecto
+        firstSelected = selectibles[0];
     }
 
     public void Toggle()
@@ -36,7 +43,7 @@ public class SubMenu : MonoBehaviour
         else
             Open();
     }
-    
+
     public void Open()
     {
         if (isOpen) return;
@@ -50,13 +57,13 @@ public class SubMenu : MonoBehaviour
         
         // Selecciona el primero
         firstSelected.Select();
-        
+
         OnOpen?.Invoke();
     }
 
-    public virtual void Close()
+    public virtual bool Close()
     {
-        if (!isOpen) return;
+        if (!isOpen) return true;
         isOpen = false;
         
         // Animacion
@@ -64,11 +71,12 @@ public class SubMenu : MonoBehaviour
         
         // Guarda el item seleccionado para la proxima vez que abra empezar por ahi
         if (saveSelected) firstSelected = CurrentSelected;
-        
+
         // Seleccionamos el que ya habia seleccionado antes de abrirlo
         parentSelected.Select();
         
         OnClose?.Invoke();
-    }
 
+        return true;
+    }
 }

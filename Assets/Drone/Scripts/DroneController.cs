@@ -87,7 +87,7 @@ namespace DroneSim
         #endregion
 
         #region Environment Parameters
-        private static EnvironmentSettingsSO EnvironmentSettings => LevelManager.Instance.CurrentLevel.EnvironmentSettings;
+        private static EnvironmentSettingsSO EnvironmentSettings => LevelManager.Instance.EnvironmentSettings;
         #endregion
         
         private Rigidbody rb;
@@ -438,8 +438,8 @@ namespace DroneSim
             float sqrVelV = velVertical.sqrMagnitude;
             
             // Drag components
-            float dragH = 0.5f * horizontalDragCoefficient * EnvironmentSettings.atmosphericSettings.airDensity * sqrVelH;
-            float dragV = 0.5f * verticalDragCoefficient * EnvironmentSettings.atmosphericSettings.airDensity * sqrVelV;
+            float dragH = 0.5f * horizontalDragCoefficient * EnvironmentSettings.airDensity * sqrVelH;
+            float dragV = 0.5f * verticalDragCoefficient * EnvironmentSettings.airDensity * sqrVelV;
             
             // Apply Forces
             rb.AddForce(-velHorizontal.normalized * dragH);

@@ -26,20 +26,16 @@ public class DroneCameraManager : MonoBehaviour
     public CameraType initialCam = CameraType.TPV;
     
     public DroneCamera[] Cameras;
+    public DroneCamera ActiveCamera => Cameras[activeCamera];
     
-    // UI
-    public Image cameraIcon;
 
     public event Action OnCameraSwitched;
 
     private void Awake()
     {
-        cameraIcon = GameObject.FindWithTag("Camera Icon").GetComponent<Image>();
-
         activeCamera = (int) initialCam;
         
         UpdateCamera();
-        UpdateSprite();
     }
 
     public void SwitchCamera()
@@ -47,11 +43,11 @@ public class DroneCameraManager : MonoBehaviour
         activeCamera = (activeCamera + 1) % Cameras.Length;
 
         UpdateCamera();
-        UpdateSprite();
 
         OnCameraSwitched?.Invoke();
     }
     
-    private void UpdateCamera() => GameManager.Camera = Cameras[activeCamera].camera;
-    private void UpdateSprite() => cameraIcon.sprite = Cameras[activeCamera].icon;
+    private void UpdateCamera() => GameManager.Camera = ActiveCamera.camera;
+
+    public Sprite ActiveCameraSprite => ActiveCamera.icon;
 }

@@ -9,9 +9,15 @@ EditorBuildSettings:
     path: Assets/Scenes/Main Menu.unity
     guid: c6826ace15207ec4c8735712efefdcc0
   - enabled: 1
-    path: Assets/Levels/Prototype/Prototype Level.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/Levels/Tutorial.unity
+    guid: 4597c24acc0a8f146b9cbeef30329026
   - enabled: 1
-    path: Assets/Levels/Instituto/Instituto.unity
+    path: Assets/Levels/Highschool.unity
     guid: 43dbe778673d7b74eb6cf545053c8a7f
+  - enabled: 1
+    path: Assets/Levels/Mars.unity
+    guid: e98b4300c5cf5234f8adeab480ec6219
+  - enabled: 1
+    path: Assets/Levels/Prototype.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects: {}

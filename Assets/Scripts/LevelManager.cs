@@ -10,23 +10,41 @@ public class LevelManager : SingletonPersistent<LevelManager>
     public struct Level
     {
         [HideInInspector] public int ID;
-        
-        public string Name;
-        public EnvironmentSettingsSO EnvironmentSettings;
-        
-        public bool Completed;
+         public string name;
+         public Sprite previewImage;
+
+         [HideInInspector] public int buildIndex;
+
+         public EnvironmentSettingsSO EnvironmentSettings;
+
+         public bool Completed;
 
         public event Action OnLoad;
-        public event Action OnQuit;
+        public event Action OnUnload;
 
-        public void Load() => OnLoad.Invoke();
-        public void Quit() => OnQuit.Invoke();
+        public void Load()
+        {
+            EnvironmentSettings.ApplySettings();
+            Debug.Log("Level " + name + " Loaded");
+            OnLoad?.Invoke();
+        }
+
+        public void Unload()
+        {
+            Debug.Log("Level " + name + " Unloaded");
+            OnUnload?.Invoke();
+        }
     }
+    
+    public string levelsPath = "Levels/";
 
-    [SerializeField] private Level[] levels;
+    public Level[] levels;
     private Dictionary<string, Level> levelMap;
 
-    public Level CurrentLevel;
+    [HideInInspector] public Level currentLevel;
+
+    public EnvironmentSettingsSO EnvironmentSettings => currentLevel.EnvironmentSettings;
+    private bool InMainMenu => SceneManager.GetActiveScene().buildIndex == 0;
 
     protected override void Awake()
     {
@@ -36,37 +54,61 @@ public class LevelManager : SingletonPersistent<LevelManager>
         levelMap = new Dictionary<string, Level>();
         for (int i = 0; i < levels.Length; i++)
         {
-            Level level = levels[i];
-            level.ID = i;
+            levels[i].ID = i;
             
-            levelMap.Add(level.Name, level);
+            levels[i].buildIndex = SceneUtility.GetBuildIndexByScenePath(levelsPath + levels[i].name + ".unity");
+
+            levelMap.Add(levels[i].name, levels[i]);
         }
         
-        CurrentLevel = levels[0];
-    }
+        // Carga cual fue el ultimo nivel seleccionado
+        LoadSelectedLevelPref();
 
-    public void PlayLevel(int levelID)
-    {
-        CurrentLevel.Quit();
-
-        CurrentLevel = levels[levelID];
+        // Cada vez que carga una escena guarda el nivel
+        SceneManager.sceneLoaded += (scene, mode) => SaveSelectedLevelPref();
         
-        SceneManager.LoadScene(CurrentLevel.Name);
-        
-        CurrentLevel.Load();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
 
-    public void QuitLevel()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        CurrentLevel.Quit();
-        SceneManager.LoadScene(0); // 0 deberia ser el menu principal
+        // LEVEL
+        if (levelMap.ContainsKey(scene.name))
+            levelMap[scene.name].Load();
+        
+        // Main Menu
+        else if (scene.name == "Main Menu")
+            Debug.Log("Main Menu loaded");
+        
+        // Not Found!!
+        else
+            Debug.Log("No hay ningun nivel guardado para esta escena: " + scene.name);
+    }
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+        if (levelMap.ContainsKey(scene.name))
+            levelMap[scene.name].Unload();
     }
 
 
-    public void PlayLevel(string levelName) => PlayLevel(levelMap[levelName].ID);
-
+    public void LoadSelectedLevel() => SceneManager.LoadScene(currentLevel.buildIndex);
+    public void LoadLevel(int levelID)
+    {
+        currentLevel = levels[levelID];
+        LoadSelectedLevel();
+    }
+    
+    public void LoadLevel(string levelName) => LoadLevel(levelMap[levelName].ID);
 
     public Level GetLevel(string levelName) => levelMap[levelName];
+
+    // Carga el menu, la escena 0 deberia ser el menu principal
+    public void QuitLevel() => SceneManager.LoadScene(0);
+
+    public static readonly string SelectedLevelSavePath = "selected level";
     
-    private void UpdateGravity(float newGravity) => Physics.gravity = new Vector3(0, -newGravity, 0); 
+    public void LoadSelectedLevelPref() => currentLevel = levels[PlayerPrefs.GetInt(SelectedLevelSavePath, 0)];
+    public void SaveSelectedLevelPref() => PlayerPrefs.SetInt(SelectedLevelSavePath, currentLevel.ID);
 }

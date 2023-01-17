@@ -1,15 +1,15 @@
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 [Serializable]
 public enum GameMode {Drone, Pause}
 
-public class GameManager : Singleton<GameManager>
+public class GameManager : SingletonPersistent<GameManager>
 {
     // GAME MODES
+    public GameMode defaultGameMode = GameMode.Drone;
+    
     [SerializeField]
     private GameMode mode;
     [SerializeField]
@@ -18,7 +18,16 @@ public class GameManager : Singleton<GameManager>
     public GameMode Mode { get => mode; private set => mode = value; }
     public GameMode PrevMode { get => prevMode; private set => prevMode = value; }
     public bool GameIsPaused => mode == GameMode.Pause;
-    
+
+    public static event Action OnQuitGame;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        SceneManager.sceneLoaded += (scene, loadMode) => mode = defaultGameMode; 
+    }
+
     public void SwitchMode(GameMode newMode)
     {
         // Al salir de un Modo
@@ -62,13 +71,15 @@ public class GameManager : Singleton<GameManager>
 
     public void ResetGame()
     {
-        SwitchMode(GameMode.Drone);
+        SwitchMode(defaultGameMode);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
 
     public static void Quit () 
     {
+        OnQuitGame?.Invoke();
+        
         #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
         #else

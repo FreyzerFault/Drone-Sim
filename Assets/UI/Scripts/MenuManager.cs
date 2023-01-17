@@ -1,32 +1,26 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class MenuManager : Singleton<MenuManager>
 {
     public List<SubMenu> subMenus;
 
-    private SubMenu LevelMenu => subMenus[0];
+    private LevelMenu levelMenu;
+    private SettingsMenu settingsMenu;
+    
     private SubMenu DroneMenu => subMenus[1];
-    private SubMenu SettingsMenu => subMenus[2];
 
     private int menuOpened = -1;
-
-    public int levelSelectedID;
     public int droneSelectedID;
 
     private static readonly int Open = Animator.StringToHash("open");
-    private static readonly int Selected = Animator.StringToHash("Selected");
 
-    public bool isLevelSelectionOpen => LevelMenu.GetComponent<Animator>().GetBool(Open);
+    public bool isLevelSelectionOpen => levelMenu.GetComponent<Animator>().GetBool(Open);
     public bool isDroneSelectionOpen => DroneMenu.GetComponent<Animator>().GetBool(Open);
 
     private void Start()
     {
-        UpdateSelectedLevel(levelSelectedID);
         UpdateSelectedDrone(droneSelectedID);
 
         for (int i = 0; i < subMenus.Count; i++)
@@ -35,22 +29,16 @@ public class MenuManager : Singleton<MenuManager>
             subMenus[i].OnClose += () => menuOpened = -1;
             subMenus[i].OnOpen += () => menuOpened = menuID;
         }
+
+        levelMenu = (LevelMenu) subMenus[0];
+        settingsMenu = (SettingsMenu) subMenus[2];
     }
 
-    public void ToggleLevelSelection()
-    {
-        ToggleMenu(0);
-    }
-    
-    public void ToggleDroneSelection()
-    {
-        ToggleMenu(1);
-    }
-    
-    public void ToggleSettingsMenu()
-    {
-        ToggleMenu(2);
-    }
+    public void ToggleLevelSelection() => ToggleMenu(0);
+
+    public void ToggleDroneSelection() => ToggleMenu(1);
+
+    public void ToggleSettingsMenu() => ToggleMenu(2);
 
     // Abre o Cierra el Menu
     private void ToggleMenu(int menuID)
@@ -63,8 +51,8 @@ public class MenuManager : Singleton<MenuManager>
         }
         
         // Si no cerramos si hay alguno otro abierto y abrimos el menu
-        CloseMenu();
-        OpenMenu(menuID);
+        if (CloseMenu())
+            OpenMenu(menuID);
     }
 
     private void OpenMenu(int menuID)
@@ -72,17 +60,10 @@ public class MenuManager : Singleton<MenuManager>
         if (menuOpened == menuID) return;
         subMenus[menuID].Open();
     }
-    private void CloseMenu()
+    private bool CloseMenu()
     {
-        if (menuOpened == -1) return;
-        subMenus[menuOpened].Close();
-    }
-
-    public void SelectLevel(int newLevelID)
-    {
-        LevelMenu.GetComponentsInChildren<Button>()[levelSelectedID].animator.SetBool(Selected, false);
-        LevelMenu.GetComponentsInChildren<Button>()[newLevelID].animator.SetBool(Selected, true);
-        levelSelectedID = newLevelID;
+        if (menuOpened == -1) return true;
+        return subMenus[menuOpened].Close();
     }
 
     public void SelectDrone(int newDroneID)
@@ -93,13 +74,8 @@ public class MenuManager : Singleton<MenuManager>
     }
 
 
-    public void UpdateSelectedLevel(int id)
-    {
-        LevelMenu.firstSelected = LevelMenu.selectibles[id];
-        LevelMenu.selectibles[levelSelectedID].animator.SetBool(Selected, false);
-        LevelMenu.firstSelected.animator.SetBool(Selected, true);
-        levelSelectedID = id;
-    }
+    
+    private static readonly int Selected = Animator.StringToHash("Selected");
     
     public void UpdateSelectedDrone(int id)
     {
@@ -110,4 +86,11 @@ public class MenuManager : Singleton<MenuManager>
     }
 
     public void OnCancel() => CloseMenu();
+
+    public void Play()
+    {
+        CloseMenu();
+        
+        LevelManager.Instance.LoadSelectedLevel();
+    }
 }

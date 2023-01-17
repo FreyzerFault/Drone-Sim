@@ -15,7 +15,7 @@ public class SettingsMenu : TabMenu
     [SerializeField] private List<Button> botButtons;
 
     [SerializeField] private GameObject closeDialogueBox;
-    
+
     protected override void Awake()
     {
         base.Awake();
@@ -95,10 +95,11 @@ public class SettingsMenu : TabMenu
         }
     }
 
-    public override void Close()
+    public override bool Close()
     {
         closeDialogueBox.SetActive(true);
         closeDialogueBox.GetComponentsInChildren<Selectable>()[0].Select();
+        return false;
     }
 
     public void CloseTrue()
