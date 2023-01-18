@@ -1,11 +1,11 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
-namespace DroneSim
+namespace dronSim
 {
-    public class DroneTpvCamera : MonoBehaviour
+    public class DroneTpvCamera : DroneCamera
     {
-        public DroneController drone;
-
         public float distanceOrbit;
         public float heightOrbit;
 
@@ -14,46 +14,48 @@ namespace DroneSim
         // Desplazamiento ligero de la camara en direccion a la que se mueve el dron para facilitar mayor visibilidad
         [Range(0.001f, 0.1f)] public float velocityOffset = 1;
         
-        private void Awake()
+
+        protected void Start()
         {
-            drone = GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneController>();
+            distanceOrbit = Vector3.ProjectOnPlane(dron.transform.position - dron.TPVposition.position, Vector3.up).magnitude;
+            heightOrbit = Vector3.ProjectOnPlane(dron.transform.position - dron.TPVposition.position, dron.transform.forward).magnitude;
 
-            distanceOrbit = Vector3.ProjectOnPlane(drone.transform.position - drone.TPVposition.position, Vector3.up).magnitude;
-            heightOrbit = Vector3.ProjectOnPlane(drone.transform.position - drone.TPVposition.position, drone.transform.forward).magnitude;
-
-
-            transform.position = drone.transform.position
-                                 - Vector3.ProjectOnPlane(drone.transform.forward, Vector3.up).normalized * distanceOrbit
-                                 + Vector3.up * heightOrbit;
-            transform.rotation = drone.transform.rotation;
-
-            targetPos = drone.transform.position;
+            targetPos = dron.transform.position;
         }
 
         Vector3 smoothVel = Vector3.zero;
         Vector3 smoothTargetVel = Vector3.zero;
         private Vector3 targetPos;
 
-        private void LateUpdate()
+        protected override void OnEnable()
         {
-            Vector3 droneVelocity = drone.accelerometer.Velocity;
-            Vector3 localDroneVelocity = drone.transform.worldToLocalMatrix * droneVelocity;
-            localDroneVelocity.z = 0;
-            droneVelocity = drone.transform.localToWorldMatrix * localDroneVelocity;
+            if (dron != null)
+            {
+                transform.position = dron.TPVposition.position;
+                transform.rotation = dron.TPVposition.rotation;
+            }
+        }
+
+        protected override void LateUpdate()
+        {
+            Vector3 dronVelocity = dron.accelerometer.Velocity;
+            Vector3 localdronVelocity = dron.transform.worldToLocalMatrix * dronVelocity;
+            localdronVelocity.z = 0;
+            dronVelocity = dron.transform.localToWorldMatrix * localdronVelocity;
             
-            Vector3 dronePos = drone.transform.position;
-            Vector3 droneForward = drone.transform.forward;
+            Vector3 dronPos = dron.transform.position;
+            Vector3 dronForward = dron.transform.forward;
             
             // Adonde apunta
-            targetPos = Vector3.SmoothDamp(targetPos, (dronePos + droneVelocity * velocityOffset),
+            targetPos = Vector3.SmoothDamp(targetPos, (dronPos + dronVelocity * velocityOffset),
                 ref smoothTargetVel, smoothness);
 
             // Adonde se mueve
-            Vector3 movingTargetPos = dronePos
-                                - Vector3.ProjectOnPlane(droneForward, Vector3.up).normalized * distanceOrbit
+            Vector3 movingTargetPos = dronPos
+                                - Vector3.ProjectOnPlane(dronForward, Vector3.up).normalized * distanceOrbit
                                 + Vector3.up * heightOrbit;
             
-            movingTargetPos += droneVelocity * velocityOffset;
+            movingTargetPos += dronVelocity * velocityOffset;
 
             transform.position =
                 Vector3.SmoothDamp(
@@ -72,13 +74,13 @@ namespace DroneSim
         private void OnDrawGizmos()
         {
             // Gizmos.color = Color.green;
-            // Gizmos.DrawLine(drone.transform.position, targetPos);
+            // Gizmos.DrawLine(dron.transform.position, targetPos);
             //
             // Gizmos.color = Color.red;
             // Gizmos.DrawSphere(targetPos, 0.02f);
             //
             // Gizmos.color = Color.cyan;
-            // Gizmos.DrawSphere(drone.transform.position + drone.accelerometer.Velocity * velocityOffset, 0.02f);
+            // Gizmos.DrawSphere(dron.transform.position + dron.accelerometer.Velocity * velocityOffset, 0.02f);
         }
 
         #endregion

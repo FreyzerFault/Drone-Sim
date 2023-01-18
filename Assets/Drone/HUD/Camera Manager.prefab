@@ -167,6 +167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30b52c2eadc4d1340b919d69e6318e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 2
+  camera: {fileID: 2895339652779068581}
+  icon: {fileID: 21300000, guid: 94e9c3b645f95e549ac2690e22c74f9e, type: 3}
+  dron: {fileID: 0}
 --- !u!1 &722402238343195753
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,18 +218,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 769e5425197ae504290e4a0971e3abfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Cameras:
-  - type: 0
-    camera: {fileID: 4840310303209555075}
-    icon: {fileID: 21300000, guid: b3e65fb6eeaefff4da63601be88d47ff, type: 3}
-  - type: 1
-    camera: {fileID: 6571837492131715556}
-    icon: {fileID: 21300000, guid: 6e90c179d8560fd44bd64da63180afdf, type: 3}
-  - type: 2
-    camera: {fileID: 2895339652779068581}
-    icon: {fileID: 21300000, guid: 94e9c3b645f95e549ac2690e22c74f9e, type: 3}
-  initialCam: 0
-  cameraIcon: {fileID: 0}
+  initialCam: 1
+  cameras:
+  - {fileID: 2315472455800819577}
+  - {fileID: 6571837492131715560}
+  - {fileID: 574110136134295792}
+  dron: {fileID: 0}
 --- !u!1 &1361632071423328226
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,7 +391,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23962225df3c25c4ba605946f3bbbd52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drone: {fileID: 0}
+  type: 1
+  camera: {fileID: 6571837492131715556}
+  icon: {fileID: 21300000, guid: 6e90c179d8560fd44bd64da63180afdf, type: 3}
+  dron: {fileID: 0}
   distanceOrbit: 0.71
   heightOrbit: 0.33
   smoothness: 0.016
@@ -565,4 +566,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d515d616b94debe409a76a86afa90d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drone: {fileID: 0}
+  type: 0
+  camera: {fileID: 4840310303209555075}
+  icon: {fileID: 21300000, guid: b3e65fb6eeaefff4da63601be88d47ff, type: 3}
+  dron: {fileID: 0}

@@ -2,19 +2,14 @@ using UnityEngine;
 
 namespace DroneSim
 {
-    public class DroneStaticCamera : MonoBehaviour
+    public class DroneStaticCamera : DroneCamera
     {
-        private DroneController drone;
+        protected override void OnEnable() {}
 
-        private void Awake()
-        {
-            drone = GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneController>();
-        }
-
-        private void LateUpdate()
+        protected override void LateUpdate()
         {
             transform.rotation = Quaternion.Slerp(transform.rotation,
-                Quaternion.LookRotation(drone.transform.position - transform.position), 0.1f);
+                Quaternion.LookRotation(dron.transform.position - transform.position), 0.1f);
         }
     }
 

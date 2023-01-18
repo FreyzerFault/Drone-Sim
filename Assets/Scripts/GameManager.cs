@@ -64,7 +64,8 @@ public class GameManager : SingletonPersistent<GameManager>
         get => Camera.main;
         set
         {
-            Camera.main.gameObject.SetActive(false);
+            if (Camera.main != null)
+                Camera.main.gameObject.SetActive(false);
             value.gameObject.SetActive(true);
         }
     }

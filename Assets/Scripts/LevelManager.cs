@@ -25,15 +25,10 @@ public class LevelManager : SingletonPersistent<LevelManager>
         public void Load()
         {
             EnvironmentSettings.ApplySettings();
-            Debug.Log("Level " + name + " Loaded");
             OnLoad?.Invoke();
         }
 
-        public void Unload()
-        {
-            Debug.Log("Level " + name + " Unloaded");
-            OnUnload?.Invoke();
-        }
+        public void Unload() => OnUnload?.Invoke();
     }
     
     public string levelsPath = "Levels/";

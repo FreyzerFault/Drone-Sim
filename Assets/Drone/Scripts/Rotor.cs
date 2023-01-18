@@ -10,7 +10,8 @@ namespace DroneSim
         private Rigidbody drone_rb;
 
         // Animation Active
-        public bool animationActivated = false;
+        public bool animationActivated = true;
+        public bool blurActivated = true;
 
         private MeshRenderer meshRenderer;
         private MeshRenderer blurMeshRenderer;
@@ -56,6 +57,9 @@ namespace DroneSim
                 drone = t.parent.GetComponent<DroneController>();
                 drone_rb = drone.GetComponent<Rigidbody>();
             }
+            
+            if (drone == null)
+                Debug.LogError("Dron not found");
 
             meshRenderer = GetComponent<MeshRenderer>();
             blurMeshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
@@ -80,7 +84,8 @@ namespace DroneSim
             if (animationActivated)
             {
                 AnimatePropeller(smoothPower);
-                SetTexture(smoothPower);
+                if (blurActivated)
+                    SetTexture(smoothPower);
             }
 
             // Audio
@@ -106,7 +111,7 @@ namespace DroneSim
         {
             // CLAMP Power [0,1]
             power = Mathf.Clamp01(power);
-
+            
             // Force upwards to drone from rotor point
             ApplyThrottle();
             ApplyTorque();

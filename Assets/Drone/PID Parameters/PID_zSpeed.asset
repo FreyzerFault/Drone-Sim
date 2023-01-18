@@ -12,11 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a0fc09f7c705f748a69f691f195300c, type: 3}
   m_Name: PID_zSpeed
   m_EditorClassIdentifier: 
-  pGain: 30
+  pGain: 10
   iGain: 1
   dGain: 1
   useP: 1
   useI: 0
   useD: 1
-  iSum: -0.09301377
-  error: 0.004761342

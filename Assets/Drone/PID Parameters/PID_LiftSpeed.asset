@@ -16,7 +16,5 @@ MonoBehaviour:
   iGain: 0.1
   dGain: 0.1
   useP: 1
-  useI: 1
+  useI: 0
   useD: 1
-  iSum: -0.000065415305
-  error: -0.0014237469

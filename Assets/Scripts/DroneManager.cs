@@ -11,8 +11,6 @@ public class DroneManager : SingletonPersistent<DroneManager>
     public GameObject[] prefabs;
     public GameObject cameraManagerPrefab;
 
-    public GameObject SpawnPoint => GameObject.FindWithTag("Initial Point");
-
     protected override void Awake()
     {
         base.Awake();
@@ -21,20 +19,26 @@ public class DroneManager : SingletonPersistent<DroneManager>
         LoadSelectedDronePref();
 
         // Cada vez que cargue un nivel destruye el anterior dron y spawnea uno nuevo
-        SceneManager.sceneLoaded += (scene, mode) => DestroyDrone();
         SceneManager.sceneLoaded += (scene, mode) => LoadDrone();
     }
     
     public void LoadDrone(Transform spawnPoint)
     {
-        GameObject drone = Instantiate(CurrentDrone.prefab, spawnPoint);
+        DestroyDrone();
+        
+        GameObject drone = Instantiate(CurrentDrone.prefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
         drone.GetComponent<DroneController>().droneSettings = CurrentDrone;
-        GameObject cameraManager = Instantiate(cameraManagerPrefab, spawnPoint);
     }
 
-    public void LoadDrone() => LoadDrone(SpawnPoint.transform);
+    public void LoadDrone() => LoadDrone(GameObject.FindWithTag("Player Parent").transform);
 
-    public void DestroyDrone() => Destroy(FindObjectOfType<DroneController>());
+    public void DestroyDrone()
+    {
+        foreach (DroneController droneController in FindObjectsOfType<DroneController>())
+        {
+            Destroy(droneController.gameObject);
+        }
+    }
 
     public static readonly string SelectedDroneSavePath = "selected drone";
     private void LoadSelectedDronePref() => currentDroneIndex = PlayerPrefs.GetInt(SelectedDroneSavePath, 0);

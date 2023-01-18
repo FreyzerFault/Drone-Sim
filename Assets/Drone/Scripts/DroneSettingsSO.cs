@@ -20,16 +20,13 @@ namespace DroneSim
 
         // Depends on drone's surface facing velocity direction (angle of attack)
         public float minDragCoefficient = 0.35f;
-        public float maxDragCoefficient = 0.80f;
+        public float maxDragCoefficient = 1.00f;
 
-        public float angularDrag = 0.5f;
+        public float angularDrag = 2f;
         
         [Header("Saturation Values")]
-        // Max params of the propellers
-        public float maxRotationSpeed = 10000;
-
         public float maxTorque = 1;
-        public float maxThrottle = 1;
+        public float maxThrottle = 10;
 
 
         // Movement params
@@ -38,6 +35,9 @@ namespace DroneSim
         // Speed params
         public float maxSpeed = 10;
         public float maxLiftSpeed = 10;
-        public float maxAngularSpeed = 10;
+        public float maxAngularSpeed = 30;
+        
+        // Max params of the propellers animation
+        public float maxRotationSpeed = 1000;
     }
 }

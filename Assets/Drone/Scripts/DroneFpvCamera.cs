@@ -1,21 +1,17 @@
-using UnityEngine;
-
-
 namespace DroneSim
 {
-    public class DroneFpvCamera : MonoBehaviour
+    public class DroneFpvCamera : DroneCamera
     {
-        public DroneController drone;
-
-        private void Awake()
+        protected override void OnEnable()
         {
-            drone = GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneController>();
+            transform.position = dron.FPVposition.position;
+            transform.rotation = dron.FPVposition.rotation;
         }
 
-        private void LateUpdate()
+        protected override void LateUpdate()
         {
-            transform.position = drone.FPVposition.position;
-            transform.rotation = drone.FPVposition.rotation;
+            transform.position = dron.FPVposition.position;
+            transform.rotation = dron.FPVposition.rotation;
         }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Globalization;
 using DroneSim;
 using TMPro;
@@ -56,8 +55,6 @@ public class DroneHUD : MonoBehaviour
     
     private void Awake()
     {
-        drone = GameObject.FindWithTag("Drone").GetComponent<DroneController>();
-
         // JOYSTICKS
         GameObject[] joysticks = GameObject.FindGameObjectsWithTag("Joystick");
         if (joysticks.Length != 2) Debug.LogError("Joysticks are not found in UI");
@@ -67,6 +64,8 @@ public class DroneHUD : MonoBehaviour
 
     private void Start()
     {
+        drone = FindObjectOfType<DroneController>();
+        
         // ANIMATIONS
         drone.OnFlightModeChange += UpdateFlightMode;
         drone.OnHoverStabilizationToggle += UpdateHoverStabilization;
@@ -112,7 +111,7 @@ public class DroneHUD : MonoBehaviour
         
         cameraIcon.sprite = drone.cameraManager.ActiveCameraSprite;
     }
-
+    
     private void UpdateFlightMode(bool next)
     {
         FlightMode.text = drone.flightMode.ToString();
