@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeabc3a67eedef34db1c47097bc2e05e, type: 3}
   m_Name: Red
   m_EditorClassIdentifier: 
+  name: Red Velvet
   prefab: {fileID: 4619493491999937135, guid: 704e5e441135e8e4fa95e6486f0e9eb5, type: 3}
   previewImage: {fileID: 0}
   pitchRollCurve:

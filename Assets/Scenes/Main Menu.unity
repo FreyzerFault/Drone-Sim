@@ -853,7 +853,7 @@ GameObject:
   - component: {fileID: 149508348}
   - component: {fileID: 149508347}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: Preview Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5546,8 +5546,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1749970131}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 1679161861}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
         m_MethodName: Quit
         m_Mode: 1
         m_Arguments:
@@ -5849,7 +5849,7 @@ GameObject:
   - component: {fileID: 741105023}
   - component: {fileID: 741105022}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: Preview Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6502,7 +6502,7 @@ GameObject:
   - component: {fileID: 839484148}
   - component: {fileID: 839484147}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: Preview Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6541,7 +6541,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6509804}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5294118}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6855,7 +6855,7 @@ GameObject:
   - component: {fileID: 866314238}
   - component: {fileID: 866314237}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: Preview Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6894,7 +6894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6509804}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5294118}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -9103,7 +9103,7 @@ GameObject:
   - component: {fileID: 1075009951}
   - component: {fileID: 1075009950}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: Preview Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10187,7 +10187,7 @@ GameObject:
   - component: {fileID: 1211827758}
   - component: {fileID: 1211827757}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: Preview Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10263,7 +10263,7 @@ GameObject:
   - component: {fileID: 1221992251}
   - component: {fileID: 1221992250}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: Preview Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10562,7 +10562,7 @@ GameObject:
   - component: {fileID: 1240454371}
   - component: {fileID: 1240454370}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: Preview Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10601,7 +10601,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6509804}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5294118}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -11563,7 +11563,7 @@ GameObject:
   - component: {fileID: 1327485196}
   - component: {fileID: 1327485195}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: Preview Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11602,7 +11602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6509804}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5294118}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12958,7 +12958,7 @@ GameObject:
   - component: {fileID: 1452561880}
   - component: {fileID: 1452561879}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: Preview Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12997,7 +12997,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6509804}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5294118}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -14097,11 +14097,18 @@ MonoBehaviour:
   currentDroneIndex: 0
   prefabs:
   - {fileID: 5952197869793569669, guid: 50ac9edcba5f11b41b3d1b52f9cd52eb, type: 3}
-  - {fileID: 4619493491999937135, guid: 704e5e441135e8e4fa95e6486f0e9eb5, type: 3}
   - {fileID: 1101666500419492401, guid: 168f173a4b49234469dd617d0a948d2c, type: 3}
-  - {fileID: 503184870776373947, guid: 61754726978e34242bfbf9a53b5a2c71, type: 3}
+  - {fileID: 4619493491999937135, guid: 704e5e441135e8e4fa95e6486f0e9eb5, type: 3}
   - {fileID: 1308554487435048426, guid: 3bcde8dd9ced6c04e92c985daf7e1d9c, type: 3}
+  - {fileID: 503184870776373947, guid: 61754726978e34242bfbf9a53b5a2c71, type: 3}
   - {fileID: 3187740233918182754, guid: 10afe6958fa206847b3f388a44d6f9a3, type: 3}
+  previewImages:
+  - {fileID: 21300000, guid: 2cab2cc34b876884ea3fc087308426a6, type: 3}
+  - {fileID: 21300000, guid: 1e8721c5d06637f41af03a4e4c9832e1, type: 3}
+  - {fileID: 21300000, guid: a8c05d2f2f16e664095a54a990c422ff, type: 3}
+  - {fileID: 21300000, guid: c273e21511b8afe4891690b2333836be, type: 3}
+  - {fileID: 21300000, guid: d8245e875c4a39342884391c56b132ce, type: 3}
+  - {fileID: 21300000, guid: 9473e6d9b837ec446a91972248077e23, type: 3}
   cameraManagerPrefab: {fileID: 722402238343195753, guid: 5d61df123d94dc344907bbf0833859a7, type: 3}
 --- !u!1 &1650571066
 GameObject:
@@ -15986,7 +15993,7 @@ GameObject:
   - component: {fileID: 1884241144}
   - component: {fileID: 1884241143}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: Preview Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16025,7 +16032,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6509804}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5294118}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -16842,7 +16849,7 @@ GameObject:
   - component: {fileID: 2000427734}
   - component: {fileID: 2000427733}
   m_Layer: 5
-  m_Name: Icon
+  m_Name: Preview Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -72,4 +72,11 @@ public class MenuManager : Singleton<MenuManager>
         
         LevelManager.Instance.LoadSelectedLevel();
     }
+    
+    public void Quit()
+    {
+        CloseMenu();
+        
+        GameManager.Quit();
+    }
 }

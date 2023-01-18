@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeabc3a67eedef34db1c47097bc2e05e, type: 3}
   m_Name: Black
   m_EditorClassIdentifier: 
+  name: Black Ring
   prefab: {fileID: 1101666500419492401, guid: 168f173a4b49234469dd617d0a948d2c, type: 3}
   previewImage: {fileID: 0}
   pitchRollCurve:

@@ -26,7 +26,7 @@ public class DroneCameraManager : SingletonPersistent<DroneCameraManager>
                 Debug.Log("Dron not found");
         };
 
-        cameras = GetComponentsInChildren<DroneCamera>();
+        cameras = GetComponentsInChildren<DroneCamera>(true);
         activeCamera = (int) initialCam;
         
         if (FindDron())

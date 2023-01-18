@@ -9,6 +9,7 @@ public class DroneManager : SingletonPersistent<DroneManager>
     public DroneSettingsSO CurrentDrone => drones[currentDroneIndex];
 
     public GameObject[] prefabs;
+    public Sprite[] previewImages;
     public GameObject cameraManagerPrefab;
 
     protected override void Awake()
@@ -43,4 +44,5 @@ public class DroneManager : SingletonPersistent<DroneManager>
     public static readonly string SelectedDroneSavePath = "selected drone";
     private void LoadSelectedDronePref() => currentDroneIndex = PlayerPrefs.GetInt(SelectedDroneSavePath, 0);
     public void SaveSelectedDronePref() => PlayerPrefs.SetInt(SelectedDroneSavePath, currentDroneIndex);
+    
 }

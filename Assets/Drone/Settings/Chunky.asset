@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeabc3a67eedef34db1c47097bc2e05e, type: 3}
   m_Name: Chunky
   m_EditorClassIdentifier: 
+  name: Chunky Boy
   prefab: {fileID: 1308554487435048426, guid: 3bcde8dd9ced6c04e92c985daf7e1d9c, type: 3}
   previewImage: {fileID: 0}
   pitchRollCurve:

@@ -29,8 +29,8 @@ public class DroneMenu : SubMenu
             if (i < DroneManager.Instance.drones.Length)
             {
                 droneName = DroneManager.Instance.drones[i].name;
-                if (DroneManager.Instance.drones[i].previewImage != null)
-                    dronemage = DroneManager.Instance.drones[i].previewImage;
+                if (DroneManager.Instance.previewImages[i] != null)
+                    dronemage = DroneManager.Instance.previewImages[i];
                 
                 selectibles[i].GetComponent<Animator>().SetBool(Disable, false);
             }
@@ -40,6 +40,8 @@ public class DroneMenu : SubMenu
             selectibles[i].GetComponentInChildren<TMP_Text>().text = droneName;
             selectibles[i].GetComponentsInChildren<Image>()[1].sprite = dronemage;
         }
+
+        OnClose += DroneManager.Instance.SaveSelectedDronePref;
     }
     
     public void SelectDrone(int newDroneID)

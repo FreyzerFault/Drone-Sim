@@ -6,6 +6,8 @@ namespace DroneSim
     [CreateAssetMenu(fileName = "Drone Settings", menuName = "Settings/Drone Settings", order = 1)]
     public class DroneSettingsSO : ScriptableObject
     {
+        public string name;
+        
         [Header("Modelo 3D")] 
         public GameObject prefab;
         public Sprite previewImage;

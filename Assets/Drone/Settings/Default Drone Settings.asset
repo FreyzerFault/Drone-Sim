@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeabc3a67eedef34db1c47097bc2e05e, type: 3}
   m_Name: Default Drone Settings
   m_EditorClassIdentifier: 
+  name: Default
   prefab: {fileID: 5952197869793569669, guid: 50ac9edcba5f11b41b3d1b52f9cd52eb, type: 3}
   previewImage: {fileID: 0}
   pitchRollCurve:
