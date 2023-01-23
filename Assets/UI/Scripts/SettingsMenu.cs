@@ -1,27 +1,33 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingsMenu : TabMenu
+public class SettingsMenu : Menu
 {
     public SettingsManager Settings => SettingsManager.Instance;
 
-    GameObject AudioMenu => menus[0];
-    GameObject GraphicsMenu => menus[1];
-    GameObject ControlsMenu => menus[2];
-    GameObject GameMenu => menus[3];
+    Menu AudioMenu => subMenus[0];
+    Menu GraphicsMenu => subMenus[1];
+    Menu ControlsMenu => subMenus[2];
+    Menu GameMenu => subMenus[3];
 
-    [SerializeField] private List<Button> botButtons;
+    [SerializeField] private DynamicNavigation botButtons;
 
     [SerializeField] private GameObject closeDialogueBox;
+
+    private bool canClose = false;
 
     protected override void Awake()
     {
         base.Awake();
-        
-        OnOpen += LoadSetting;
-        onTabChange += OnTabChange;
+
+        OnOpen += LoadSettings;
+
+        // Cada vez que abre un submenu se actualiza la navegacion de los botones inferiores
+        foreach (Menu subMenu in subMenus)
+        {
+            subMenu.OnOpen += UpdateBottomSectionNavigation;
+        }
     }
 
     public void SaveSettings()
@@ -48,7 +54,7 @@ public class SettingsMenu : TabMenu
     }
 
 
-    public void LoadSetting()
+    public void LoadSettings()
     {
         // AUDIO
         Slider[] audioSliders = AudioMenu.GetComponentsInChildren<Slider>();
@@ -74,36 +80,40 @@ public class SettingsMenu : TabMenu
         GameMenu.GetComponentsInChildren<Toggle>()[0].isOn = Settings.GodMode;
     }
 
-    private void OnTabChange()
+    private void UpdateBottomSectionNavigation()
     {
-        // Cambiamos la navegacion de los botones de abajo para conectarlos con el ultimo seleccionable
-        
-        // El ultimo lo conectamos con el primer boton de abajo
-        Selectable lastSelectable = menus[selectedTab].GetComponentsInChildren<Selectable>()[^1];
-        
-        Navigation lastNav = lastSelectable.navigation;
-        lastNav.selectOnDown = botButtons[0];
-        lastSelectable.navigation = lastNav;
-            
-        // Todos los botones de abajo lo conectamos con el ultimo seleccionable
-        foreach (Button button in botButtons)
-        {
-            Navigation bNav = button.navigation;
-            bNav.selectOnUp = lastSelectable;
+        botButtons.topSection = subMenus[menuOpened].gameObject;
+        botButtons.UpdateNavigation();
+    }
 
-            button.navigation = bNav;
-        }
+    private void OpenDialogueBox()
+    {
+        closeDialogueBox.SetActive(true);
+        closeDialogueBox.GetComponentsInChildren<Selectable>()[0].Select();
+    }
+
+    public override void Open()
+    {
+        canClose = false;
+        base.Open();
     }
 
     public override bool Close()
     {
-        closeDialogueBox.SetActive(true);
-        closeDialogueBox.GetComponentsInChildren<Selectable>()[0].Select();
-        return false;
+        if (canClose)
+            return base.Close();
+        else
+        {
+            OpenDialogueBox();
+            canClose = true;
+            return false;
+        }
     }
 
-    public void CloseTrue()
-    {
-        base.Close();   
-    }
+    public void CloseTrue() => base.Close();
+
+     public override void OnCancelRecursive()
+     {
+         Close();
+     }
 }

@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DroneMenu : MenuAnimated
+public class DroneMenu : Menu
 {
     public Sprite defaultDroneImage;
     
@@ -16,8 +16,10 @@ public class DroneMenu : MenuAnimated
     }
     
     
-    public void Start()
+    protected override void Start()
     {
+        base.Start();
+        
         SelectDrone(DroneSelectedID);
         
         // Carga los botones con el nombre y la imagen

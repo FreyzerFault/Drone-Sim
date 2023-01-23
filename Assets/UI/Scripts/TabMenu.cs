@@ -1,69 +1,47 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class TabMenu : MenuAnimated
+public class TabMenu : MonoBehaviour
 {
-    public int selectedTab;
+    [SerializeField] protected List<Button> buttons = new List<Button>();
     public Color selectedTabColor;
-    private int TabCount => tabButtons.Count;
-
-
     public GameObject tabsParent;
-    public GameObject menusParent;
-    
-    [SerializeField] protected List<Button> tabButtons = new List<Button>();
-    [SerializeField] protected List<GameObject> menus = new List<GameObject>();
 
-    protected event Action onTabChange;
+    private Menu menu;
 
-
-    protected override void Awake()
+    protected void Awake()
     {
-        base.Awake();
-        
-        tabButtons = tabsParent.GetComponentsInChildren<Button>().ToList();
-        
-        for (int i = 0; i < TabCount; i++)
-        {
-            menus.Add(menusParent.transform.GetChild(i).gameObject);
-            menus[i].SetActive(false);
-        }
+        menu = GetComponent<Menu>();
+        buttons = tabsParent.GetComponentsInChildren<Button>().ToList();
+    }
 
-        OnOpen += () => OpenTab(0);
+    public void OpenTab(int tabIndex)
+    {
+        if (!menu.isOpen)
+            menu.Open();
+
+        if (menu.menuOpened == tabIndex) return;
+
+        foreach (Button button in buttons) 
+            button.GetComponent<Image>().color = Color.white;
+
+        buttons[tabIndex].GetComponent<Image>().color = selectedTabColor;
+        menu.ToggleSubMenu(tabIndex);
     }
 
     public void OnTabNavigate(InputValue value)
     {
         // Esta seleccionado el ultimo y pulsa derecha
-        if (value.Get<float>() > 0 && selectedTab == TabCount - 1)
+        if (value.Get<float>() > 0 && menu.menuOpened == menu.subMenus.Count - 1)
             return;
         
         // Esta seleccionado el primero y pulsa izquierda
-        if (value.Get<float>() < 0 && selectedTab == 0)
+        if (value.Get<float>() < 0 && menu.menuOpened == 0)
             return;
         
-        OpenTab(selectedTab + (int)value.Get<float>());
-    }
-
-    public void OpenTab(int newTab)
-    {
-        // Cambia el color de la pestaña
-        tabButtons[selectedTab].GetComponent<Image>().color = Color.white;
-        tabButtons[newTab].GetComponent<Image>().color = selectedTabColor;
-        
-        // Cierra la anterior y abre esta
-        menus[selectedTab].SetActive(false);
-        menus[newTab].SetActive(true);
-        
-        // Selecciona el primer item seleccionable
-        menus[newTab].GetComponentsInChildren<Selectable>()[0].Select();
-
-        selectedTab = newTab;
-        
-        onTabChange?.Invoke();
+        OpenTab(menu.menuOpened + (int)value.Get<float>());
     }
 }

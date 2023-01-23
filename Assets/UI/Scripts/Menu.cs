@@ -5,13 +5,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Animator))]
 public class Menu : MonoBehaviour
 {
-    public Menu[] subMenus;
-    protected int menuOpened = -1;
+    public List<Menu> subMenus = new List<Menu>();
+    [HideInInspector] public int menuOpened = -1;
     
     [HideInInspector] public bool isOpen = false;
+    public bool closeOnCancel = true;
 
     public bool saveSelected = false;
     public Selectable firstSelected;
@@ -22,8 +22,20 @@ public class Menu : MonoBehaviour
     public static Selectable CurrentSelected => (EventSystem.current.currentSelectedGameObject == null) ? null : EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>();
     public int SelectedIndex => selectibles.IndexOf(CurrentSelected);
 
+    public event Action BeforeOpen;
     public event Action OnOpen;
+    public event Action BeforeClose;
     public event Action OnClose;
+
+    #region Animator
+
+    private Animator animator;
+    
+    private static readonly int OpenID = Animator.StringToHash("open");
+    
+    public bool isPersistent = false;
+
+    #endregion
 
     protected virtual void Awake()
     {
@@ -33,14 +45,24 @@ public class Menu : MonoBehaviour
         firstSelected = selectibles[0];
     }
 
-    private void Start()
+    protected virtual void Start()
     {
-        for (int i = 0; i < subMenus.Length; i++)
+        for (int i = 0; i < subMenus.Count; i++)
         {
             int menuID = i;
             subMenus[i].OnClose += () => menuOpened = -1;
             subMenus[i].OnOpen += () => menuOpened = menuID;
         }
+        
+        // Animation
+        animator = GetComponent<Animator>();
+        
+        if (animator != null && !isPersistent)
+            for (int i = 0; i < subMenus.Count; i++)
+            {
+                subMenus[i].OnClose += () => animator.SetBool(OpenID, true);
+                subMenus[i].OnOpen += () => animator.SetBool(OpenID, false);
+            }
     }
 
     public void Toggle()
@@ -51,9 +73,12 @@ public class Menu : MonoBehaviour
             Open();
     }
 
-    public void Open()
+    public virtual void Open()
     {
         if (isOpen) return;
+        
+        BeforeOpen?.Invoke();
+        
         isOpen = true;
         
         // Guardamos el seleccionado antes de abrir el menu para cuando se cierre seleccionarlo 
@@ -62,6 +87,11 @@ public class Menu : MonoBehaviour
         // Selecciona el primero
         if (firstSelected)
             firstSelected.Select();
+        
+        if (animator != null)
+            animator.SetBool(OpenID, true);
+        else
+            gameObject.SetActive(true);
 
         OnOpen?.Invoke();
     }
@@ -70,6 +100,8 @@ public class Menu : MonoBehaviour
     {
         if (!isOpen) return true;
 
+        BeforeClose?.Invoke();
+        
         if (menuOpened != -1)
             if (!CloseSubMenu())
                 return false;
@@ -83,6 +115,11 @@ public class Menu : MonoBehaviour
         if (parentSelected != null)
             parentSelected.Select();
         
+        if (animator != null)
+            animator.SetBool(OpenID, false);
+        else
+            gameObject.SetActive(false);
+
         OnClose?.Invoke();
 
         return true;
@@ -112,14 +149,15 @@ public class Menu : MonoBehaviour
     protected void OpenSubMenu(int menuID)
     {
         if (menuOpened == menuID) return;
+        menuOpened = menuID;
         subMenus[menuID].Open();
     }
 
-    public void OnCancelRecursive()
+    public virtual void OnCancelRecursive()
     {
-        if (menuOpened == -1)
-            Close();
-        else
+        if (menuOpened != -1)
             subMenus[menuOpened].OnCancelRecursive();
+        else if (closeOnCancel)
+                Close();
     }
 }

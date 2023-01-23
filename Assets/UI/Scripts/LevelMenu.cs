@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelMenu : MenuAnimated
+public class LevelMenu : Menu
 {
     public Sprite defaultLevelImage;
     
@@ -15,8 +15,10 @@ public class LevelMenu : MenuAnimated
         set => LevelManager.Instance.currentLevel = LevelManager.Instance.levels[value];
     }
 
-    public void Start()
+    protected override void Start()
     {
+        base.Start();
+        
         SelectLevel(LevelSelectedID);
         
         // Carga los botones con el nombre y la imagen

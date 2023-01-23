@@ -11,4 +11,10 @@ public class PauseMenu : MenuManager
 
     public void ResetLevel() => LevelManager.ResetLevel();
     public void Quit() => LevelManager.QuitLevel();
+
+    #region Settings
+
+    public void UpdateGlobalAudio(float audio) => SettingsManager.Instance.GlobalVolume = audio;
+
+    #endregion
 }
