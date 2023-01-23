@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,11 +9,26 @@ namespace DroneSim
         private DroneController droneController;
 
         [HideInInspector] public bool cheatsActivated = false;
-        
-        private void Awake()
+
+        private void Start()
         {
             droneController = GetComponent<DroneController>();
+
+            GameManager.Instance.OnPause += disable;
+            GameManager.Instance.OnUnpause += enable;
         }
+
+        private void OnDestroy()
+        {
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.OnPause -= disable;
+                GameManager.Instance.OnUnpause -= enable;
+            }
+        }
+
+        private void enable() => GetComponent<PlayerInput>().enabled = true;
+        private void disable() => GetComponent<PlayerInput>().enabled = false;
 
         #region InputMessages
 
@@ -32,22 +48,16 @@ namespace DroneSim
 
         private void OnReset()
         {
-            if (GameManager.Instance.GameIsPaused) return;
-            
             droneController.ResetRotation();
         }
 
         private void OnToggleMotor()
-        {
-            if (GameManager.Instance.GameIsPaused) return;
-            
+        {   
             droneController.enabled = !droneController.enabled;
         }
 
         private void OnChangeMode(InputValue value)
         {
-            if (GameManager.Instance.GameIsPaused) return;
-
             if (cheatsActivated)
                 droneController.ActivateGodMode();
             else
@@ -55,28 +65,20 @@ namespace DroneSim
         }
         
         private void OnToggleHover()
-        {
-            if (GameManager.Instance.GameIsPaused) return;
-            
+        {   
             droneController.ToggleHoverStabilization();
         }
 
         private void OnSwitchCamera()
         {
-            if (GameManager.Instance.GameIsPaused) return;
-            
             droneController.cameraManager.SwitchCamera();
         }
         
         
         // PAUSE
-        private MenuToggle menuToggle;
-        public void OnPause(InputValue value)
+        public void OnPause()
         {
-            if (menuToggle == null)
-                menuToggle = GameObject.FindGameObjectWithTag("MenuToggle").GetComponent<MenuToggle>();
-
-            menuToggle.Toggle();
+            PauseMenu.Instance.Toggle();
         }
 
         public void OnHoldToCheats(InputValue value) => cheatsActivated = !cheatsActivated;

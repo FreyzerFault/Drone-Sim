@@ -6,32 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : SingletonPersistent<LevelManager>
 {
-    [Serializable]
-    public struct Level
-    {
-        [HideInInspector] public int ID;
-         public string name;
-         public Sprite previewImage;
-
-         [HideInInspector] public int buildIndex;
-
-         public EnvironmentSettingsSO EnvironmentSettings;
-
-         public bool Completed;
-
-        public event Action OnLoad;
-        public event Action OnUnload;
-
-        public void Load()
-        {
-            EnvironmentSettings.ApplySettings();
-            OnLoad?.Invoke();
-        }
-
-        public void Unload() => OnUnload?.Invoke();
-    }
-    
-    public string levelsPath = "Levels/";
+    public string levelsPath = "Assets/Levels/";
 
     public Level[] levels;
     private Dictionary<string, Level> levelMap;
@@ -44,45 +19,47 @@ public class LevelManager : SingletonPersistent<LevelManager>
     protected override void Awake()
     {
         base.Awake();
-        
+
         // Crea el mapa de Niveles para consultarlos por nombre
         levelMap = new Dictionary<string, Level>();
         for (int i = 0; i < levels.Length; i++)
         {
             levels[i].ID = i;
-            
+
             levels[i].buildIndex = SceneUtility.GetBuildIndexByScenePath(levelsPath + levels[i].name + ".unity");
 
             levelMap.Add(levels[i].name, levels[i]);
         }
-        
+
         // Carga cual fue el ultimo nivel seleccionado
         LoadSelectedLevelPref();
-
-        // Cada vez que carga una escena guarda el nivel
-        SceneManager.sceneLoaded += (scene, mode) => SaveSelectedLevelPref();
-        
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void Start()
     {
+        GameManager.Instance.OnSceneLoaded += OnSceneLoaded;
+        GameManager.Instance.OnSceneUnloaded += OnSceneUnloaded;
+    }
+
+    private void OnSceneLoaded()
+    {
+        // Cada vez que carga una escena guarda el nivel
+        SaveSelectedLevelPref();
+
+        Scene scene = SceneManager.GetActiveScene();
+            
         // LEVEL
         if (levelMap.ContainsKey(scene.name))
             levelMap[scene.name].Load();
         
-        // Main Menu
-        else if (scene.name == "Main Menu")
-            Debug.Log("Main Menu loaded");
-        
         // Not Found!!
-        else
+        else if (scene.name != "Main Menu")
             Debug.Log("No hay ningun nivel guardado para esta escena: " + scene.name);
     }
 
-    private void OnSceneUnloaded(Scene scene)
+    private void OnSceneUnloaded()
     {
+        Scene scene = SceneManager.GetActiveScene();
         if (levelMap.ContainsKey(scene.name))
             levelMap[scene.name].Unload();
     }
@@ -100,7 +77,8 @@ public class LevelManager : SingletonPersistent<LevelManager>
     public Level GetLevel(string levelName) => levelMap[levelName];
 
     // Carga el menu, la escena 0 deberia ser el menu principal
-    public void QuitLevel() => SceneManager.LoadScene(0);
+    public static void ResetLevel() => GameManager.ResetScene();
+    public static void QuitLevel() => SceneManager.LoadScene(0);
 
     public static readonly string SelectedLevelSavePath = "selected level";
     

@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using DroneSim;
 using TMPro;
@@ -173,4 +174,11 @@ public class DroneHUD : MonoBehaviour
             drone.rotorCCW1.power,
             drone.rotorCCW2.power
         );
+
+    private void OnDestroy()
+    {
+        drone.OnFlightModeChange -= UpdateFlightMode;
+        drone.OnHoverStabilizationToggle -= UpdateHoverStabilization;
+        drone.cameraManager.OnCameraSwitched -= UpdateCameraIcon;
+    }
 }

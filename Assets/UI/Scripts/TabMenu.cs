@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class TabMenu : SubMenu
+public class TabMenu : MenuAnimated
 {
     public int selectedTab;
     public Color selectedTabColor;

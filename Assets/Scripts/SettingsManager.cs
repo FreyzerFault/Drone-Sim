@@ -6,8 +6,8 @@ public class SettingsManager : SingletonPersistent<SettingsManager>
     [SerializeField] private SettingsSO settings;
     [SerializeField] private SettingsSO defaultSettings;
 
-    public event Action onLoad;
-    public event Action onSave;
+    public event Action OnLoad;
+    public event Action OnSave;
     
     public float GlobalVolume
     {
@@ -37,11 +37,10 @@ public class SettingsManager : SingletonPersistent<SettingsManager>
         set => settings.godMode = value;
     }
 
-    protected override void Awake()
+    private void Start()
     {
-        base.Awake();
         Load();
-        GameManager.OnQuitGame += Save;
+        GameManager.Instance.OnQuitGame += Save;
     }
 
     public void ReturnToDefaultSettings()
@@ -71,7 +70,7 @@ public class SettingsManager : SingletonPersistent<SettingsManager>
         
         PlayerPrefs.Save();
 
-        onSave?.Invoke();
+        OnSave?.Invoke();
         Debug.Log("Settings Saved");
     }
 
@@ -92,6 +91,6 @@ public class SettingsManager : SingletonPersistent<SettingsManager>
         // Game
         GodMode = PlayerPrefs.GetInt("GodMode", 0) == 1;
         
-        onLoad?.Invoke();
+        OnLoad?.Invoke();
     }
 }

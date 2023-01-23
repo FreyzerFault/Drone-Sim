@@ -35,11 +35,11 @@ MonoBehaviour:
     overrideState: 1
     value: 0
   shutterAngle:
-    overrideState: 0
+    overrideState: 1
     value: 224
   sampleCount:
     overrideState: 1
-    value: 4
+    value: 32
 --- !u!114 &3649283874229080937
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -134,7 +134,7 @@ MonoBehaviour:
     value: {fileID: 0}
     defaultState: 1
   dirtIntensity:
-    overrideState: 0
+    overrideState: 1
     value: 0
 --- !u!114 &5008082352790117204
 MonoBehaviour:
@@ -197,7 +197,7 @@ MonoBehaviour:
     overrideState: 1
     value: 1
   gradingMode:
-    overrideState: 0
+    overrideState: 1
     value: 1
   externalLut:
     overrideState: 0

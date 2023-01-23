@@ -1,10 +1,8 @@
 using System;
 using DroneSim;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
-public class DroneCameraManager : SingletonPersistent<DroneCameraManager>
+public class DroneCameraManager : Singleton<DroneCameraManager>
 {
     private int activeCamera = 0;
     public DroneCamera.CameraType initialCam = DroneCamera.CameraType.TPV;
@@ -18,21 +16,13 @@ public class DroneCameraManager : SingletonPersistent<DroneCameraManager>
 
     private void Start()
     {
-        SceneManager.sceneLoaded += (scene, mode) =>
-        {
-            if (FindDron())
-                LoadCamera();
-            else
-                Debug.Log("Dron not found");
-        };
-
         cameras = GetComponentsInChildren<DroneCamera>(true);
         activeCamera = (int) initialCam;
         
         if (FindDron())
             LoadCamera();
     }
-
+    
     private void Update()
     {
         if (cameras.Length == 0)
@@ -57,7 +47,7 @@ public class DroneCameraManager : SingletonPersistent<DroneCameraManager>
         OnCameraSwitched?.Invoke();
     }
     
-    private void LoadCamera() => GameManager.Camera = ActiveCamera.camera;
+    private static void LoadCamera() => GameManager.Camera = Instance.ActiveCamera.camera;
 
     public Sprite ActiveCameraSprite => ActiveCamera.icon;
 }

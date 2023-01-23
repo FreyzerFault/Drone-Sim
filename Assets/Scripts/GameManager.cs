@@ -1,86 +1,103 @@
 using System;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [Serializable]
-public enum GameMode {Drone, Pause}
+public enum GameState {Playing, Pause}
 
 public class GameManager : SingletonPersistent<GameManager>
 {
     // GAME MODES
-    public GameMode defaultGameMode = GameMode.Drone;
+    private const GameState DefaultGameState = GameState.Playing;
     
-    [SerializeField]
-    private GameMode mode;
-    [SerializeField]
-    private GameMode prevMode;
+    public GameState CurrentGameState { get; private set; }
+    public GameState PreviousGameState { get; private set; }
+
+    public static bool GameIsPaused => Instance.CurrentGameState == GameState.Pause;
+
+    #region Events
+
+    public event Action OnPause;
+    public event Action OnUnpause;
     
-    public GameMode Mode { get => mode; private set => mode = value; }
-    public GameMode PrevMode { get => prevMode; private set => prevMode = value; }
-    public bool GameIsPaused => mode == GameMode.Pause;
+    public event Action OnQuitGame;
 
-    public static event Action OnQuitGame;
-
-    protected override void Awake()
+    // Cambia los eventos static de SceneManager por unos locales
+    // Permite encapsular el control del evento en el GameManager para ser el unico en desuscribirse
+    // Al no ser static los eventos sustitutos se limpian solos al cerrar el juego
+    public event Action OnSceneLoaded;
+    public event Action OnSceneUnloaded;
+    private void OnSceneLoadedDelegate(Scene scene, LoadSceneMode mode) => OnSceneLoaded?.Invoke();
+    private void OnSceneUnloadedDelegate(Scene scene) => OnSceneUnloaded?.Invoke();
+    #endregion
+    
+    private void Start()
     {
-        base.Awake();
+        SceneManager.sceneLoaded += OnSceneLoadedDelegate;
+        SceneManager.sceneUnloaded += OnSceneUnloadedDelegate;
 
-        SceneManager.sceneLoaded += (scene, loadMode) => mode = defaultGameMode; 
-    }
+        OnSceneLoaded += SetDefaultGameState;
 
-    public void SwitchMode(GameMode newMode)
-    {
-        // Al salir de un Modo
-        switch (mode)
-        {
-            case GameMode.Drone:
-                // TODO
-                break;
-            case GameMode.Pause:
-                Time.timeScale = 1;
-                break;
-        }
+        OnPause += () => Time.timeScale = 0;
+        OnUnpause += () => Time.timeScale = 1;
         
-        // Al entrar en ese modo
-        switch (newMode)
-        {
-            case GameMode.Drone:
-                // TODO
-                break;
-            case GameMode.Pause:
-                Time.timeScale = 0;
-                break;
-        }
-
-        prevMode = mode;
-        mode = newMode;
+        SetDefaultGameState();
     }
     
-    public void SwitchToPreviousMode() => SwitchMode(prevMode);
-    
-    
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoadedDelegate;
+        SceneManager.sceneUnloaded -= OnSceneUnloadedDelegate;
+    }
+
+    public static void SwitchGameState(GameState newState)
+    {
+        if (Instance.CurrentGameState == newState) return;
+        
+        Instance.PreviousGameState = Instance.CurrentGameState;
+        Instance.CurrentGameState = newState;
+
+        Instance.HandleStateEvents();
+    }
+
+
+    private void HandleStateEvents()
+    {
+        if (Instance.CurrentGameState == GameState.Pause)
+            Instance.OnPause?.Invoke();
+        
+        if (Instance.PreviousGameState == GameState.Pause)
+            Instance.OnUnpause?.Invoke();
+    }
+
     // CAMERA MANAGEMENT
     public static Camera Camera { 
         get => Camera.main;
         set
         {
+            if (value == null) Debug.LogError("Camera " + value.name + " is not found or not a Camera");
+            
             if (Camera.main != null)
                 Camera.main.gameObject.SetActive(false);
             value.gameObject.SetActive(true);
         }
     }
 
-    public void ResetGame()
+    public static void ResetScene()
     {
-        SwitchMode(defaultGameMode);
+        SetDefaultGameState();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+    
+    public static void ReturnToPreviousState() => SwitchGameState(Instance.PreviousGameState);
+    private static void SetDefaultGameState() => SwitchGameState(DefaultGameState);
 
 
     public static void Quit () 
     {
-        OnQuitGame?.Invoke();
-        
+        Instance.OnQuitGame?.Invoke();
+
         #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
         #else

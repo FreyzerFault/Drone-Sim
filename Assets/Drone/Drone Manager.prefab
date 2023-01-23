@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8167382296812622727
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8428974302309014287}
+  - component: {fileID: 2999749189849438256}
+  m_Layer: 0
+  m_Name: Drone Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8428974302309014287
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8167382296812622727}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -13.255859, y: -17.003784, z: -1.6927443}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2999749189849438256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8167382296812622727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2136d2667987c594b867d6cf4fa22bc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drones:
+  - {fileID: 11400000, guid: acae8a2d0bbf5cd4f972d0330463b81a, type: 2}
+  - {fileID: 11400000, guid: 00886358d16e65849a3c6233fef0a078, type: 2}
+  - {fileID: 11400000, guid: cd3b7c59d9f1f5543b550c88a4475bb4, type: 2}
+  - {fileID: 11400000, guid: 0ce6745c57107d443841758390c0ee2a, type: 2}
+  - {fileID: 11400000, guid: a8726cb78624c2440bb65dfcfb1e5557, type: 2}
+  - {fileID: 11400000, guid: 97d35e8ea4f633c498aef20787091dcc, type: 2}
+  currentDroneIndex: 0
+  prefabs:
+  - {fileID: 5952197869793569669, guid: 50ac9edcba5f11b41b3d1b52f9cd52eb, type: 3}
+  - {fileID: 1101666500419492401, guid: 168f173a4b49234469dd617d0a948d2c, type: 3}
+  - {fileID: 4619493491999937135, guid: 704e5e441135e8e4fa95e6486f0e9eb5, type: 3}
+  - {fileID: 1308554487435048426, guid: 3bcde8dd9ced6c04e92c985daf7e1d9c, type: 3}
+  - {fileID: 503184870776373947, guid: 61754726978e34242bfbf9a53b5a2c71, type: 3}
+  - {fileID: 3187740233918182754, guid: 10afe6958fa206847b3f388a44d6f9a3, type: 3}
+  previewImages:
+  - {fileID: 21300000, guid: 2cab2cc34b876884ea3fc087308426a6, type: 3}
+  - {fileID: 21300000, guid: 1e8721c5d06637f41af03a4e4c9832e1, type: 3}
+  - {fileID: 21300000, guid: a8c05d2f2f16e664095a54a990c422ff, type: 3}
+  - {fileID: 21300000, guid: c273e21511b8afe4891690b2333836be, type: 3}
+  - {fileID: 21300000, guid: d8245e875c4a39342884391c56b132ce, type: 3}
+  - {fileID: 21300000, guid: 9473e6d9b837ec446a91972248077e23, type: 3}
+  cameraManagerPrefab: {fileID: 722402238343195753, guid: 5d61df123d94dc344907bbf0833859a7, type: 3}

@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelMenu : SubMenu
+public class LevelMenu : MenuAnimated
 {
     public Sprite defaultLevelImage;
     

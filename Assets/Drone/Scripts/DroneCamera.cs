@@ -1,4 +1,3 @@
-using System;
 using DroneSim;
 using UnityEngine;
 

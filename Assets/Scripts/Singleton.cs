@@ -43,5 +43,15 @@ public abstract class SingletonPersistent<T> : Singleton<T> where T : MonoBehavi
         base.Awake();
 
         DontDestroyOnLoad(Instance);
+        //PersistentParentsRecursive(Instance.gameObject);
+    }
+
+    private static void PersistentParentsRecursive(GameObject obj)
+    {
+        if (obj.transform.parent != null)
+        {
+            PersistentParentsRecursive(obj.transform.parent.gameObject);
+            DontDestroyOnLoad(obj.transform.parent.gameObject);
+        }
     }
 }

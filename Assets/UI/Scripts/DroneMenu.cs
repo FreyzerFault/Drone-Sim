@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DroneMenu : SubMenu
+public class DroneMenu : MenuAnimated
 {
     public Sprite defaultDroneImage;
     

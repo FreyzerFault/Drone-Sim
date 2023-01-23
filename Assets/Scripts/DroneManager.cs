@@ -1,4 +1,5 @@
 using DroneSim;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,17 +13,15 @@ public class DroneManager : SingletonPersistent<DroneManager>
     public Sprite[] previewImages;
     public GameObject cameraManagerPrefab;
 
-    protected override void Awake()
+    private void Start()
     {
-        base.Awake();
-        
-        // Carga cual fue el ultimo nivel seleccionado
+        // Carga cual fue el ultimo dron seleccionado
         LoadSelectedDronePref();
 
         // Cada vez que cargue un nivel destruye el anterior dron y spawnea uno nuevo
-        SceneManager.sceneLoaded += (scene, mode) => LoadDrone();
+        GameManager.Instance.OnSceneLoaded += LoadDrone;
     }
-    
+
     public void LoadDrone(Transform spawnPoint)
     {
         DestroyDrone();
@@ -31,7 +30,12 @@ public class DroneManager : SingletonPersistent<DroneManager>
         drone.GetComponent<DroneController>().droneSettings = CurrentDrone;
     }
 
-    public void LoadDrone() => LoadDrone(GameObject.FindWithTag("Player Parent").transform);
+    public void LoadDrone()
+    {
+        GameObject parent = GameObject.FindWithTag("Player Parent");
+        if (parent != null)
+            LoadDrone(parent.transform);
+    }
 
     public void DestroyDrone()
     {
