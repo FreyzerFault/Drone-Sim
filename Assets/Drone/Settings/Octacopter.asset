@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Dr. Octopus
   prefab: {fileID: 3187740233918182754, guid: 10afe6958fa206847b3f388a44d6f9a3, type: 3}
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 21300000, guid: 9473e6d9b837ec446a91972248077e23, type: 3}
   pitchRollCurve:
     serializedVersion: 2
     m_Curve:

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Black Ring
   prefab: {fileID: 1101666500419492401, guid: 168f173a4b49234469dd617d0a948d2c, type: 3}
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 21300000, guid: 1e8721c5d06637f41af03a4e4c9832e1, type: 3}
   pitchRollCurve:
     serializedVersion: 2
     m_Curve:

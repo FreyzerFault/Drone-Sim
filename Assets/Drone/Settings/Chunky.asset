@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Chunky Boy
   prefab: {fileID: 1308554487435048426, guid: 3bcde8dd9ced6c04e92c985daf7e1d9c, type: 3}
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 21300000, guid: c273e21511b8afe4891690b2333836be, type: 3}
   pitchRollCurve:
     serializedVersion: 2
     m_Curve:

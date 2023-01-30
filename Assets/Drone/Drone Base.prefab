@@ -457,6 +457,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drone: {fileID: 6724672218753143662}
   animationActivated: 1
+  blurActivated: 1
+  soundActivated: 1
   blurTextures:
   - {fileID: 2800000, guid: a3ac4bae1835cd14aaa93ab75c41317e, type: 3}
   - {fileID: 2800000, guid: 985fe3c4fbc3d2f44b7d783a4b0afa33, type: 3}
@@ -464,6 +466,7 @@ MonoBehaviour:
   counterclockwise: 0
   power: 0
   smoothAnimation: 1
+  minSmoothPower: 0.1
 --- !u!1 &5941920997575008622
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,6 +663,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drone: {fileID: 6724672218753143662}
   animationActivated: 1
+  blurActivated: 1
+  soundActivated: 1
   blurTextures:
   - {fileID: 2800000, guid: a3ac4bae1835cd14aaa93ab75c41317e, type: 3}
   - {fileID: 2800000, guid: 985fe3c4fbc3d2f44b7d783a4b0afa33, type: 3}
@@ -667,6 +672,7 @@ MonoBehaviour:
   counterclockwise: 1
   power: 0
   smoothAnimation: 1
+  minSmoothPower: 0.1
 --- !u!1 &5941920997575029690
 GameObject:
   m_ObjectHideFlags: 0
@@ -863,6 +869,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drone: {fileID: 6724672218753143662}
   animationActivated: 1
+  blurActivated: 1
+  soundActivated: 1
   blurTextures:
   - {fileID: 2800000, guid: a3ac4bae1835cd14aaa93ab75c41317e, type: 3}
   - {fileID: 2800000, guid: 985fe3c4fbc3d2f44b7d783a4b0afa33, type: 3}
@@ -870,6 +878,7 @@ MonoBehaviour:
   counterclockwise: 1
   power: 0
   smoothAnimation: 1
+  minSmoothPower: 0.1
 --- !u!1 &5941920997575220708
 GameObject:
   m_ObjectHideFlags: 0
@@ -1066,6 +1075,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drone: {fileID: 6724672218753143662}
   animationActivated: 1
+  blurActivated: 1
+  soundActivated: 1
   blurTextures:
   - {fileID: 2800000, guid: a3ac4bae1835cd14aaa93ab75c41317e, type: 3}
   - {fileID: 2800000, guid: 985fe3c4fbc3d2f44b7d783a4b0afa33, type: 3}
@@ -1073,6 +1084,7 @@ MonoBehaviour:
   counterclockwise: 0
   power: 0
   smoothAnimation: 1
+  minSmoothPower: 0.1
 --- !u!1001 &261967154972789397
 PrefabInstance:
   m_ObjectHideFlags: 0

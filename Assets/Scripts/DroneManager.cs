@@ -1,17 +1,19 @@
 using DroneSim;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class DroneManager : SingletonPersistent<DroneManager>
 {
-    public DroneSettingsSO[] drones;
-    public int currentDroneIndex;
-    public DroneSettingsSO CurrentDrone => drones[currentDroneIndex];
+    public DroneSettingsSO[] droneConfigurations;
+    public int currentDroneConfigurationIndex;
+    
+    public DroneController currentDroneController;
+    private DroneSettingsSO CurrentDroneSettings => droneConfigurations[currentDroneConfigurationIndex];
 
-    public GameObject[] prefabs;
-    public Sprite[] previewImages;
-    public GameObject cameraManagerPrefab;
+    protected override void Awake()
+    {
+        base.Awake();
+        currentDroneController = FindObjectOfType<DroneController>();
+    }
 
     private void Start()
     {
@@ -26,8 +28,10 @@ public class DroneManager : SingletonPersistent<DroneManager>
     {
         DestroyDrone();
         
-        GameObject drone = Instantiate(CurrentDrone.prefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
-        drone.GetComponent<DroneController>().droneSettings = CurrentDrone;
+        GameObject drone = Instantiate(CurrentDroneSettings.prefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
+
+        currentDroneController = drone.GetComponent<DroneController>();
+        currentDroneController.droneSettings = CurrentDroneSettings;
     }
 
     public void LoadDrone()
@@ -46,7 +50,7 @@ public class DroneManager : SingletonPersistent<DroneManager>
     }
 
     public static readonly string SelectedDroneSavePath = "selected drone";
-    private void LoadSelectedDronePref() => currentDroneIndex = PlayerPrefs.GetInt(SelectedDroneSavePath, 0);
-    public void SaveSelectedDronePref() => PlayerPrefs.SetInt(SelectedDroneSavePath, currentDroneIndex);
+    private void LoadSelectedDronePref() => currentDroneConfigurationIndex = PlayerPrefs.GetInt(SelectedDroneSavePath, 0);
+    public void SaveSelectedDronePref() => PlayerPrefs.SetInt(SelectedDroneSavePath, currentDroneConfigurationIndex);
     
 }

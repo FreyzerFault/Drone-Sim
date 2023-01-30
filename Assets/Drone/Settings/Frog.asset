@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Frogaddier
   prefab: {fileID: 503184870776373947, guid: 61754726978e34242bfbf9a53b5a2c71, type: 3}
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 21300000, guid: d8245e875c4a39342884391c56b132ce, type: 3}
   pitchRollCurve:
     serializedVersion: 2
     m_Curve:

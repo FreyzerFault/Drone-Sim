@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace DroneSim
 {
@@ -12,6 +13,7 @@ namespace DroneSim
         // Animation Active
         public bool animationActivated = true;
         public bool blurActivated = true;
+        public bool soundActivated = true;
 
         private MeshRenderer meshRenderer;
         private MeshRenderer blurMeshRenderer;
@@ -29,8 +31,9 @@ namespace DroneSim
         private float lastPower;
         protected float smoothPower;
         private float smoothStep = 0.1f;
+        public float minSmoothPower = 0.1f;
 
-        public float Power => smoothAnimation ? smoothPower : power;
+        public virtual float Power => smoothAnimation ? smoothPower : power;
 
         #region Physics Parameters
 
@@ -51,23 +54,21 @@ namespace DroneSim
 
         protected virtual void Awake()
         {
-            Transform t = transform;
-            if (t.parent != null && t.parent.GetComponent<DroneController>())
-            {
-                drone = t.parent.GetComponent<DroneController>();
-                drone_rb = drone.GetComponent<Rigidbody>();
-            }
-            
-            if (drone == null)
-                Debug.LogError("Dron not found");
-
             meshRenderer = GetComponent<MeshRenderer>();
-            blurMeshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
+            
+            if (transform.childCount > 0)
+                blurMeshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
 
             audioSource = GetComponent<AudioSource>();
 
             lastPower = power;
             smoothPower = power;
+        }
+
+        protected virtual void Start()
+        {
+            drone = DroneManager.Instance.currentDroneController;
+            drone_rb = drone.GetComponent<Rigidbody>();
         }
 
         protected virtual void Update()
@@ -89,7 +90,8 @@ namespace DroneSim
             }
 
             // Audio
-            SetAudio(smoothPower);
+            if (soundActivated)
+                SetAudio(smoothPower);
         }
 
         protected void UpdateSmoothPower()
@@ -99,12 +101,21 @@ namespace DroneSim
 
             // Smooth change in power
             float powerDiff = power - lastPower;
-            if (Mathf.Abs(powerDiff) > smoothStep)
-                smoothPower = lastPower + smoothStep * (powerDiff > 0 ? 1 : -1);
+            
+            // Si la diferencia es negativa, esta disminuyendo, visualmente no deben verse las helices frenadas de golpe,
+            // por lo que hay que utilizar un smoothStep mucho mas pequeño, para reducir el frenado
+            float breakSmoothStep = smoothStep / 20;
+            if (powerDiff < 0 && Mathf.Abs(powerDiff) > breakSmoothStep) 
+                smoothPower = lastPower - breakSmoothStep;
             else
-                smoothPower = power;
+            {
+                if (Mathf.Abs(powerDiff) > smoothStep)
+                    smoothPower = lastPower + smoothStep * (powerDiff > 0 ? 1 : -1);
+                else
+                    smoothPower = power;
+            }
 
-            lastPower = smoothPower;
+            lastPower = Mathf.Max(minSmoothPower, smoothPower);
         }
 
         protected virtual void FixedUpdate()
@@ -124,7 +135,7 @@ namespace DroneSim
         /// Rotate depending on power
         /// </summary>
         /// <param name="power_t"></param>
-        protected void AnimatePropeller(float power_t)
+        protected virtual void AnimatePropeller(float power_t)
         {
             float maxRotationSpeed = drone.droneSettings.maxRotationSpeed;
             float angle = Mathf.Lerp(0, maxRotationSpeed, Mathf.Pow(power_t, 0.1f)) * Time.deltaTime *
@@ -158,7 +169,7 @@ namespace DroneSim
         /// Change audio params dynamicaly depending on power
         /// </summary>
         /// <param name="power_t"></param>
-        private void SetAudio(float power_t)
+        protected void SetAudio(float power_t)
         {
             float powerSqr = power_t * power_t;
             audioSource.volume = Mathf.Lerp(0, .5f, powerSqr);

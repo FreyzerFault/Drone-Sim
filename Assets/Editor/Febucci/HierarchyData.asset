@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13e4683880117bb40bf96a253db55efe, type: 3}
+  m_Name: HierarchyData
+  m_EditorClassIdentifier: 
+  enabled: 1
+  updateInPlayMode: 1
+  drawActivationToggle: 1
+  icons:
+    enabled: 1
+    aligned: 0
+    pairs:
+    - iconToDraw: {fileID: 2800000, guid: c60f434eb448b3549a4ae8fe78d75b22, type: 3}
+      targetClasses:
+      - {fileID: 11500000, guid: 3b08c80e8e3b064419c9b62611a1cacd, type: 3}
+      - {fileID: 11500000, guid: 2136d2667987c594b867d6cf4fa22bc4, type: 3}
+    - iconToDraw: {fileID: 2800000, guid: 7bcf89088376c4e43bcc140d08e7ac5b, type: 3}
+      targetClasses:
+      - {fileID: 11500000, guid: 7ea44f08ac125ec488112f4c4d317fae, type: 3}
+    - iconToDraw: {fileID: 2800000, guid: f3ad6218c8c543e4fb3460914860e5be, type: 3}
+      targetClasses:
+      - {fileID: 11500000, guid: c675d5174821b8a4daeb23f8c6ee42d8, type: 3}
+      - {fileID: 11500000, guid: 5bc7ffc245b06f64d83135e2976aa47b, type: 3}
+    - iconToDraw: {fileID: 2800000, guid: f6f6ebcaea2d9594fa4945b9ba7ce580, type: 3}
+      targetClasses:
+      - {fileID: 11500000, guid: 769e5425197ae504290e4a0971e3abfa, type: 3}
+    - iconToDraw: {fileID: 2800000, guid: 346e8702c7f18e5488a99e270e0db7bc, type: 3}
+      targetClasses:
+      - {fileID: 11500000, guid: 79ac4271574acab4ea56350dcfa7b04e, type: 3}
+    - iconToDraw: {fileID: 2800000, guid: 3e5ed5aceffe61c47b8a2f8125e70394, type: 3}
+      targetClasses:
+      - {fileID: 11500000, guid: 6c737da8950e71b40bdd91c6006f05f0, type: 3}
+    - iconToDraw: {fileID: 2800000, guid: 83438053370c84456a73f7f95ef821fb, type: 3}
+      targetClasses:
+      - {fileID: 11500000, guid: 96e90af20e308d248b5a9e5e9a43cd4b, type: 3}
+  prefabsData:
+    enabled: 1
+    prefabs: []
+  alternatingBackground:
+    enabled: 1
+    color: {r: 0, g: 0, b: 0, a: 0.08}
+  separator:
+    enabled: 1
+    startString: '>'
+    color: {r: 0, g: 1, b: 1, a: 0.15}
+  tree:
+    enabled: 1
+    drawOverlayOnColoredPrefabs: 1
+    dividerHeigth: 0.92
+    baseLevelColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    branches:
+    - overlayColor: {r: 1, g: 0.44, b: 0.97, a: 0.04}
+      colors:
+      - {r: 1, g: 0.44, b: 0.97, a: 1}
+      - {r: 0.56, g: 0.44, b: 1, a: 1}
+      - {r: 0.44, g: 0.71, b: 1, a: 1}
+      - {r: 0.19, g: 0.53, b: 0.78, a: 1}
+    - overlayColor: {r: 0.93, g: 1, b: 0.42, a: 0.04}
+      colors:
+      - {r: 0.93, g: 1, b: 0.42, a: 1}
+      - {r: 1, g: 0.75, b: 0.42, a: 1}
+      - {r: 1, g: 0.46, b: 0.31, a: 1}
+      - {r: 1, g: 0.35, b: 0.34, a: 1}

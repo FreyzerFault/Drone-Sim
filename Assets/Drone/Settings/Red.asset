@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Red Velvet
   prefab: {fileID: 4619493491999937135, guid: 704e5e441135e8e4fa95e6486f0e9eb5, type: 3}
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 21300000, guid: a8c05d2f2f16e664095a54a990c422ff, type: 3}
   pitchRollCurve:
     serializedVersion: 2
     m_Curve:
