@@ -4,7 +4,12 @@ namespace DroneSim
 {
     public class DroneStaticCamera : DroneCamera
     {
-        protected override void OnEnable() {}
+        protected override void OnEnable()
+        {
+            GameObject initObj = GameObject.FindWithTag("Land Camera Init Point");
+            if (initObj)
+                transform.SetPositionAndRotation(initObj.transform.position, initObj.transform.rotation);
+        }
 
         protected override void LateUpdate()
         {

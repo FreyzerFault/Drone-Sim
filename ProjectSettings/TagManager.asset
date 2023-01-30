@@ -10,6 +10,9 @@ TagManager:
   - Camera Manager
   - Camera Icon
   - Player Parent
+  - Land Camera Init Point
+  - Level HUD
+  - Arrow Hint
   layers:
   - Default
   - TransparentFX
