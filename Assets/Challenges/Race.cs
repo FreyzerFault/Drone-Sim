@@ -138,6 +138,15 @@ public class Race : Challenge
         arrowToRing.target = ring.transform;
     }
 
-    private void ShowArrow() => arrowToRing.Show();
-    private void HideArrow() => arrowToRing.Hide();
+    private void ShowArrow()
+    {
+        if (arrowToRing != null)
+            arrowToRing.Show();
+    }
+
+    private void HideArrow()
+    {
+        if (arrowToRing != null)
+            arrowToRing.Hide();
+    }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9171698869760413885}
   - component: {fileID: 9171698869761380989}
   - component: {fileID: 360799931311213174}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 9171698869760413887}
   - component: {fileID: 9171698869761380991}
   - component: {fileID: 2906161641768052610}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -362,7 +362,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3209865575176536708, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
       propertyPath: m_Name
-      value: Fat Drone
+      value: Chunky Drone
       objectReference: {fileID: 0}
     - target: {fileID: 4623541211508815579, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
       propertyPath: m_Materials.Array.data[0]

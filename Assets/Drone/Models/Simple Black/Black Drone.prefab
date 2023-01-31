@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7020028322821359869}
   - component: {fileID: 6187882826916869381}
   - component: {fileID: 4992110903259302466}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 1295591904721495134}
   - component: {fileID: 6261778311552106237}
   - component: {fileID: 8438875269606673329}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
