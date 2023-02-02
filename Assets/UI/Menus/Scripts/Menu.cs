@@ -39,6 +39,8 @@ public class Menu : MonoBehaviour
 
     protected virtual void Awake()
     {
+        isOpen = false;
+        
         selectibles = GetComponentsInChildren<Selectable>().ToList();
 
         // Carga el seleccionado por defecto
@@ -155,9 +157,12 @@ public class Menu : MonoBehaviour
 
     public virtual void OnCancelRecursive()
     {
-        if (menuOpened != -1)
-            subMenus[menuOpened].OnCancelRecursive();
-        else if (closeOnCancel)
+        if (isOpen)
+        {
+            if (menuOpened != -1)
+                subMenus[menuOpened].OnCancelRecursive();
+            else if (closeOnCancel)
                 Close();
+        }
     }
 }

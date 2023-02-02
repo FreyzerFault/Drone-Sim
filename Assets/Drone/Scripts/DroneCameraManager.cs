@@ -19,23 +19,13 @@ public class DroneCameraManager : Singleton<DroneCameraManager>
         cameras = GetComponentsInChildren<DroneCamera>(true);
         activeCamera = (int) initialCam;
         
-        if (FindDron())
-            LoadCamera();
+        LoadCamera();
     }
     
     private void Update()
     {
         if (cameras.Length == 0)
             cameras = GetComponentsInChildren<DroneCamera>(true);
-    }
-
-    public bool FindDron()
-    {
-        dron = FindObjectOfType<DroneController>();
-
-        foreach (DroneCamera camera in cameras) camera.dron = dron;
-
-        return dron != null;
     }
 
     public void SwitchCamera()

@@ -5,7 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - MenuToggle
-  - Joystick
   - Drone
   - Camera Manager
   - Camera Icon
@@ -13,6 +12,8 @@ TagManager:
   - Land Camera Init Point
   - Level HUD
   - Arrow Hint
+  - Joystick I
+  - Joystick D
   layers:
   - Default
   - TransparentFX

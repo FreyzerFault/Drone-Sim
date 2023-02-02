@@ -16,12 +16,11 @@ public abstract class DroneCamera : MonoBehaviour
     public Camera camera;
     public Sprite icon;
 
-    public DroneController dron;
+    public DroneController Dron => DroneManager.Instance.currentDroneController;
 
     private void Awake()
     {
         camera = GetComponent<Camera>();
-        dron = FindObjectOfType<DroneController>();
     }
 
     protected abstract void OnEnable();

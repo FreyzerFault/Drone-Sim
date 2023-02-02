@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3861e70878b25e64d950c8424c639506, type: 3}
   m_Name: Highschool
   m_EditorClassIdentifier: 
-  ID: 0
+  ID: 2
   name: Highschool
   previewImage: {fileID: 21300000, guid: 1f5e045e5c37dcf4d88558750a7812dc, type: 3}
-  buildIndex: 0
+  completed: 0
+  buildIndex: 2
+  music: Menu
+  ambient: Day
   EnvironmentSettings: {fileID: 11400000, guid: 22c124c3937569f47af34e5ea2da3289, type: 2}
-  Completed: 0

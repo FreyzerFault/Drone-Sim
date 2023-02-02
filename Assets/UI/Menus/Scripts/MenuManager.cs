@@ -19,6 +19,7 @@ public class MenuManager : Singleton<MenuManager>
 
     public void Open() => RootMenu.Open();
     public bool Close() => RootMenu.Close();
-    
-    public void OnCancel() => RootMenu.OnCancelRecursive();
+
+    public virtual void OnCancel() => RootMenu.OnCancelRecursive();
+    public virtual void OnCloseMenu() => Close();
 }

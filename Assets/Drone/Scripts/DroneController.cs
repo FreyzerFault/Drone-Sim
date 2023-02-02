@@ -105,7 +105,36 @@ namespace DroneSim
             UpdatePhysicParameters();
             
             ResetRotors();
+
+            GameManager.Instance.OnPause += OnPause;
+            GameManager.Instance.OnUnpause += OnUnpause;
         }
+
+        private void OnDestroy()
+        {
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.OnPause -= OnPause;
+                GameManager.Instance.OnUnpause -= OnUnpause;
+            }
+        }
+
+        #region OnPause
+
+        private void OnPause()
+        {
+            rb.isKinematic = true;
+            enabled = false;
+        }
+
+        private void OnUnpause()
+        {
+            rb.isKinematic = false;
+            enabled = true;
+        }
+
+        #endregion
+        
 
         private void UpdatePhysicParameters()
         {

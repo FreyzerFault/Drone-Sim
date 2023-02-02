@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace DroneSim
 {
@@ -13,7 +14,10 @@ namespace DroneSim
         // Animation Active
         public bool animationActivated = true;
         public bool blurActivated = true;
-        public bool soundActivated = true;
+        
+        // Audio
+        public bool audioActivated = true;
+        public float maxVolume = 0.5f;
 
         private MeshRenderer meshRenderer;
         private MeshRenderer blurMeshRenderer;
@@ -69,7 +73,35 @@ namespace DroneSim
         {
             drone = DroneManager.Instance.currentDroneController;
             drone_rb = drone.GetComponent<Rigidbody>();
+            
+            GameManager.Instance.OnPause += OnPause;
+            GameManager.Instance.OnUnpause += OnUnpause;
         }
+        
+        private void OnDestroy()
+        {
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.OnPause -= OnPause;
+                GameManager.Instance.OnUnpause -= OnUnpause;
+            }
+        }
+
+        #region OnPause
+
+        private void OnPause()
+        {
+            audioSource.mute = true;
+            enabled = false;
+        }
+
+        private void OnUnpause()
+        {
+            audioSource.mute = false;
+            enabled = true;
+        }
+
+        #endregion
 
         protected virtual void Update()
         {
@@ -90,8 +122,7 @@ namespace DroneSim
             }
 
             // Audio
-            if (soundActivated)
-                SetAudio(smoothPower);
+            if (audioActivated) SetAudio(smoothPower);
         }
 
         protected void UpdateSmoothPower()
@@ -172,7 +203,7 @@ namespace DroneSim
         protected void SetAudio(float power_t)
         {
             float powerSqr = power_t * power_t;
-            audioSource.volume = Mathf.Lerp(0, .5f, powerSqr);
+            audioSource.volume = Mathf.Lerp(0, maxVolume, powerSqr);
             audioSource.pitch = Mathf.Lerp(0.9f, 1.1f, powerSqr);
         }
 

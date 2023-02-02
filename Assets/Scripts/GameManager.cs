@@ -38,9 +38,6 @@ public class GameManager : SingletonPersistent<GameManager>
         SceneManager.sceneUnloaded += OnSceneUnloadedDelegate;
 
         OnSceneLoaded += SetDefaultGameState;
-
-        OnPause += () => Time.timeScale = 0;
-        OnUnpause += () => Time.timeScale = 1;
         
         SetDefaultGameState();
     }

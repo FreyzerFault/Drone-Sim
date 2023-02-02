@@ -15,6 +15,8 @@ MonoBehaviour:
   ID: 0
   name: Mars
   previewImage: {fileID: 21300000, guid: 8b99695a629de4845a9e699cf53ce7f0, type: 3}
+  completed: 0
   buildIndex: 0
+  music: 
+  ambient: Mars
   EnvironmentSettings: {fileID: 11400000, guid: ac9c377d835104e40aa5e09e9532648d, type: 2}
-  Completed: 0

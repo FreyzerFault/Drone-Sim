@@ -22,4 +22,6 @@ public class MainMenu : MenuManager
         if (Close())
             GameManager.Quit();
     }
+
+    public override void OnCloseMenu() { }
 }

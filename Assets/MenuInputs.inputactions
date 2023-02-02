@@ -85,6 +85,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "CloseMenu",
+                    "type": "Button",
+                    "id": "b02a85e6-e3e2-4838-861a-a76b72fb684d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -125,6 +134,17 @@
                     "name": "",
                     "id": "2ed3e757-b9a7-4a48-a69d-38452e7f2f4c",
                     "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7cba2ce4-e214-45c5-8d9d-042a992c2b7b",
+                    "path": "<Keyboard>/backspace",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -332,23 +352,23 @@
                 },
                 {
                     "name": "",
-                    "id": "f3d980a9-7fc7-4dd8-a816-249d70aa5841",
-                    "path": "<Gamepad>/start",
+                    "id": "13c13f86-4739-4e0a-bfbd-68634eb6fce2",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Cancel",
+                    "action": "CloseMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "176fae9b-c7cd-4b21-a198-a668bcb09763",
-                    "path": "<Keyboard>/escape",
+                    "id": "80282543-c60c-478d-918f-ad210c2e8bc9",
+                    "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Cancel",
+                    "action": "CloseMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

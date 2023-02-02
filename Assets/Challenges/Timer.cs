@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -11,7 +12,13 @@ public class Timer : MonoBehaviour
     public Color color;
     public Color pauseColor;
 
-    protected virtual void Awake() => timeElapsed = 0;
+    // Cuando llegue al segundo endTime => OnEnd.Invoke() y se Pausa
+    // Si endTime == 0 => no termina
+    public float endTime = 0; // en segundos
+    public event Action OnEnd;
+    public bool completed = false;
+
+    protected void Awake() => timeElapsed = 0;
 
     private void Start() => SuscribeEvents();
 
@@ -20,22 +27,34 @@ public class Timer : MonoBehaviour
     {
         if (pause) return;
         
-        timeElapsed += Time.deltaTime * 1000;
+        timeElapsed += Time.deltaTime;
         
         if (timerText != null)
             timerText.text = ToString();
+        
+        if (endTime != 0 && endTime < timeElapsed)
+        {
+            Pause();
+            completed = true;
+            OnEnd?.Invoke();
+        }
     }
     
     public void Pause()
     {
         pause = true;
-        timerText.color = pauseColor;
+        if (timerText != null)
+            timerText.color = pauseColor;
     }
 
     public void Unpause()
     {
-        pause = false;
-        timerText.color = color;
+        if (!completed)
+        {
+            pause = false;
+            if (timerText != null)
+                timerText.color = color;   
+        }
     }
 
     public void Reset() => timeElapsed = 0;
@@ -56,8 +75,8 @@ public class Timer : MonoBehaviour
     }
 
     public override string ToString() => string.Format("{0:00}:{1:00}:{2:00}",
-        Mathf.Floor(timeElapsed / 60000),
-        Mathf.Floor((timeElapsed / 1000) % 60),
-        Mathf.Floor((timeElapsed % 1000) / 10)
+        Mathf.Floor(timeElapsed / 60),
+        Mathf.Floor(timeElapsed % 60),
+        Mathf.Floor(timeElapsed * 1000 % 1000 / 10)
         );
 }

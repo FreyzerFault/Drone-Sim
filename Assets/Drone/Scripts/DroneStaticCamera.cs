@@ -14,7 +14,7 @@ namespace DroneSim
         protected override void LateUpdate()
         {
             transform.rotation = Quaternion.Slerp(transform.rotation,
-                Quaternion.LookRotation(dron.transform.position - transform.position), 0.1f);
+                Quaternion.LookRotation(Dron.transform.position - transform.position), 0.1f);
         }
     }
 

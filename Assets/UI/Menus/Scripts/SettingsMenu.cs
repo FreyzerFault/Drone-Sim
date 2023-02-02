@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,8 +7,8 @@ public class SettingsMenu : Menu
 {
     public SettingsManager Settings => SettingsManager.Instance;
 
-    Menu AudioMenu => subMenus[0];
-    Menu GraphicsMenu => subMenus[1];
+    AudioSettingsMenu AudioMenu => (AudioSettingsMenu) subMenus[0];
+    VideoSettingsMenu VideoMenu => (VideoSettingsMenu) subMenus[1];
     Menu ControlsMenu => subMenus[2];
     Menu GameMenu => subMenus[3];
 
@@ -17,66 +18,32 @@ public class SettingsMenu : Menu
 
     private bool canClose = false;
 
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
-
+        base.Start();
+        
         OnOpen += LoadSettings;
 
         // Cada vez que abre un submenu se actualiza la navegacion de los botones inferiores
-        foreach (Menu subMenu in subMenus)
-        {
-            subMenu.OnOpen += UpdateBottomSectionNavigation;
-        }
+        foreach (Menu subMenu in subMenus) subMenu.OnOpen += UpdateBottomSectionNavigation;
+
+        // GODMODE
+        Toggle godModeToggle = GameMenu.GetComponentsInChildren<Toggle>()[0];
+        godModeToggle.onValueChanged.AddListener((on) => Settings.GodMode = on);
     }
 
-    public void SaveSettings()
-    {
-        // AUDIO
-        Slider[] audioSliders = AudioMenu.GetComponentsInChildren<Slider>();
-        Settings.GlobalVolume = audioSliders[0].value * 100;
-        Settings.MusicVolume = audioSliders[1].value * 100;
-        Settings.EffectsVolume = audioSliders[2].value * 100;
-        
-        // RESOLUTION
-        TMP_Dropdown resolutionDropdown = GraphicsMenu.GetComponentsInChildren<TMP_Dropdown>()[0];
-        int index = resolutionDropdown.value;
-        
-        // Resolucion en formato 1920x1080 [WidthxHeight]
-        string[] res = resolutionDropdown.options[index].text.Split("x");
-        int w = int.Parse(res[0]);
-        int h = int.Parse(res[1]);
-        Settings.Resolution = new Vector2(w, h);
 
-        Settings.GodMode = GameMenu.GetComponentsInChildren<Toggle>()[0].isOn;
-        
-        Settings.Save();
-    }
+    public void SaveSettings() => Settings.Save();
 
 
     public void LoadSettings()
     {
-        // AUDIO
-        Slider[] audioSliders = AudioMenu.GetComponentsInChildren<Slider>();
-        audioSliders[0].value = Settings.GlobalVolume / 100;
-        audioSliders[1].value = Settings.MusicVolume / 100;
-        audioSliders[2].value = Settings.EffectsVolume / 100;
+        Settings.Load();
         
-        // RESOLUTION
-        TMP_Dropdown resolutionDropdown = GraphicsMenu.GetComponentsInChildren<TMP_Dropdown>()[0];
-        for (var i = 0; i < resolutionDropdown.options.Count; i++)
-        {
-            TMP_Dropdown.OptionData option = resolutionDropdown.options[i];
-            
-            // Resolucion en formato 1920x1080 [WidthxHeight]
-            string[] res = option.text.Split("x");
-            int w = int.Parse(res[0]);
-            int h = int.Parse(res[1]);
-            
-            if (w == (int) Settings.Resolution.x && h == (int) Settings.Resolution.y)
-                resolutionDropdown.value = i;
-        }
+        AudioMenu.LoadSettings();
+        VideoMenu.LoadSettings();
 
+        // TODO GameSettingsMenu
         GameMenu.GetComponentsInChildren<Toggle>()[0].isOn = Settings.GodMode;
     }
 

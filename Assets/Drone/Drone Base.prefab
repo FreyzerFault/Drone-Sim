@@ -356,7 +356,7 @@ AudioSource:
   m_GameObject: {fileID: 5941920997574991552}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 1289283087516765187, guid: 2396f7b8426536d4e88d44ac7d690c79, type: 2}
   m_audioClip: {fileID: 8300000, guid: a41d1b4b35af4154da0034220e2dbbfe, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.309
@@ -458,7 +458,8 @@ MonoBehaviour:
   drone: {fileID: 6724672218753143662}
   animationActivated: 1
   blurActivated: 1
-  soundActivated: 1
+  audioActivated: 1
+  maxVolume: 0.5
   blurTextures:
   - {fileID: 2800000, guid: a3ac4bae1835cd14aaa93ab75c41317e, type: 3}
   - {fileID: 2800000, guid: 985fe3c4fbc3d2f44b7d783a4b0afa33, type: 3}
@@ -562,7 +563,7 @@ AudioSource:
   m_GameObject: {fileID: 5941920997575008622}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 1289283087516765187, guid: 2396f7b8426536d4e88d44ac7d690c79, type: 2}
   m_audioClip: {fileID: 8300000, guid: a41d1b4b35af4154da0034220e2dbbfe, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.309
@@ -664,7 +665,8 @@ MonoBehaviour:
   drone: {fileID: 6724672218753143662}
   animationActivated: 1
   blurActivated: 1
-  soundActivated: 1
+  audioActivated: 1
+  maxVolume: 0.5
   blurTextures:
   - {fileID: 2800000, guid: a3ac4bae1835cd14aaa93ab75c41317e, type: 3}
   - {fileID: 2800000, guid: 985fe3c4fbc3d2f44b7d783a4b0afa33, type: 3}
@@ -768,7 +770,7 @@ AudioSource:
   m_GameObject: {fileID: 5941920997575029690}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 1289283087516765187, guid: 2396f7b8426536d4e88d44ac7d690c79, type: 2}
   m_audioClip: {fileID: 8300000, guid: a41d1b4b35af4154da0034220e2dbbfe, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.309
@@ -870,7 +872,8 @@ MonoBehaviour:
   drone: {fileID: 6724672218753143662}
   animationActivated: 1
   blurActivated: 1
-  soundActivated: 1
+  audioActivated: 1
+  maxVolume: 0.5
   blurTextures:
   - {fileID: 2800000, guid: a3ac4bae1835cd14aaa93ab75c41317e, type: 3}
   - {fileID: 2800000, guid: 985fe3c4fbc3d2f44b7d783a4b0afa33, type: 3}
@@ -974,7 +977,7 @@ AudioSource:
   m_GameObject: {fileID: 5941920997575220708}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 1289283087516765187, guid: 2396f7b8426536d4e88d44ac7d690c79, type: 2}
   m_audioClip: {fileID: 8300000, guid: a41d1b4b35af4154da0034220e2dbbfe, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.309
@@ -1076,7 +1079,8 @@ MonoBehaviour:
   drone: {fileID: 6724672218753143662}
   animationActivated: 1
   blurActivated: 1
-  soundActivated: 1
+  audioActivated: 1
+  maxVolume: 0.5
   blurTextures:
   - {fileID: 2800000, guid: a3ac4bae1835cd14aaa93ab75c41317e, type: 3}
   - {fileID: 2800000, guid: 985fe3c4fbc3d2f44b7d783a4b0afa33, type: 3}

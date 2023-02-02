@@ -65,6 +65,10 @@ public class Race : Challenge
         {
             PauseTimer();
             arrowToRing.Hide();
+
+            foreach (Ring ring in rings) ring.gameObject.SetActive(false);
+            Message.Instance.Text = "Race ended within " + timer.timeElapsed.ToString("F2") + " seconds!";
+            Message.Instance.Open();
         }
 
         base.EndChallenge();
@@ -116,7 +120,11 @@ public class Race : Challenge
     private void UpdateRingsText()
     {
         if (ringsText != null)
+        {
             ringsText.text = ringsTriggered + "/" + rings.Length;
+            if (ringsTriggered == rings.Length)
+                ringsText.color = Color.yellow;
+        }
     }
 
     private void TurnOffRing(int id)

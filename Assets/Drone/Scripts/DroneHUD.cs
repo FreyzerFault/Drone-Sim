@@ -57,10 +57,8 @@ public class DroneHUD : MonoBehaviour
     private void Awake()
     {
         // JOYSTICKS
-        GameObject[] joysticks = GameObject.FindGameObjectsWithTag("Joystick");
-        if (joysticks.Length != 2) Debug.LogError("Joysticks are not found in UI");
-        joystickLeft = joysticks[1].GetComponent<JoystickUI>();
-        joystickRight = joysticks[0].GetComponent<JoystickUI>();
+        joystickLeft = GameObject.FindGameObjectWithTag("Joystick I").GetComponent<JoystickUI>();
+        joystickRight = GameObject.FindGameObjectWithTag("Joystick D").GetComponent<JoystickUI>();
     }
 
     private void Start()

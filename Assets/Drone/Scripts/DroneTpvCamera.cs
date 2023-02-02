@@ -1,3 +1,4 @@
+using DroneSim;
 using UnityEngine;
 
 namespace dronSim
@@ -15,6 +16,7 @@ namespace dronSim
 
         protected void Start()
         {
+            DroneController dron = Dron;
             distanceOrbit = Vector3.ProjectOnPlane(dron.transform.position - dron.TPVposition.position, Vector3.up).magnitude;
             heightOrbit = Vector3.ProjectOnPlane(dron.transform.position - dron.TPVposition.position, dron.transform.forward).magnitude;
 
@@ -27,6 +29,7 @@ namespace dronSim
 
         protected override void OnEnable()
         {
+            DroneController dron = Dron;
             if (dron != null)
             {
                 transform.position = dron.TPVposition.position;
@@ -36,6 +39,7 @@ namespace dronSim
 
         protected override void LateUpdate()
         {
+            DroneController dron = Dron;
             Vector3 dronVelocity = dron.accelerometer.Velocity;
             Vector3 localdronVelocity = dron.transform.worldToLocalMatrix * dronVelocity;
             localdronVelocity.z = 0;

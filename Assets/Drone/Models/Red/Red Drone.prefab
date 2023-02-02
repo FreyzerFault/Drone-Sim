@@ -215,27 +215,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4632102926047521506, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.2706
+      value: 0.36939925
       objectReference: {fileID: 0}
     - target: {fileID: 4632102926047521506, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.79477
+      value: -1.3654677
       objectReference: {fileID: 0}
     - target: {fileID: 4632102926047521506, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9821262
+      value: 0.98963636
       objectReference: {fileID: 0}
     - target: {fileID: 4632102926047521506, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.18790637
+      value: 0.14359625
       objectReference: {fileID: 0}
     - target: {fileID: 4632102926047521506, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.010732499
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4632102926047521506, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.002057376
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4632102926047521506, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 16.512
+      objectReference: {fileID: 0}
+    - target: {fileID: 4632102926047521506, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5305838056303804299, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5941920997572747156, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
       propertyPath: m_RenderingLayerMask

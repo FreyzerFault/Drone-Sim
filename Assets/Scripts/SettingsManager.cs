@@ -25,7 +25,7 @@ public class SettingsManager : SingletonPersistent<SettingsManager>
         get => settings.effectsVolume;
         set => settings.effectsVolume = value;
     }
-    public Vector2 Resolution 
+    public Vector2Int Resolution 
     {
         get => settings.resolution;
         set => settings.resolution = value;
@@ -54,37 +54,38 @@ public class SettingsManager : SingletonPersistent<SettingsManager>
     
     public void Save()
     {
+        OnSave?.Invoke();
+        
         // Audio
         PlayerPrefs.SetFloat("globalSound", GlobalVolume);
         PlayerPrefs.SetFloat("musicSound", MusicVolume);
         PlayerPrefs.SetFloat("effectsSound", EffectsVolume);
 
         // Graphics
-        PlayerPrefs.SetFloat("ResolutionX", Resolution.x);
-        PlayerPrefs.SetFloat("ResolutionY", Resolution.y);
+        PlayerPrefs.SetInt("ResolutionX", Resolution.x);
+        PlayerPrefs.SetInt("ResolutionY", Resolution.y);
         
         // Controls
         
         // Game
         PlayerPrefs.SetInt("GodMode", GodMode ? 1 : 0);
-        
+
         PlayerPrefs.Save();
 
-        OnSave?.Invoke();
         Debug.Log("Settings Saved");
     }
 
     public void Load()
     {
         // Audio
-        GlobalVolume = PlayerPrefs.GetFloat("globalSound", 50);
-        MusicVolume = PlayerPrefs.GetFloat("musicSound", 50);
-        EffectsVolume = PlayerPrefs.GetFloat("effectsSound", 50);
+        GlobalVolume = PlayerPrefs.GetFloat("globalSound", .5f);
+        MusicVolume = PlayerPrefs.GetFloat("musicSound", .5f);
+        EffectsVolume = PlayerPrefs.GetFloat("effectsSound", .5f);
 
         // Graphics
-        float w = PlayerPrefs.GetFloat("ResolutionX", 1920);
-        float h = PlayerPrefs.GetFloat("ResolutionY", 1080);
-        Resolution = new Vector2(w, h);
+        int w = PlayerPrefs.GetInt("ResolutionX", 1920);
+        int h = PlayerPrefs.GetInt("ResolutionY", 1080);
+        Resolution = new Vector2Int(w, h);
         
         // Controls
         
@@ -92,5 +93,7 @@ public class SettingsManager : SingletonPersistent<SettingsManager>
         GodMode = PlayerPrefs.GetInt("GodMode", 0) == 1;
         
         OnLoad?.Invoke();
+        
+        Debug.Log("Settings Loaded");
     }
 }

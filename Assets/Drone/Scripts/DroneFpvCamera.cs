@@ -4,14 +4,14 @@ namespace DroneSim
     {
         protected override void OnEnable()
         {
-            transform.position = dron.FPVposition.position;
-            transform.rotation = dron.FPVposition.rotation;
+            transform.position = Dron.FPVposition.position;
+            transform.rotation = Dron.FPVposition.rotation;
         }
 
         protected override void LateUpdate()
         {
-            transform.position = dron.FPVposition.position;
-            transform.rotation = dron.FPVposition.rotation;
+            transform.position = Dron.FPVposition.position;
+            transform.rotation = Dron.FPVposition.rotation;
         }
     }
 }
