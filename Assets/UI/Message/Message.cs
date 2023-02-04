@@ -7,21 +7,21 @@ public class Message : Singleton<Message>
 {
     public bool openOnAwake = false;
     
-    protected TMP_Text TMPtext;
-    protected Image background;
+    private TMP_Text textComponent;
+    private Image background;
     
-    public bool IsOpen => animator.GetBool(OpenID);
+    public bool IsOpen => animator.GetBool(OpenAnimID);
     
     private Animator animator;
-    private static readonly int OpenID = Animator.StringToHash("open");
+    private static readonly int OpenAnimID = Animator.StringToHash("open");
 
-    public string Text { get => TMPtext.text; set => TMPtext.text = value; }
+    public string Text { get => textComponent.text; set => textComponent.text = value; }
     
     protected override void Awake()
     {
         base.Awake();
         
-        TMPtext = GetComponentInChildren<TMP_Text>();
+        textComponent = GetComponentInChildren<TMP_Text>();
         background = GetComponentInChildren<Image>();
         animator = GetComponent<Animator>();
     }
@@ -36,16 +36,19 @@ public class Message : Singleton<Message>
 
     public virtual void Open()
     {
-        animator.SetBool(OpenID, true);
+        OpenAnimation();
         SetHeight();
     }
-    
-    public virtual void Close() => animator.SetBool(OpenID, false);
+
+    protected virtual void Close() => CloseAnimation();
+
+    private void OpenAnimation() => animator.SetBool(OpenAnimID, true);
+    private void CloseAnimation() => animator.SetBool(OpenAnimID, false);
     
     private void SetHeight()
     {
         float backgroundWidth = background.rectTransform.sizeDelta.x;
-        background.rectTransform.sizeDelta = new Vector2(backgroundWidth, TMPtext.preferredHeight);
+        background.rectTransform.sizeDelta = new Vector2(backgroundWidth, textComponent.preferredHeight);
     }
 
 }

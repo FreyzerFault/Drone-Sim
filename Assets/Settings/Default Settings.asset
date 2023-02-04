@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52127d99276543745b139766740d17e7, type: 3}
   m_Name: Default Settings
   m_EditorClassIdentifier: 
-  globalVolume: 50
-  musicVolume: 50
-  effectsVolume: 50
+  globalVolume: 0.5
+  musicVolume: 0.5
+  effectsVolume: 0.5
   resolution: {x: 1920, y: 1080}
   godMode: 0

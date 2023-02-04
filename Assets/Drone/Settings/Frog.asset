@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeabc3a67eedef34db1c47097bc2e05e, type: 3}
   m_Name: Frog
   m_EditorClassIdentifier: 
-  name: Frogaddier
+  configurationName: Frogadrone
   prefab: {fileID: 503184870776373947, guid: 61754726978e34242bfbf9a53b5a2c71, type: 3}
   previewImage: {fileID: 21300000, guid: d8245e875c4a39342884391c56b132ce, type: 3}
   pitchRollCurve:

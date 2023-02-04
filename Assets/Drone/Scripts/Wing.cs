@@ -2,6 +2,10 @@ using DroneSim;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/**
+ * Rotor solo visual, no aplica físicas
+ * Utilizado en modelos basados en animales
+ */
 public class Wing : Rotor
 {
     public enum WingType

@@ -32,34 +32,27 @@ public class Race : Challenge
         if (levelHUD != null)
             ringsText = levelHUD.GetComponentsInChildren<TMP_Text>()[1];
 
-
-        if (orderRingsByHierarchy)
-        {
-            // Los ordena por la jerarquia de Unity
-            for (int i = 0; i < rings.Length; i++)
-                rings[i].id = i;
-        }
-        else // los ordena por ID
-        {
-            IEnumerable<Ring> ringsOrdered = rings.OrderBy<Ring, int>((ring) => ring.id);
-            rings = ringsOrdered.ToArray();
-        }
+        OrderRings();
     }
+
 
     private void Start() => StartChallenge();
 
-    public override void StartChallenge()
+    protected override void StartChallenge()
     {
         base.StartChallenge();
 
+        OrderRings();
         InitializeRings();
+        UpdateRingsText();
+        
         PlaceDroneInStart();
+        
         StartTimer();
         ShowTimer();
-        UpdateRingsText();
     }
 
-    public override void EndChallenge()
+    protected override void EndChallenge()
     {
         if (!completed)
         {
@@ -80,6 +73,24 @@ public class Race : Challenge
             startObject.transform.rotation
         );
 
+    #region Rings
+
+    
+    private void OrderRings()
+    {
+        if (orderRingsByHierarchy)
+        {
+            // Los ordena por la jerarquia de Unity
+            for (int i = 0; i < rings.Length; i++)
+                rings[i].id = i;
+        }
+        else // los ordena por ID
+        {
+            IEnumerable<Ring> ringsOrdered = rings.OrderBy<Ring, int>((ring) => ring.id);
+            rings = ringsOrdered.ToArray();
+        }
+    }
+    
     private void InitializeRings()
     {
         // Desactiva todos los anillos menos el PRIMERO
@@ -90,7 +101,6 @@ public class Race : Challenge
             else
                 TurnOffRing(i);
         }
-
 
         // Suscribe sus eventos de Trigger (cuando el dron pasa)
         foreach (var ring in rings) ring.SuscribeToTrigger(RingTriggered);
@@ -146,15 +156,21 @@ public class Race : Challenge
         arrowToRing.target = ring.transform;
     }
 
+    #endregion
+
+    #region Arrow
+
     private void ShowArrow()
     {
         if (arrowToRing != null)
             arrowToRing.Show();
     }
-
+     
     private void HideArrow()
     {
         if (arrowToRing != null)
             arrowToRing.Hide();
     }
+
+    #endregion
 }

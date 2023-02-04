@@ -1,25 +1,30 @@
 public class MenuManager : Singleton<MenuManager>
 {
-    public Menu RootMenu;
+    public Menu rootMenu;
 
     protected override void Awake()
     {
         base.Awake();
-        if (RootMenu == null)
-            RootMenu = GetComponent<Menu>();
+        if (rootMenu == null)
+            rootMenu = GetComponent<Menu>();
     }
 
     public void Toggle()
     {
-        if (RootMenu.isOpen)
+        if (rootMenu.isOpen)
             Close();
         else
             Open();
     }
 
-    public void Open() => RootMenu.Open();
-    public bool Close() => RootMenu.Close();
+    private void Open() => rootMenu.Open();
+    protected bool Close() => rootMenu.Close();
 
-    public virtual void OnCancel() => RootMenu.OnCancelRecursive();
-    public virtual void OnCloseMenu() => Close();
+    #region Inputs
+
+    public virtual void OnCancel() => rootMenu.OnCancelRecursive();
+    public virtual void OnCloseMenu() => Close();    
+
+    #endregion
+
 }

@@ -10,13 +10,7 @@ namespace DroneSim
 
         [HideInInspector] public bool cheatsActivated = false;
 
-        private void Start()
-        {
-            droneController = GetComponent<DroneController>();
-
-            //GameManager.Instance.OnPause += disable;
-            //GameManager.Instance.OnUnpause += enable;
-        }
+        private void Start() => droneController = GetComponent<DroneController>();
 
         private void OnDestroy()
         {
@@ -27,8 +21,8 @@ namespace DroneSim
             }
         }
 
-        public void enable() => GetComponent<PlayerInput>().enabled = true;
-        public void disable() => GetComponent<PlayerInput>().enabled = false;
+        private void enable() => GetComponent<PlayerInput>().enabled = true;
+        private void disable() => GetComponent<PlayerInput>().enabled = false;
 
         #region InputMessages
 
@@ -78,7 +72,7 @@ namespace DroneSim
         private void OnSwitchCamera()
         {
             if (GameManager.GameIsPaused) return; 
-            droneController.cameraManager.SwitchCamera();
+            CameraManager.Instance.SwitchCamera();
         }
         
         

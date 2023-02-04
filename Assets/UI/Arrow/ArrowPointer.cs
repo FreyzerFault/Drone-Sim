@@ -15,7 +15,7 @@ public class ArrowPointer : MonoBehaviour
         arrowSprite = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
 
-        radius = FindObjectOfType(typeof(CanvasScaler)).GetComponent<CanvasScaler>().referenceResolution.y / 2.5f;
+        radius = CanvasScalerResolution().y / 2.5f;
     }
 
     private void Start()
@@ -26,20 +26,25 @@ public class ArrowPointer : MonoBehaviour
 
     private void Update()
     {
-        if (target == null) return;
+        if (target == null  || !arrowSprite.enabled) return;
         
-        if (arrowSprite.enabled == true)
-        {
-            Transform origin = GameManager.Camera.transform;
-            Vector3 targetDir = (target.position - origin.position).normalized;
-            targetDir = Vector3.ProjectOnPlane(targetDir, origin.forward).normalized;
-            targetDir = origin.worldToLocalMatrix * targetDir;
-            transform.rotation = Quaternion.LookRotation(Vector3.forward, targetDir);
-            
-            rectTransform.anchoredPosition = new Vector2(targetDir.x, targetDir.y) * radius;
-        }
+        PointToTarget();
     }
-
+    
     public void Show() => arrowSprite.enabled = true;
     public void Hide() => arrowSprite.enabled = false;
+
+    private void PointToTarget()
+    {
+        Transform origin = GameManager.Camera.transform;
+        Vector3 targetDir = (target.position - origin.position).normalized;
+        targetDir = Vector3.ProjectOnPlane(targetDir, origin.forward).normalized;
+        targetDir = origin.worldToLocalMatrix * targetDir;
+        transform.rotation = Quaternion.LookRotation(Vector3.forward, targetDir);
+            
+        rectTransform.anchoredPosition = new Vector2(targetDir.x, targetDir.y) * radius;
+    }
+
+    private static Vector2 CanvasScalerResolution() =>
+        FindObjectOfType(typeof(CanvasScaler)).GetComponent<CanvasScaler>().referenceResolution;
 }

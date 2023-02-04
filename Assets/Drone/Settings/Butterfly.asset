@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeabc3a67eedef34db1c47097bc2e05e, type: 3}
   m_Name: Butterfly
   m_EditorClassIdentifier: 
-  name: Butterfly
+  configurationName: Butterflone
   prefab: {fileID: 1271175817348386541, guid: c244c230b46dc5b468a77de5956bc701, type: 3}
   previewImage: {fileID: 21300000, guid: cf46cca6d642ec346901e54e5c736cf3, type: 3}
   pitchRollCurve:

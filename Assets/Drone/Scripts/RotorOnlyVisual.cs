@@ -3,6 +3,12 @@ using UnityEngine.PlayerLoop;
 
 namespace DroneSim
 {
+    /**
+     * Rotor redundante
+     * No se aplican fisicas, solo visual
+     * Usado en drones que tienen más o menos de 4 hélices
+     */
+    
     public class RotorOnlyVisual : Rotor
     {
         public Rotor nearRotor1 = null;
@@ -11,7 +17,23 @@ namespace DroneSim
         protected override void Awake()
         {
             base.Awake();
+            
+            FindNearestRotors();
+        }
 
+        protected override void Update()
+        {
+            // Media de potencias
+            power = (nearRotor1.power + nearRotor2.power) / 2;
+            
+            UpdateSmoothPower();
+            
+            AnimatePropeller(SmoothPower);
+            SetTexture(SmoothPower);
+        }
+
+        private void FindNearestRotors()
+        {
             Rotor[] rotors =
             {
                 drone.rotorCW1,
@@ -40,17 +62,6 @@ namespace DroneSim
                         nearRotor2 = rotors[i];
                 }
             }
-        }
-
-        protected override void Update()
-        {
-            // Media de potencias
-            power = (nearRotor1.power + nearRotor2.power) / 2;
-            
-            UpdateSmoothPower();
-            
-            AnimatePropeller(smoothPower);
-            SetTexture(smoothPower);
         }
 
         protected override void FixedUpdate() {}

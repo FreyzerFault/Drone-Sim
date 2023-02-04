@@ -14,7 +14,6 @@ public class Sound
 
     [Range(0, 1)]public float volume = .5f;
     [Range(-3, 3)]public float pitch = 1;
-    
     public bool loop = false;
 
     public bool IsPlaying => source.isPlaying;
@@ -27,6 +26,7 @@ public class Sound
         source.pitch = pitch;
         source.loop = loop;
         source.outputAudioMixerGroup = mixerGroup;
+        source.playOnAwake = false;
     }
     
     

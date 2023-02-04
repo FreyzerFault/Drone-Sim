@@ -12,10 +12,9 @@ public class Timer : MonoBehaviour
     public Color color;
     public Color pauseColor;
 
-    // Cuando llegue al segundo endTime => OnEnd.Invoke() y se Pausa
-    // Si endTime == 0 => no termina
     public float endTime = 0; // en segundos
     public event Action OnEnd;
+    
     public bool completed = false;
 
     protected void Awake() => timeElapsed = 0;
@@ -23,22 +22,21 @@ public class Timer : MonoBehaviour
     private void Start() => SuscribeEvents();
 
     private void OnDestroy() => UnsuscribeEvents();
+    
     private void Update()
     {
         if (pause) return;
         
         timeElapsed += Time.deltaTime;
         
-        if (timerText != null)
-            timerText.text = ToString();
+        UpdateText();
         
-        if (endTime != 0 && endTime < timeElapsed)
-        {
-            Pause();
-            completed = true;
-            OnEnd?.Invoke();
-        }
+        // Cuando llegue al segundo endTime => OnEnd.Invoke() y se Pausa
+        // Si endTime == 0 => no termina
+        if (endTime != 0 && endTime < timeElapsed) 
+            EndTimer();
     }
+
     
     public void Pause()
     {
@@ -59,6 +57,20 @@ public class Timer : MonoBehaviour
 
     public void Reset() => timeElapsed = 0;
 
+    private void UpdateText()
+    {
+        if (timerText != null) timerText.text = ToString();
+    }
+    
+    private void EndTimer()
+    {
+        Pause();
+        completed = true;
+        OnEnd?.Invoke();
+    }
+    
+    #region Events
+
     private void SuscribeEvents()
     {
         GameManager.Instance.OnPause += Pause;
@@ -73,6 +85,8 @@ public class Timer : MonoBehaviour
             GameManager.Instance.OnPause -= Unpause;
         }
     }
+
+    #endregion
 
     public override string ToString() => string.Format("{0:00}:{1:00}:{2:00}",
         Mathf.Floor(timeElapsed / 60),

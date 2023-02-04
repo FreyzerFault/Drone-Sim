@@ -4,9 +4,10 @@ using UnityEngine;
 public class DroneManager : SingletonPersistent<DroneManager>
 {
     public DroneSettingsSO[] droneConfigurations;
-    public int currentDroneConfigurationIndex;
     
-    public DroneController currentDroneController;
+    [HideInInspector] public int currentDroneConfigurationIndex;
+    [HideInInspector] public DroneController currentDroneController;
+    
     private DroneSettingsSO CurrentDroneSettings => droneConfigurations[currentDroneConfigurationIndex];
 
     protected override void Awake()
@@ -24,7 +25,7 @@ public class DroneManager : SingletonPersistent<DroneManager>
         GameManager.Instance.OnSceneLoaded += LoadDrone;
     }
 
-    public void LoadDrone(Transform spawnPoint)
+    private void LoadDrone(Transform spawnPoint)
     {
         DestroyDrone();
         
@@ -34,14 +35,14 @@ public class DroneManager : SingletonPersistent<DroneManager>
         currentDroneController.droneSettings = CurrentDroneSettings;
     }
 
-    public void LoadDrone()
+    private void LoadDrone()
     {
         GameObject parent = GameObject.FindWithTag("Player Parent");
         if (parent != null)
             LoadDrone(parent.transform);
     }
 
-    public void DestroyDrone()
+    private void DestroyDrone()
     {
         foreach (DroneController droneController in FindObjectsOfType<DroneController>())
         {
@@ -49,8 +50,12 @@ public class DroneManager : SingletonPersistent<DroneManager>
         }
     }
 
-    public static readonly string SelectedDroneSavePath = "selected drone";
+    #region Save/Load Selected Drone
+    
+    private static readonly string SelectedDroneSavePath = "selected drone";
     private void LoadSelectedDronePref() => currentDroneConfigurationIndex = PlayerPrefs.GetInt(SelectedDroneSavePath, 0);
     public void SaveSelectedDronePref() => PlayerPrefs.SetInt(SelectedDroneSavePath, currentDroneConfigurationIndex);
+
+    #endregion
     
 }

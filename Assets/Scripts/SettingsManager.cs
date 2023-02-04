@@ -8,7 +8,9 @@ public class SettingsManager : SingletonPersistent<SettingsManager>
 
     public event Action OnLoad;
     public event Action OnSave;
-    
+
+    #region Settings Values
+
     public float GlobalVolume
     {
         get => settings.globalVolume;
@@ -37,21 +39,14 @@ public class SettingsManager : SingletonPersistent<SettingsManager>
         set => settings.godMode = value;
     }
 
+    #endregion
+
     private void Start()
     {
         Load();
         GameManager.Instance.OnQuitGame += Save;
     }
 
-    public void ReturnToDefaultSettings()
-    {
-        GlobalVolume = defaultSettings.globalVolume;
-        MusicVolume = defaultSettings.musicVolume;
-        EffectsVolume = defaultSettings.effectsVolume;
-        Resolution = defaultSettings.resolution;
-        GodMode = defaultSettings.godMode;
-    }
-    
     public void Save()
     {
         OnSave?.Invoke();
@@ -95,5 +90,14 @@ public class SettingsManager : SingletonPersistent<SettingsManager>
         OnLoad?.Invoke();
         
         Debug.Log("Settings Loaded");
+    }
+    
+    public void ReturnToDefaultSettings()
+    {
+        GlobalVolume = defaultSettings.globalVolume;
+        MusicVolume = defaultSettings.musicVolume;
+        EffectsVolume = defaultSettings.effectsVolume;
+        Resolution = defaultSettings.resolution;
+        GodMode = defaultSettings.godMode;
     }
 }

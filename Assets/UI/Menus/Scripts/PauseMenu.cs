@@ -4,16 +4,16 @@ using UnityEngine.InputSystem;
 
 public class PauseMenu : MenuManager
 {
-    private Menu audioMenu => RootMenu.subMenus[0].subMenus[0];
-    private Menu videoMenu => RootMenu.subMenus[0].subMenus[1];
+    private Menu AudioMenu => rootMenu.GetSubmenu(0).GetSubmenu(0);
+    private Menu VideoMenu => rootMenu.GetSubmenu(0).GetSubmenu(0);
     
     private void Start()
     {
-        RootMenu.OnOpen += Pause;
-        RootMenu.OnClose += UnPause;
+        rootMenu.OnOpen += Pause;
+        rootMenu.OnClose += UnPause;
 
-        audioMenu.OnClose += SaveSettings;
-        videoMenu.OnClose += SaveSettings;
+        AudioMenu.OnClose += SaveSettings;
+        VideoMenu.OnClose += SaveSettings;
     }
 
     public void Pause()

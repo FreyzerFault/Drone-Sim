@@ -5,8 +5,8 @@ public class AudioIcon : MonoBehaviour
 {
     private Image image;
     
-    public Sprite muteIcon;
-    public Sprite audioIcon;
+    [SerializeField] private Sprite muteIcon;
+    [SerializeField] private Sprite audioIcon;
 
     private void Awake() => image = GetComponent<Image>();
 

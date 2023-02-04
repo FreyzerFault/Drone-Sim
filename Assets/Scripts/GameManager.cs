@@ -8,30 +8,6 @@ public enum GameState {Playing, Pause}
 
 public class GameManager : SingletonPersistent<GameManager>
 {
-    // GAME MODES
-    private const GameState DefaultGameState = GameState.Playing;
-    
-    public GameState CurrentGameState { get; private set; }
-    public GameState PreviousGameState { get; private set; }
-
-    public static bool GameIsPaused => Instance.CurrentGameState == GameState.Pause;
-
-    #region Events
-
-    public event Action OnPause;
-    public event Action OnUnpause;
-    
-    public event Action OnQuitGame;
-
-    // Cambia los eventos static de SceneManager por unos locales
-    // Permite encapsular el control del evento en el GameManager para ser el unico en desuscribirse
-    // Al no ser static los eventos sustitutos se limpian solos al cerrar el juego
-    public event Action OnSceneLoaded;
-    public event Action OnSceneUnloaded;
-    private void OnSceneLoadedDelegate(Scene scene, LoadSceneMode mode) => OnSceneLoaded?.Invoke();
-    private void OnSceneUnloadedDelegate(Scene scene) => OnSceneUnloaded?.Invoke();
-    #endregion
-    
     private void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoadedDelegate;
@@ -47,6 +23,22 @@ public class GameManager : SingletonPersistent<GameManager>
         SceneManager.sceneLoaded -= OnSceneLoadedDelegate;
         SceneManager.sceneUnloaded -= OnSceneUnloadedDelegate;
     }
+    
+    #region States
+    
+    private const GameState DefaultGameState = GameState.Playing;
+    
+    public GameState CurrentGameState { get; private set; }
+    public GameState PreviousGameState { get; private set; }
+    
+    public static bool GameIsPaused => Instance.CurrentGameState == GameState.Pause;
+    
+    public event Action OnPause;
+    public event Action OnUnpause;
+    
+    
+    public static void ReturnToPreviousState() => SwitchGameState(Instance.PreviousGameState);
+    private static void SetDefaultGameState() => SwitchGameState(DefaultGameState);
 
     public static void SwitchGameState(GameState newState)
     {
@@ -57,8 +49,7 @@ public class GameManager : SingletonPersistent<GameManager>
 
         Instance.HandleStateEvents();
     }
-
-
+    
     private void HandleStateEvents()
     {
         if (Instance.CurrentGameState == GameState.Pause)
@@ -67,8 +58,29 @@ public class GameManager : SingletonPersistent<GameManager>
         if (Instance.PreviousGameState == GameState.Pause)
             Instance.OnUnpause?.Invoke();
     }
+    
+    #endregion
+    
+    #region Scene
 
-    // CAMERA MANAGEMENT
+    // Cambia los eventos static de SceneManager por unos locales
+    // Permite encapsular el control del evento en el GameManager para ser el unico en desuscribirse
+    // Al no ser static los eventos sustitutos se limpian solos al cerrar el juego
+    public event Action OnSceneLoaded;
+    public event Action OnSceneUnloaded;
+    private void OnSceneLoadedDelegate(Scene scene, LoadSceneMode mode) => OnSceneLoaded?.Invoke();
+    private void OnSceneUnloadedDelegate(Scene scene) => OnSceneUnloaded?.Invoke();
+    
+    public static void ResetScene()
+    {
+        SetDefaultGameState();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    
+    #endregion
+
+    #region Camera
+
     public static Camera Camera { 
         get => Camera.main;
         set
@@ -81,24 +93,24 @@ public class GameManager : SingletonPersistent<GameManager>
         }
     }
 
-    public static void ResetScene()
-    {
-        SetDefaultGameState();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
+
+    #endregion
     
-    public static void ReturnToPreviousState() => SwitchGameState(Instance.PreviousGameState);
-    private static void SetDefaultGameState() => SwitchGameState(DefaultGameState);
+    #region Quit Game
 
-
+    public event Action OnQuitGame;
+    
     public static void Quit () 
     {
         Instance.OnQuitGame?.Invoke();
 
         #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
+            UnityEditor.EditorApplication.isPlaying = false;
         #else
-                Application.Quit();
+            Application.Quit();
         #endif
     }
+    
+
+    #endregion
 }

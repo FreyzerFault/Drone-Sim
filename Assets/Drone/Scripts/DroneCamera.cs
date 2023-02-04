@@ -1,7 +1,7 @@
-using DroneSim;
+using Cinemachine;
 using UnityEngine;
 
-public abstract class DroneCamera : MonoBehaviour
+public class DroneCamera : MonoBehaviour
 {
     public enum CameraType
     {
@@ -9,21 +9,14 @@ public abstract class DroneCamera : MonoBehaviour
         TPV = 1,
         Static = 2,
     }
-
     public CameraType type;
-    public int Index => (int) type;
-    
-    public Camera camera;
-    public Sprite icon;
 
-    public DroneController Dron => DroneManager.Instance.currentDroneController;
+    protected CinemachineVirtualCamera virtualCamera;
+    private const int ACTIVE_PRIORITY = 10;
+    private const int INACTIVE_PRIORITY = 5;
 
-    private void Awake()
-    {
-        camera = GetComponent<Camera>();
-    }
+    protected virtual void Awake() => virtualCamera = GetComponent<CinemachineVirtualCamera>();
 
-    protected abstract void OnEnable();
-
-    protected abstract void LateUpdate();
+    public virtual void Enable() => virtualCamera.Priority = ACTIVE_PRIORITY;
+    public virtual void Disable() => virtualCamera.Priority = INACTIVE_PRIORITY;
 }

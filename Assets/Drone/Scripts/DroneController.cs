@@ -6,97 +6,17 @@ namespace DroneSim
     public class DroneController : MonoBehaviour
     {
         public DroneSettingsSO droneSettings;
-        
+
         [HideInInspector] public DronePIDController pidController;
         [HideInInspector] public Gyroscope gyro;
         [HideInInspector] public Accelerometer accelerometer;
-        
-        #region Rotors
-        
-        // Rotors of the drone (have to be associated to the four rotors of the drone, with the order V1,O1,V2,O2)
-        public Rotor rotorCW1;
-        public Rotor rotorCW2;
-        public Rotor rotorCCW1;
-        public Rotor rotorCCW2;
-        
-        #endregion
-        
 
-        #region Modos
-        
-        public enum FlightMode
-        {
-            Angle,      // El input es un ángulo de ataque no mayor a un límite
-            Horizon,    // El input es una frecuencia angular => El dron puede girar sin límite
-            Manual,     // No se usa PID, puramente fuerzas en cada rotor
-            GodMode,     // El dron intentara mantener la posición y orientación por PID
-        }
-        
-        public FlightMode flightMode;
-        public bool hoverStabilization = true; // El dron intenta no perder altitud al moverse lateralmente
-        
-
-        public event Action<bool> OnFlightModeChange;
-        public event Action<bool> OnHoverStabilizationToggle;
-
-        #endregion
-        
-        
-        #region Cameras
-
-        public DroneCameraManager cameraManager;
-
-        public Transform FPVposition;
-        public Transform TPVposition;
-
-        #endregion
-
-
-        #region INPUTS - OUTPUTS
-
-        [Range(-1,1)] public float yawInput = 0;
-        [Range(-1,1)] public float pitchInput = 0;
-        [Range(-1,1)] public float rollInput = 0;
-        [Range(-1,1)] public float liftInput = 0;
-        
-        // No input this frame
-        public bool NoInput => yawInput == 0 && pitchInput == 0 && rollInput == 0 && liftInput == 0;
-        
-        // Output values
-        private float yaw = 0;
-        private float pitch = 0;
-        private float roll = 0;
-        private float lift = 0;
-
-        #endregion
-        
-
-        #region Physic Parameters
-        
-        // Parametros fisicos de unity
-        public float Mass { get => rb.mass; set => rb.mass = value; }
-        public float Weight => rb.mass * Physics.gravity.magnitude;
-        public float Radius => Vector3.Distance(transform.position, rotorCW1.transform.position);
-
-        // Potencia necesaria para mantener la altura
-        public float HoverPower => Mathf.Clamp01(Weight / droneSettings.maxThrottle / 4);
-        
-        #endregion
-
-        #region Environment Parameters
-        private static EnvironmentSettingsSO EnvironmentSettings => LevelManager.Instance.EnvironmentSettings;
-        #endregion
-        
-        private Rigidbody rb;
-        
-        
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
             pidController = GetComponent<DronePIDController>();
             accelerometer = GetComponent<Accelerometer>();
             gyro = GetComponent<Gyroscope>();
-            cameraManager = GameObject.FindWithTag("Camera Manager").GetComponent<DroneCameraManager>();
         }
 
         private void Start()
@@ -119,32 +39,19 @@ namespace DroneSim
             }
         }
 
-        #region OnPause
+        #region Physics
 
-        private void OnPause()
-        {
-            rb.isKinematic = true;
-            enabled = false;
-        }
-
-        private void OnUnpause()
-        {
-            rb.isKinematic = false;
-            enabled = true;
-        }
-
-        #endregion
+        private static EnvironmentSettingsSO EnvironmentSettings => LevelManager.Instance.EnvironmentSettings;
+        private Rigidbody rb;
         
+        // Parametros fisicos de unity
+        public float Mass { get => rb.mass; set => rb.mass = value; }
+        public float Weight => rb.mass * Physics.gravity.magnitude;
+        public float Radius => Vector3.Distance(transform.position, rotorCW1.transform.position);
 
-        private void UpdatePhysicParameters()
-        {
-            rb.mass = droneSettings.mass;
-            rb.drag = droneSettings.maxDragCoefficient;
-            rb.angularDrag = droneSettings.angularDrag;
-            rb.maxAngularVelocity = droneSettings.maxAngularSpeed;
-            rb.centerOfMass = Vector3.zero;
-        }
-
+        // Potencia necesaria para mantener la altura
+        public float HoverPower => Mathf.Clamp01(Weight / droneSettings.maxThrottle / 4);
+        
         private void FixedUpdate()
         {
             ResetRotors();
@@ -166,37 +73,78 @@ namespace DroneSim
             
             
             // EXTERNAL FORCES (Drag, Air,...)
-            // ApplyDrag();
+            ApplyDrag();
         }
         
-        // Procesa todos los inputs segun la configuracion del dron y genera los outputs correspondientes:
-        // Pitch, Roll, Yaw y Lift
-        private void ProcessInputs()
+        private void UpdatePhysicParameters()
         {
-            switch (flightMode)
-            {
-                case FlightMode.Angle:
-                    AngleMode();
-                    break;
-                case FlightMode.Horizon:
-                    HorizonMode();
-                    break;
-                case FlightMode.Manual:
-                    ManualMode();
-                    break;
-                case FlightMode.GodMode:
-                    GodMode();
-                    break;
-            }
+            rb.mass = droneSettings.mass;
+            rb.drag = droneSettings.maxDragCoefficient;
+            rb.angularDrag = droneSettings.angularDrag;
+            rb.maxAngularVelocity = droneSettings.maxAngularSpeed;
+            rb.centerOfMass = Vector3.zero;
+        }
+        
+        #region External Physics
+
+        private void ApplyDrag()
+        {
+            return; // TODO No funciona bien, utilizar drag de Unity, o mejorar
             
-            // Check outputs out of ranges [-1,1]?
-            if (lift is < -1 or > 1 || pitch is < -1 or > 1 || roll is < -1 or > 1 || yaw is < -1 or > 1)
-                Debug.Log("Some PID results may not be in Range [-1,1]\n" +
-                          "Lift: " + lift + " Pitch: " + pitch + " Roll: " + roll + " Yaw: " + yaw);
+            float minDrag = droneSettings.minDragCoefficient;
+            float maxDrag = droneSettings.maxDragCoefficient;
+            
+            // Drag depends on angle of attack 0-90 ([X, Z] axis rotation)
+            // Angle 0 -> min drag 
+            // Angle 90 -> max drag 
+            Vector3 rotation = transform.rotation.eulerAngles;
+            float attackAngleNormalized = 
+                Mathf.InverseLerp(0, 90, Mathf.Abs(rotation.x))
+                * Mathf.InverseLerp(0, 90, Mathf.Abs(rotation.z));
+            float horizontalDragCoefficient = Mathf.Lerp(minDrag, maxDrag, attackAngleNormalized);
+
+            // Vertical Drag is inversely proportional to the horizontal
+            float verticalDragCoefficient = Mathf.Lerp(maxDrag, minDrag, attackAngleNormalized);
+
+            // Square Velocity H and V components
+            Vector3 velHorizontal = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            Vector3 velVertical = new Vector3(0, rb.velocity.y, 0);
+            float sqrVelH = velHorizontal.sqrMagnitude;
+            float sqrVelV = velVertical.sqrMagnitude;
+            
+            // Drag components
+            float dragH = 0.5f * horizontalDragCoefficient * EnvironmentSettings.airDensity * sqrVelH;
+            float dragV = 0.5f * verticalDragCoefficient * EnvironmentSettings.airDensity * sqrVelV;
+            
+            // Apply Forces
+            rb.AddForce(-velHorizontal.normalized * dragH);
+            rb.AddForce(-velVertical.normalized * dragV);
+
+            // DEBUG
+            drag = -velHorizontal.normalized * dragH + -velVertical.normalized * dragV;
         }
 
-        #region Modes
+        #endregion
 
+        #endregion
+
+        #region Modos de Vuelo
+
+        public enum FlightMode
+        {
+            Angle,      // El input es un ángulo de ataque no mayor a un límite
+            Horizon,    // El input es una frecuencia angular => El dron puede girar sin límite
+            Manual,     // No se usa PID, puramente fuerzas en cada rotor
+            GodMode,     // El dron intentara mantener la posición y orientación por PID
+        }
+        
+        public FlightMode flightMode;
+        public bool hoverStabilization = true; // El dron intenta no perder altitud al moverse lateralmente
+        
+
+        public event Action<bool> OnFlightModeChange;
+        public event Action<bool> OnHoverStabilizationToggle;
+        
         public void SwitchMode(bool next)
         {
             switch (flightMode)
@@ -326,10 +274,16 @@ namespace DroneSim
         
         #region Rotors
 
-        /// <summary>
-        /// Distribuye lift, pitch, roll y yaw a cada rotor
-        /// (Valores de cada uno = [-1,1])
-        /// </summary>
+        // Rotors of the drone (have to be associated to the four rotors of the drone, with the order V1,O1,V2,O2)
+        public Rotor rotorCW1;
+        public Rotor rotorCW2;
+        public Rotor rotorCCW1;
+        public Rotor rotorCCW2;
+        
+        /**
+         * Distribuye lift, pitch, roll y yaw a cada rotor
+         * (Valores de cada uno = [-1,1])
+         */
         private void HandleRotors()
         {
             float hover;
@@ -440,45 +394,65 @@ namespace DroneSim
 
         #endregion
 
-        #region External Physics
+        #region Inputs => Outputs
 
-        private void ApplyDrag()
+        [Range(-1,1)] public float yawInput = 0;
+        [Range(-1,1)] public float pitchInput = 0;
+        [Range(-1,1)] public float rollInput = 0;
+        [Range(-1,1)] public float liftInput = 0;
+        
+        // No input this frame
+        public bool NoInput => yawInput == 0 && pitchInput == 0 && rollInput == 0 && liftInput == 0;
+        
+        // Output values
+        private float yaw = 0;
+        private float pitch = 0;
+        private float roll = 0;
+        private float lift = 0;
+        // Procesa todos los inputs segun la configuracion del dron y genera los outputs correspondientes:
+        // Pitch, Roll, Yaw y Lift
+        private void ProcessInputs()
         {
-            float minDrag = droneSettings.minDragCoefficient;
-            float maxDrag = droneSettings.maxDragCoefficient;
+            switch (flightMode)
+            {
+                case FlightMode.Angle:
+                    AngleMode();
+                    break;
+                case FlightMode.Horizon:
+                    HorizonMode();
+                    break;
+                case FlightMode.Manual:
+                    ManualMode();
+                    break;
+                case FlightMode.GodMode:
+                    GodMode();
+                    break;
+            }
             
-            // Drag depends on angle of attack 0-90 ([X, Z] axis rotation)
-            // Angle 0 -> min drag 
-            // Angle 90 -> max drag 
-            Vector3 rotation = transform.rotation.eulerAngles;
-            float attackAngleNormalized = 
-                Mathf.InverseLerp(0, 90, Mathf.Abs(rotation.x))
-                * Mathf.InverseLerp(0, 90, Mathf.Abs(rotation.z));
-            float horizontalDragCoefficient = Mathf.Lerp(minDrag, maxDrag, attackAngleNormalized);
-
-            // Vertical Drag is inversely proportional to the horizontal
-            float verticalDragCoefficient = Mathf.Lerp(maxDrag, minDrag, attackAngleNormalized);
-
-            // Square Velocity H and V components
-            Vector3 velHorizontal = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-            Vector3 velVertical = new Vector3(0, rb.velocity.y, 0);
-            float sqrVelH = velHorizontal.sqrMagnitude;
-            float sqrVelV = velVertical.sqrMagnitude;
-            
-            // Drag components
-            float dragH = 0.5f * horizontalDragCoefficient * EnvironmentSettings.airDensity * sqrVelH;
-            float dragV = 0.5f * verticalDragCoefficient * EnvironmentSettings.airDensity * sqrVelV;
-            
-            // Apply Forces
-            rb.AddForce(-velHorizontal.normalized * dragH);
-            rb.AddForce(-velVertical.normalized * dragV);
-
-            // DEBUG
-            drag = -velHorizontal.normalized * dragH + -velVertical.normalized * dragV;
+            // Check outputs out of ranges [-1,1]?
+            if (lift is < -1 or > 1 || pitch is < -1 or > 1 || roll is < -1 or > 1 || yaw is < -1 or > 1)
+                Debug.Log("Some PID results may not be in Range [-1,1]\n" +
+                          "Lift: " + lift + " Pitch: " + pitch + " Roll: " + roll + " Yaw: " + yaw);
         }
 
         #endregion
 
+        #region OnPause
+
+        private void OnPause()
+        {
+            rb.isKinematic = true;
+            enabled = false;
+        }
+
+        private void OnUnpause()
+        {
+            rb.isKinematic = false;
+            enabled = true;
+        }
+
+        #endregion
+        
         #region Gizmos
 
         private Vector3 drag;
@@ -497,8 +471,6 @@ namespace DroneSim
 
         #endregion
 
-        
-            
         // Resetea todos los parametros de movimiento del dron para cuando se quede atascado
         public void ResetRotation()
         {

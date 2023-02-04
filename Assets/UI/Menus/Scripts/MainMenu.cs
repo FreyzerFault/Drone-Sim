@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class MainMenu : MenuManager
 {
-    private static readonly int Open = Animator.StringToHash("open");
+    private static readonly int OpenID = Animator.StringToHash("open");
 
     protected override void Awake()
     {
         base.Awake();
         
-        RootMenu.Open();
+        rootMenu.Open();
     }
 
     public void Play()

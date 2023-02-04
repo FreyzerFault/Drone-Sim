@@ -7,12 +7,6 @@ public class Ring : MonoBehaviour
     public int id;
     private bool on = true;
     
-    private event Action<int> OnTrigger;
-    public event Action OnVisible;
-    public event Action OnInvisible;
-
-    public void SuscribeToTrigger(Action<int> onTrigger) => OnTrigger += onTrigger;
-
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -20,15 +14,17 @@ public class Ring : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
+    #region Trigger
+    
+    private event Action<int> OnTrigger;
+    public void SuscribeToTrigger(Action<int> onTrigger) => OnTrigger += onTrigger;
+    
     private void OnTriggerEnter(Collider other)
     {
         // Pasa el dron y esta ON => Trigger
         if (other.GetComponentInParent<DroneController>() && on) Trigger();
     }
-
-    private void OnBecameVisible() => OnVisible?.Invoke();
-    private void OnBecameInvisible() => OnInvisible?.Invoke();
-
+    
     private void Trigger()
     {
         OnTrigger?.Invoke(id);
@@ -37,6 +33,20 @@ public class Ring : MonoBehaviour
         PlayParticles();
         TurnOff();
     }
+
+    #endregion
+
+    #region Is Visible Event
+    
+    public event Action OnVisible;
+    public event Action OnInvisible;
+    
+    private void OnBecameVisible() => OnVisible?.Invoke();
+    private void OnBecameInvisible() => OnInvisible?.Invoke();
+
+    #endregion
+
+    #region On / Off
 
     public void TurnOn()
     {
@@ -49,6 +59,8 @@ public class Ring : MonoBehaviour
         on = false;
         meshRenderer.material = materialOff;
     }
+
+    #endregion
 
     #region Animation
 
@@ -65,7 +77,7 @@ public class Ring : MonoBehaviour
 
     #region Particles
 
-    private ParticleSystem particleSystem;
+    private new ParticleSystem particleSystem;
 
     private void PlayParticles()
     {

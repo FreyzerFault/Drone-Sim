@@ -83,7 +83,7 @@
                     "id": "9e5560a8-3675-4eef-971d-dd86f63dc8c2",
                     "expectedControlType": "Integer",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Tap",
                     "initialStateCheck": true
                 },
                 {
@@ -144,7 +144,7 @@
                 {
                     "name": "",
                     "id": "7cba2ce4-e214-45c5-8d9d-042a992c2b7b",
-                    "path": "<Keyboard>/backspace",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

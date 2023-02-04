@@ -9,6 +9,8 @@ public class AudioManager : SingletonPersistent<AudioManager>
 {
     private SettingsManager Settings => SettingsManager.Instance;
 
+    #region Mixer and MixerGroups
+
     public AudioMixer mixer;
     public AudioMixerGroup musicGroup;
     public AudioMixerGroup SFXGroup;
@@ -18,18 +20,19 @@ public class AudioManager : SingletonPersistent<AudioManager>
     private const string MIXER_MUSIC_TAG = "MusicVolume";
     private const string MIXER_SFX_TAG = "SFXVolume";
     private const string MIXER_MENUSFX_TAG = "MenuSFXVolume";
+
+    #endregion
+
+    #region AudioSources especificos
     
     private AudioSource musicSource;
     private AudioSource ambientSource;
     private AudioSource auxSource;
+
+    #endregion
     
     public Sound[] sounds;
     private Dictionary<string, Sound> soundMap = new Dictionary<string, Sound>();
-
-
-    public float GlobalVolume { get; private set; }
-    public float MusicVolume { get; private set; }
-    public float SFXVolume { get; private set; }
 
 
     protected override void Awake()
@@ -42,98 +45,96 @@ public class AudioManager : SingletonPersistent<AudioManager>
             soundMap.Add(sound.name, sound);
         }
     }
-    
-    private void OnDestroy() => SceneManager.sceneLoaded -= OnSceneLoad;
 
     private void Start()
     {
-        Settings.OnLoad += LoadVolumeSettings;
-        Settings.OnSave += SaveVolumeSettings;
-        
-        SceneManager.sceneLoaded += OnSceneLoad;
-        SceneManager.sceneUnloaded += OnSceneUnload;
-
-        GameManager.Instance.OnPause += OnPause;
-        GameManager.Instance.OnUnpause += OnUnpause;
-
         LoadVolumeSettings();
         
         PlayMenuMusic();
+        
+        Settings.OnLoad += LoadVolumeSettings;
+        Settings.OnSave += SaveVolumeSettings;
+        
+        GameManager.Instance.OnSceneLoaded += OnSceneLoad;
+        GameManager.Instance.OnSceneUnloaded += OnSceneUnload;
+
+        GameManager.Instance.OnPause += OnPause;
+        GameManager.Instance.OnUnpause += OnUnpause;
     }
 
     #region Scenes Loading
     
-    private void OnSceneLoad(Scene scene, LoadSceneMode mode)
+    private static void OnSceneLoad()
     {
         UpdateMixerVolumes();
         
         // MENU PRINCIPAL:
-        if (scene.buildIndex == 0) PlayMenuMusic();
+        if (SceneManager.GetActiveScene().buildIndex == 0) PlayMenuMusic();
     }
 
-    private void OnSceneUnload(Scene scene)
+    private static void OnSceneUnload()
     {
-        if (scene.buildIndex == 0) StopMusic();
+        if (SceneManager.GetActiveScene().buildIndex == 0) StopMusic();
     }
 
-    private void PlayMenuMusic() => PlayMusic("Menu");
+    private static void PlayMenuMusic() => PlayMusic("Menu");
 
     #endregion
 
     #region Music
     
-    public void PlayMusic(string musicName)
+    public static void PlayMusic(string musicName)
     {
-        musicSource = soundMap["Music/" + musicName].source; 
-        musicSource.Play();
+        Instance.musicSource = GetSound("Music/" + musicName).source;
+        Instance.musicSource.Play();
     }
-    public void PlayMusic() => musicSource.Play();
-    public void StopMusic() => musicSource.Stop();
+    public static void PlayMusic() => Instance.musicSource.Play();
+    public static void StopMusic() => Instance.musicSource.Stop();
 
     #endregion
 
     #region Ambient
 
-    public void PlayAmbient(string soundName)
+    public static void PlayAmbient(string soundName)
     {
-        ambientSource = soundMap["Ambient/" + soundName].source; 
-        ambientSource.Play();
+        Instance.ambientSource = GetSound("Ambient/" + soundName).source; 
+        Instance.ambientSource.Play();
     }
-    public void PlayAmbient() => ambientSource.Play();
-    public void StopAmbient() => ambientSource.Stop();
+    public static void PlayAmbient() => Instance.ambientSource.Play();
+    public static void StopAmbient() => Instance.ambientSource.Stop();
 
     #endregion
 
     #region Play/Stop/Pause Sound
     
-    public void Play(string soundName)
+    public static void Play(string soundName)
     {
         Sound sound = GetSound(soundName);
         if (sound != null)
             sound.Play();
     }
 
-    public void Stop(string soundName)
+    public static void Stop(string soundName)
     {
         Sound sound = GetSound(soundName);
         if (sound != null && sound.IsPlaying)
             sound.Stop();
     }
 
-    public void Pause(string soundName)
+    public static void Pause(string soundName)
     {
         Sound sound = GetSound(soundName);
         if (sound != null)
             sound.Pause();
     }
-    public void UnPause(string soundName)
+    public static void UnPause(string soundName)
     {
         Sound sound = GetSound(soundName);
         if (sound != null)
             sound.Unpause();
     }
 
-    public AudioClip GetAudioClip(string soundName)
+    public static AudioClip GetAudioClip(string soundName)
     {
         Sound sound = GetSound(soundName);
         if (sound != null)
@@ -141,9 +142,9 @@ public class AudioManager : SingletonPersistent<AudioManager>
         return null;
     }
 
-    private Sound GetSound(string soundName)
+    private static Sound GetSound(string soundName)
     {
-        if (soundMap.TryGetValue(soundName, out Sound sound))
+        if (Instance.soundMap.TryGetValue(soundName, out Sound sound))
             return sound;
         else
             Debug.LogError("Sound " + soundName + " not found in AudioManager!");
@@ -154,19 +155,19 @@ public class AudioManager : SingletonPersistent<AudioManager>
     
     #region Pause
 
-    private List<AudioSource> pausedSources = new List<AudioSource>();
+    private static List<AudioSource> _pausedSources = new List<AudioSource>();
     
-    private void OnPause()
+    private static void OnPause()
     {
         // Reduce el volumen de la musica y mutea los SFX que no sean del menu
-        mixer.SetFloat(MIXER_MUSIC_TAG, LinearToLogAudio(GlobalVolume / 10));
+        Instance.mixer.SetFloat(MIXER_MUSIC_TAG, LinearToLogAudio(Instance.GlobalVolume / 10));
 
-        foreach (Sound sound in soundMap.Values)
+        foreach (Sound sound in Instance.soundMap.Values)
         {
             AudioSource source = sound.source;
-            if (source.isPlaying && source != musicSource)
+            if (source.isPlaying && source != Instance.musicSource)
             {
-                pausedSources.Add(source);
+                _pausedSources.Add(source);
                 source.Pause();
             }
         }
@@ -176,22 +177,22 @@ public class AudioManager : SingletonPersistent<AudioManager>
         {
             if (source.isPlaying)
             {
-                pausedSources.Add(source);
+                _pausedSources.Add(source);
                 source.Pause();
             }
         }
         
     }
 
-    private void OnUnpause()
+    private static void OnUnpause()
     {
-        if (pausedSources.Count != 0)
+        if (_pausedSources.Count != 0)
         {
-            foreach (AudioSource source in pausedSources)
+            foreach (AudioSource source in _pausedSources)
                 if (source != null)
                     source.UnPause();
 
-            pausedSources.Clear();
+            _pausedSources.Clear();
         }
         
         UpdateMixerVolumes();
@@ -205,7 +206,7 @@ public class AudioManager : SingletonPersistent<AudioManager>
     {
         GlobalVolume = Settings.GlobalVolume;
         MusicVolume = Settings.MusicVolume;
-        SFXVolume = Settings.EffectsVolume;
+        SfxVolume = Settings.EffectsVolume;
 
         UpdateMixerVolumes();
     }
@@ -214,54 +215,58 @@ public class AudioManager : SingletonPersistent<AudioManager>
     {
         Settings.GlobalVolume = GlobalVolume;
         Settings.MusicVolume = MusicVolume;
-        Settings.EffectsVolume = SFXVolume;
+        Settings.EffectsVolume = SfxVolume;
     }
 
     #endregion
 
     #region Volume
-
-    private void UpdateMixerVolumes()
+    
+    public float GlobalVolume { get; private set; }
+    public float MusicVolume { get; private set; }
+    public float SfxVolume { get; private set; }
+    
+    public static void SetGlobalVolume(float volume)
     {
-        mixer.SetFloat(MIXER_MASTER_TAG, LinearToLogAudio(GlobalVolume));
-        mixer.SetFloat(MIXER_MUSIC_TAG, LinearToLogAudio(MusicVolume));
-        mixer.SetFloat(MIXER_SFX_TAG, LinearToLogAudio(SFXVolume));
-        mixer.SetFloat(MIXER_MENUSFX_TAG, LinearToLogAudio(SFXVolume));
+        Instance.GlobalVolume = volume;
+        Instance.mixer.SetFloat(MIXER_MASTER_TAG, LinearToLogAudio(volume));
     }
 
-    public void SetGlobalVolume(float volume)
+    public static void SetMusicVolume(float volume)
     {
-        GlobalVolume = volume;
-        mixer.SetFloat(MIXER_MASTER_TAG, LinearToLogAudio(volume));
+        Instance.MusicVolume = volume;
+        Instance.mixer.SetFloat(MIXER_MUSIC_TAG, LinearToLogAudio(volume));
     }
 
-    public void SetMusicVolume(float volume)
+    public static void SetSFXVolume(float volume)
     {
-        MusicVolume = volume;
-        mixer.SetFloat(MIXER_MUSIC_TAG, LinearToLogAudio(volume));
+        Instance.SfxVolume = volume;
+        Instance.mixer.SetFloat(MIXER_SFX_TAG, LinearToLogAudio(volume));
+        Instance.mixer.SetFloat(MIXER_MENUSFX_TAG, LinearToLogAudio(volume));
     }
-
-    public void SetEffectsVolume(float volume)
+    
+    private static void UpdateMixerVolumes()
     {
-        SFXVolume = volume;
-        mixer.SetFloat(MIXER_SFX_TAG, LinearToLogAudio(volume));
-        mixer.SetFloat(MIXER_MENUSFX_TAG, LinearToLogAudio(volume));
+        Instance.mixer.SetFloat(MIXER_MASTER_TAG, LinearToLogAudio(Instance.GlobalVolume));
+        Instance.mixer.SetFloat(MIXER_MUSIC_TAG, LinearToLogAudio(Instance.MusicVolume));
+        Instance.mixer.SetFloat(MIXER_SFX_TAG, LinearToLogAudio(Instance.SfxVolume));
+        Instance.mixer.SetFloat(MIXER_MENUSFX_TAG, LinearToLogAudio(Instance.SfxVolume));
     }
 
     #endregion
 
     #region Spatial Sounds
     
-    private AudioSource[] FindSpatialAudioSources()
+    private static AudioSource[] FindSpatialAudioSources()
     {
         List<AudioSource> spatialSources = FindObjectsOfType<AudioSource>().ToList();
 
         // Quita todos los sonidos que no sean espaciales (Musica, ambiente, y sonidos del AudioManager)
-        spatialSources.Remove(musicSource);
-        spatialSources.Remove(ambientSource);
-        spatialSources.Remove(auxSource);
+        spatialSources.Remove(Instance.musicSource);
+        spatialSources.Remove(Instance.ambientSource);
+        spatialSources.Remove(Instance.auxSource);
 
-        foreach (Sound sound in sounds) spatialSources.Remove(sound.source);
+        foreach (Sound sound in Instance.sounds) spatialSources.Remove(sound.source);
 
         return spatialSources.ToArray();
     }

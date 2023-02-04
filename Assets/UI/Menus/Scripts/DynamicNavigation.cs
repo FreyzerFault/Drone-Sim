@@ -5,23 +5,49 @@ using UnityEngine.UI;
 
 public class DynamicNavigation : MonoBehaviour
 {
-    public GameObject topSection;
-    public GameObject downSection;
-    public GameObject leftSection;
-    public GameObject rightSection;
+    [SerializeField] private GameObject topSection;
+    [SerializeField] private GameObject bottomSection;
+    [SerializeField] private GameObject leftSection;
+    [SerializeField] private GameObject rightSection;
 
     private List<Selectable> selectables;
 
     private void Awake() => selectables = GetComponentsInChildren<Selectable>().ToList();
 
-    public void UpdateNavigation()
+    // Use this to Change a section in each direction so it can update navigation dynamicaly to the new section 
+    public void UpdateTopSection(GameObject newTopSection)
     {
-        Selectable topSelectable = null, downSelectable = null, leftSelectable = null, rightSelectable = null;
+        topSection = newTopSection;
+        UpdateNavigation();
+    }
+    public void UpdateBottomSection(GameObject newBottomSection)
+    {
+        bottomSection = newBottomSection;
+        UpdateNavigation();
+    }
+    public void UpdateLeftSection(GameObject newLeftSection)
+    {
+        leftSection = newLeftSection;
+        UpdateNavigation();
+    }
+    public void UpdateRightSection(GameObject newRightSection)
+    {
+        rightSection = newRightSection;
+        UpdateNavigation();
+    }
+    
+    
+
+    #region Update Navigation to a new Nearest Selectible in each Direction
+
+    private void UpdateNavigation()
+    {
+        Selectable topSelectable = null, botSelectable = null, leftSelectable = null, rightSelectable = null;
 
         if (topSection != null)
             topSelectable = GetNearestSelectableTop();
-        if (downSection != null)
-            downSelectable = GetNearestSelectableDown();
+        if (bottomSection != null)
+            botSelectable = GetNearestSelectableBot();
         if (leftSection != null) 
             leftSelectable = GetNearestSelectableLeft();
         if (rightSection != null)
@@ -29,14 +55,14 @@ public class DynamicNavigation : MonoBehaviour
 
         if (topSelectable != null)
             UpdateTopSelectable(topSelectable);
-        if (downSelectable != null)
-            UpdateDownSelectable(downSelectable);
+        if (botSelectable != null)
+            UpdateBotSelectable(botSelectable);
         if (leftSelectable != null)
             UpdateLeftSelectable(leftSelectable);
         if (rightSelectable != null)
             UpdateRightSelectable(rightSelectable);
     }
-
+    
     private void UpdateTopSelectable(Selectable nearestSelectable)
     {
         Navigation nearestNav = nearestSelectable.navigation;
@@ -50,7 +76,7 @@ public class DynamicNavigation : MonoBehaviour
             selectable.navigation = nav;
         }
     }
-    private void UpdateDownSelectable(Selectable nearestSelectable)
+    private void UpdateBotSelectable(Selectable nearestSelectable)
     {
         Navigation nearestNav = nearestSelectable.navigation;
         nearestNav.selectOnUp = selectables[^1];
@@ -90,8 +116,12 @@ public class DynamicNavigation : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Find Nearest Selectable in each Direction
+
     private Selectable GetNearestSelectableTop() => topSection.GetComponentsInChildren<Selectable>()[^1];
-    private Selectable GetNearestSelectableDown() => downSection.GetComponentsInChildren<Selectable>()[0];
+    private Selectable GetNearestSelectableBot() => bottomSection.GetComponentsInChildren<Selectable>()[0];
     
     private Selectable GetNearestSelectableLeft()
     {
@@ -132,4 +162,6 @@ public class DynamicNavigation : MonoBehaviour
 
         return rightSelectables[index];
     }
+
+    #endregion
 }

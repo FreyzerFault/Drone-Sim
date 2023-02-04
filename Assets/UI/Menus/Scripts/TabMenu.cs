@@ -6,13 +6,14 @@ using UnityEngine.UI;
 
 public class TabMenu : MonoBehaviour
 {
-    [SerializeField] protected List<Button> buttons = new List<Button>();
-    public Color selectedTabColor;
-    public GameObject tabsParent;
+    [SerializeField] private Color selectedTabColor;
+    
+    [SerializeField] private GameObject tabsParent;
+    [SerializeField] private List<Button> buttons = new List<Button>();
 
     private Menu menu;
 
-    protected void Awake()
+    private void Awake()
     {
         menu = GetComponent<Menu>();
         buttons = tabsParent.GetComponentsInChildren<Button>().ToList();
@@ -20,28 +21,40 @@ public class TabMenu : MonoBehaviour
 
     public void OpenTab(int tabIndex)
     {
+        // No esta el menu abierto => Lo abre
         if (!menu.isOpen)
             menu.Open();
 
-        if (menu.menuOpened == tabIndex) return;
-
-        foreach (Button button in buttons) 
-            button.GetComponent<Image>().color = Color.white;
-
-        buttons[tabIndex].GetComponent<Image>().color = selectedTabColor;
+        // Ya estaba la tab abierta => no hace nada
+        if (menu.submenuOpened == tabIndex) return;
+        
+        SelectTabButton(tabIndex);
+        
         menu.ToggleSubMenu(tabIndex);
     }
 
-    public void OnTabNavigate(InputValue value)
+    // INPUT reservado para cambiar de tab
+    private void OnTabNavigate(InputValue value)
     {
+        float input = value.Get<float>();
+        if (input == 0) return;
+        
         // Esta seleccionado el ultimo y pulsa derecha
-        if (value.Get<float>() > 0 && menu.menuOpened == menu.subMenus.Count - 1)
+        if (input > 0 && menu.IsLastSubmenuOpened)
             return;
         
         // Esta seleccionado el primero y pulsa izquierda
-        if (value.Get<float>() < 0 && menu.menuOpened == 0)
+        if (input < 0 && menu.IsFirstSubmenuOpened)
             return;
         
-        OpenTab(menu.menuOpened + (int)value.Get<float>());
+        OpenTab(menu.submenuOpened + (int) input);
+    }
+
+    private void SelectTabButton(int tabIndex)
+    {
+        foreach (Button button in buttons)
+            button.GetComponent<Image>().color = Color.white;
+
+        buttons[tabIndex].GetComponent<Image>().color = selectedTabColor;
     }
 }

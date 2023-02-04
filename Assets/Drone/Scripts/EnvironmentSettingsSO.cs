@@ -19,6 +19,6 @@ namespace DroneSim
             UpdateGravity(gravity);
         }
 
-        public static void UpdateGravity(float newGravity) => Physics.gravity = new Vector3(0, -newGravity, 0); 
+        private static void UpdateGravity(float newGravity) => Physics.gravity = new Vector3(0, -newGravity, 0); 
     }
 }

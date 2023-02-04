@@ -7,10 +7,10 @@ using UnityEngine.UI;
 
 public class DroneHUD : MonoBehaviour
 {
-    public DroneController drone;
+    private DroneController drone;
     
     #region Info Elements
-
+    
     public Transform arrowLeft;
     public Transform arrowRight;
     public Transform arrowUp;
@@ -18,7 +18,19 @@ public class DroneHUD : MonoBehaviour
 
     public TMP_Text FlightMode;
     public TMP_Text HoverStabilization;
+
+    #region Camera Icon
+
+    [Serializable]
+    public struct CameraSprite
+    {
+        public DroneCamera.CameraType Type;
+        public Sprite Sprite;
+    }
+    public CameraSprite[] cameraSprites;
     public Image cameraIcon;
+
+    #endregion
 
     public Text liftSpeedT;
     public Text horizontalSpeedXT;
@@ -35,6 +47,8 @@ public class DroneHUD : MonoBehaviour
     public Slider CCW2slider;
 
     #endregion
+    
+    
 
     #region Joysticks
 
@@ -68,7 +82,7 @@ public class DroneHUD : MonoBehaviour
         // ANIMATIONS
         drone.OnFlightModeChange += UpdateFlightMode;
         drone.OnHoverStabilizationToggle += UpdateHoverStabilization;
-        drone.cameraManager.OnCameraSwitched += UpdateCameraIcon;
+        CameraManager.Instance.OnCameraSwitched += UpdateCameraIcon;
 
         FlightMode.text = drone.flightMode.ToString();
         UpdateHoverStabilization(drone.hoverStabilization);
@@ -108,7 +122,15 @@ public class DroneHUD : MonoBehaviour
         arrowDown.GetComponent<Animator>().SetTrigger(Down);
         arrowDown.GetComponent<Animator>().SetTrigger(Pulse);
         
-        cameraIcon.sprite = drone.cameraManager.ActiveCameraSprite;
+        cameraIcon.sprite = GetCameraIcon();
+    }
+
+    private Sprite GetCameraIcon()
+    {
+        foreach (CameraSprite cameraSprite in cameraSprites)
+            if (cameraSprite.Type == CameraManager.Instance.ActiveCameraType)
+                return cameraSprite.Sprite;
+        return null;
     }
     
     private void UpdateFlightMode(bool next)
@@ -177,6 +199,5 @@ public class DroneHUD : MonoBehaviour
     {
         drone.OnFlightModeChange -= UpdateFlightMode;
         drone.OnHoverStabilizationToggle -= UpdateHoverStabilization;
-        drone.cameraManager.OnCameraSwitched -= UpdateCameraIcon;
     }
 }

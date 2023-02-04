@@ -2510,7 +2510,7 @@ Transform:
   - {fileID: 8026516951955473968}
   - {fileID: 3610290444109403455}
   m_Father: {fileID: 7714089580282663230}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1001 &9084270444714322177
 PrefabInstance:
@@ -2595,9 +2595,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2211076879885522325, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.03888
+      objectReference: {fileID: 0}
+    - target: {fileID: 2211076879885522325, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.1012
+      objectReference: {fileID: 0}
     - target: {fileID: 3209865575176536708, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
       propertyPath: m_Name
-      value: Yellow
+      value: Yellow Drone
       objectReference: {fileID: 0}
     - target: {fileID: 4632102926047521506, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
       propertyPath: m_LocalScale.x
@@ -2751,6 +2759,14 @@ PrefabInstance:
       propertyPath: droneSettings
       value: 
       objectReference: {fileID: 11400000, guid: acae8a2d0bbf5cd4f972d0330463b81a, type: 2}
+    - target: {fileID: 8617111739689823244, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8617111739689823244, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.18910755
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b30a6499590fa8f42b7e5fb75b96b7e9, type: 3}
 --- !u!4 &7714089580282663230 stripped

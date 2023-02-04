@@ -3,8 +3,8 @@ using UnityEngine;
 
 public abstract class Challenge : MonoBehaviour
 {
-    public Timer timer;
-    public GameObject levelHUD;
+    protected Timer timer;
+    protected GameObject levelHUD;
     
     public bool completed = false;
 
@@ -12,31 +12,34 @@ public abstract class Challenge : MonoBehaviour
     {
         timer = GetComponent<Timer>();
         levelHUD = GameObject.FindWithTag("Level HUD");
+
+        if (timer == null) return;
         
-        if (timer != null)
+        timer.Pause();
+        if (levelHUD != null)
         {
-            timer.Pause();
-            if (levelHUD != null)
-            {
-                TMP_Text[] texts = levelHUD.GetComponentsInChildren<TMP_Text>();
-                timer.timerText = texts[0];
-            }
+            TMP_Text[] texts = levelHUD.GetComponentsInChildren<TMP_Text>();
+            timer.timerText = texts[0];
         }
     }
 
-    public virtual void StartChallenge() => completed = false;
-    public virtual void EndChallenge() => completed = true;
+    protected virtual void StartChallenge() => completed = false;
+    protected virtual void EndChallenge() => completed = true;
+
+    #region Timer
 
     protected void StartTimer()
     {
         ResetTimer();
         UnpauseTimer();
     }
-    protected void ResetTimer() => timer.Reset();
-    protected void UnpauseTimer() => timer.Unpause();
+
+    private void ResetTimer() => timer.Reset();
+    private void UnpauseTimer() => timer.Unpause();
     protected void PauseTimer() => timer.Pause();
 
     protected void ShowTimer() => timer.enabled = true;
     protected void HideTimer() => timer.enabled = false;
 
+    #endregion
 }

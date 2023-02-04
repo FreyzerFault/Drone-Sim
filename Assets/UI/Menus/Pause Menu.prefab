@@ -4439,6 +4439,7 @@ GameObject:
   - component: {fileID: 7111512876977923452}
   - component: {fileID: 1043204541309234134}
   - component: {fileID: 5088699151065138383}
+  - component: {fileID: 8039145205144668673}
   m_Layer: 5
   m_Name: VideoWindow
   m_TagString: Untagged
@@ -4537,15 +4538,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 728649e51fbcd1643956699d26bbcae3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subMenus: []
-  menuOpened: -1
   isOpen: 0
   closeOnCancel: 1
   saveSelected: 0
-  firstSelected: {fileID: 1043204541212134529}
+  firstSelected: {fileID: 1311287992173057615}
   parentSelected: {fileID: 1043204541212285651}
   selectibles: []
   isPersistent: 0
+  subMenus: []
+  submenuOpened: -1
+--- !u!114 &8039145205144668673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043204541309234132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5b01eb497714c1449cb2df46eb5ac6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: {x: -7, y: -3}
 --- !u!1 &1043204541376436955
 GameObject:
   m_ObjectHideFlags: 0
@@ -5663,6 +5677,7 @@ GameObject:
   - component: {fileID: 6854362398278833818}
   - component: {fileID: 1043204541603534341}
   - component: {fileID: 5470204350540904910}
+  - component: {fileID: 5238923639030018606}
   m_Layer: 5
   m_Name: AudioWindow
   m_TagString: Untagged
@@ -5761,8 +5776,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08e835b9777bcc842ab480950d76e82a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subMenus: []
-  menuOpened: -1
   isOpen: 0
   closeOnCancel: 1
   saveSelected: 0
@@ -5770,7 +5783,21 @@ MonoBehaviour:
   parentSelected: {fileID: 1043204541444175975}
   selectibles: []
   isPersistent: 0
-  effectChangedSound: {fileID: 8300000, guid: 9257d9c280f5f3445afd94488a0682c8, type: 3}
+  subMenus: []
+  submenuOpened: -1
+--- !u!114 &5238923639030018606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043204541603534363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5b01eb497714c1449cb2df46eb5ac6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: {x: -7, y: -3}
 --- !u!1 &1043204541608237806
 GameObject:
   m_ObjectHideFlags: 0
@@ -5784,6 +5811,7 @@ GameObject:
   - component: {fileID: 6695965440843826326}
   - component: {fileID: 1043204541608237800}
   - component: {fileID: 8503257375157121134}
+  - component: {fileID: 935309544291681371}
   m_Layer: 5
   m_Name: GamePlayWindow
   m_TagString: Untagged
@@ -5882,15 +5910,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39bc0063aa15df141b45d0d280277e90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subMenus: []
-  menuOpened: -1
   isOpen: 0
   closeOnCancel: 1
   saveSelected: 0
-  firstSelected: {fileID: 1043204541981797205}
+  firstSelected: {fileID: 1043204540053252023}
   parentSelected: {fileID: 1043204541212285651}
   selectibles: []
   isPersistent: 0
+  subMenus: []
+  submenuOpened: -1
+--- !u!114 &935309544291681371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043204541608237806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5b01eb497714c1449cb2df46eb5ac6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: {x: -7, y: -3}
 --- !u!1 &1043204541623566670
 GameObject:
   m_ObjectHideFlags: 0
@@ -8264,18 +8305,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39bc0063aa15df141b45d0d280277e90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOpen: 0
+  closeOnCancel: 1
+  saveSelected: 0
+  firstSelected: {fileID: 1043204541444175975}
+  parentSelected: {fileID: 3963868396281786777}
+  selectibles: []
+  isPersistent: 1
   subMenus:
   - {fileID: 5470204350540904910}
   - {fileID: 5088699151065138383}
   - {fileID: 8503257375157121134}
-  menuOpened: -1
-  isOpen: 0
-  closeOnCancel: 1
-  saveSelected: 0
-  firstSelected: {fileID: 1043204541212285651}
-  parentSelected: {fileID: 3963868396281786777}
-  selectibles: []
-  isPersistent: 1
+  submenuOpened: -1
 --- !u!114 &3104852035048323630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10152,7 +10193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f41e391a06b6c474381d67b1094bfab3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RootMenu: {fileID: 0}
+  rootMenu: {fileID: 7165847985436797672}
 --- !u!114 &7165847985436797672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10165,9 +10206,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39bc0063aa15df141b45d0d280277e90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subMenus:
-  - {fileID: 4461524508907446140}
-  menuOpened: -1
   isOpen: 0
   closeOnCancel: 1
   saveSelected: 0
@@ -10175,6 +10213,9 @@ MonoBehaviour:
   parentSelected: {fileID: 0}
   selectibles: []
   isPersistent: 0
+  subMenus:
+  - {fileID: 4461524508907446140}
+  submenuOpened: -1
 --- !u!114 &973819742846411892
 MonoBehaviour:
   m_ObjectHideFlags: 0

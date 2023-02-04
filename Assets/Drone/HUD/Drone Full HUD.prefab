@@ -1833,13 +1833,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 019aac1696c7648428504c2881c5e4d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drone: {fileID: 0}
   arrowLeft: {fileID: 3629637479213941624}
   arrowRight: {fileID: 3861962891287459212}
   arrowUp: {fileID: 2237604135989077059}
   arrowDown: {fileID: 8173582446539960514}
   FlightMode: {fileID: 8747597161137246922}
   HoverStabilization: {fileID: 5770594923212459678}
+  cameraSprites:
+  - Type: 0
+    Sprite: {fileID: 21300000, guid: b3e65fb6eeaefff4da63601be88d47ff, type: 3}
+  - Type: 1
+    Sprite: {fileID: 21300000, guid: 6e90c179d8560fd44bd64da63180afdf, type: 3}
+  - Type: 2
+    Sprite: {fileID: 21300000, guid: 94e9c3b645f95e549ac2690e22c74f9e, type: 3}
   cameraIcon: {fileID: 9122013135850905338}
   liftSpeedT: {fileID: 4560988532353417537}
   horizontalSpeedXT: {fileID: 4560988533295856461}

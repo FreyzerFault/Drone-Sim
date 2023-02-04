@@ -8,15 +8,15 @@ namespace DroneSim
     {
         private DroneController drone;
 
-        public Gyroscope Gyro => drone.gyro;
-        public Accelerometer AccMeter => drone.accelerometer;
+        private Gyroscope Gyro => drone.gyro;
+        private Accelerometer AccMeter => drone.accelerometer;
 
         // PID Configurations:
         public PIDlabeled[] PIDConfigurations; // This is for seting up the PID configurations in the inspector.
 
         private Dictionary<String, PID_Configuration> PIDConfigurationMap;
-        private Dictionary<String, float> ErrorsLastFrame;
-        private Dictionary<String, float> ErrorsSum;
+        private Dictionary<String, float> errorsLastFrame;
+        private Dictionary<String, float> errorsSum;
     
         private void Awake()
         {
@@ -24,6 +24,8 @@ namespace DroneSim
             
             SetupPIDs();
         }
+
+        #region Movimientos
 
         // Control pitch and roll to target an Angle Of Attack (X = Pitch, Y = Roll)
         public Vector2 AdjustAngleOfAttack(Vector2 targetAngle)
@@ -96,11 +98,11 @@ namespace DroneSim
             return new Vector2(
                 GetPIDcorrection("xSpeed", targetSpeed.x, AccMeter.HorizontalVelocity.x, drone.droneSettings.maxSpeed),
                 GetPIDcorrection("zSpeed", targetSpeed.y, AccMeter.HorizontalVelocity.z, drone.droneSettings.maxSpeed)
-                );
+            );
         }
 
-
-
+        #endregion
+        
         #region PID
 
         /// <summary>
@@ -116,13 +118,13 @@ namespace DroneSim
             // error / max * 2 to get the diff in [-max, max] => [-1,1]
             float error = (target - current) / (maxValue * 2);
             
-            float lastFrameError = ErrorsLastFrame[pidName];
-            float errorSum = PID.antiWindupFilter(ErrorsSum[pidName] + error, error);
+            float lastFrameError = errorsLastFrame[pidName];
+            float errorSum = PID.antiWindupFilter(errorsSum[pidName] + error, error);
             
             float correction = PID.GetPIDresult(PIDConfigurationMap[pidName], error, errorSum, lastFrameError);
 
-            ErrorsLastFrame[pidName] = error;
-            ErrorsSum[pidName] += errorSum == 0 ? 0 : error;
+            errorsLastFrame[pidName] = error;
+            errorsSum[pidName] += errorSum == 0 ? 0 : error;
 
             return correction;
         }
@@ -132,13 +134,13 @@ namespace DroneSim
             // error / max * 2 to get the diff in [-max, max] => [-1,1]
             float error = (target - current) / (maxValue * 2);
             
-            float lastFrameError = ErrorsLastFrame[pidName];
-            float errorSum = PID.antiWindupFilter(ErrorsSum[pidName] + error, error);
+            float lastFrameError = errorsLastFrame[pidName];
+            float errorSum = PID.antiWindupFilter(errorsSum[pidName] + error, error);
             
             float correction = PID.GetPIDresult(PIDConfigurationMap[pidName], errorSum, error * Math.Abs(error), lastFrameError);
 
-            ErrorsLastFrame[pidName] = error;
-            ErrorsSum[pidName] += errorSum == 0 ? 0 : error;
+            errorsLastFrame[pidName] = error;
+            errorsSum[pidName] += errorSum == 0 ? 0 : error;
 
             return correction;
         }
@@ -148,14 +150,14 @@ namespace DroneSim
         private void SetupPIDs()
         {
             PIDConfigurationMap = new Dictionary<String, PID_Configuration>();
-            ErrorsLastFrame = new Dictionary<String, float>();
-            ErrorsSum = new Dictionary<string, float>();
+            errorsLastFrame = new Dictionary<String, float>();
+            errorsSum = new Dictionary<string, float>();
             
             foreach (PIDlabeled pid in PIDConfigurations)
             {
                 PIDConfigurationMap.Add(pid.name, pid.config);
-                ErrorsLastFrame.Add(pid.name, 0);
-                ErrorsSum.Add(pid.name, 0);
+                errorsLastFrame.Add(pid.name, 0);
+                errorsSum.Add(pid.name, 0);
                 
                 PID_Configuration config = PIDConfigurationMap[pid.name];
             }

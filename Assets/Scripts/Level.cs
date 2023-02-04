@@ -29,16 +29,16 @@ public class Level : ScriptableObject
     {
         EnvironmentSettings.ApplySettings();
 
-        AudioManager.Instance.PlayMusic(music);
-        AudioManager.Instance.PlayAmbient(ambient);
+        AudioManager.PlayMusic(music);
+        AudioManager.PlayAmbient(ambient);
         
         OnLoad?.Invoke();
     }
 
     public void Unload()
     {
-        AudioManager.Instance.StopMusic();
-        AudioManager.Instance.StopAmbient();
+        AudioManager.StopMusic();
+        AudioManager.StopAmbient();
         
         OnUnload?.Invoke();
     }

@@ -13,13 +13,7 @@ public class VideoSettingsMenu : Menu
         
         OnOpen += LoadSettings;
 
-        resolutionDropdown = GetComponentsInChildren<TMP_Dropdown>(true)[0];
-        resolutionDropdown.onValueChanged.AddListener((index) =>
-        {
-            // Resolucion en formato 1920x1080 [WidthxHeight]
-            Vector2Int resolution = resolutionDropdown.options[index].text.ParseResolution();
-            ResolutionManager.SetResolution(resolution);
-        });
+        InitializeValueChangedEvents();
     }
     
     public void LoadSettings()
@@ -41,5 +35,17 @@ public class VideoSettingsMenu : Menu
                 break;
             }
         }
+    }
+    
+    private void InitializeValueChangedEvents()
+    {
+        
+        resolutionDropdown = GetComponentsInChildren<TMP_Dropdown>(true)[0];
+        resolutionDropdown.onValueChanged.AddListener((index) =>
+        {
+            // Resolucion en formato 1920x1080 [WidthxHeight]
+            Vector2Int resolution = resolutionDropdown.options[index].text.ParseResolution();
+            ResolutionManager.SetResolution(resolution);
+        });
     }
 }

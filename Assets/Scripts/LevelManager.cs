@@ -14,7 +14,6 @@ public class LevelManager : SingletonPersistent<LevelManager>
     [HideInInspector] public Level currentLevel;
 
     public EnvironmentSettingsSO EnvironmentSettings => currentLevel.EnvironmentSettings;
-    private bool InMainMenu => SceneManager.GetActiveScene().buildIndex == 0;
 
     protected override void Awake()
     {
@@ -41,6 +40,8 @@ public class LevelManager : SingletonPersistent<LevelManager>
         GameManager.Instance.OnSceneUnloaded += OnSceneUnloaded;
     }
 
+    #region Scene Events
+
     private void OnSceneLoaded()
     {
         // Cada vez que carga una escena guarda el nivel
@@ -53,7 +54,7 @@ public class LevelManager : SingletonPersistent<LevelManager>
             levelMap[scene.name].Load();
         
         // Not Found!!
-        else if (scene.name != "Main Menu")
+        else if (scene.buildIndex != 0)
             Debug.Log("No hay ningun nivel guardado para esta escena: " + scene.name);
     }
 
@@ -64,6 +65,8 @@ public class LevelManager : SingletonPersistent<LevelManager>
             levelMap[scene.name].Unload();
     }
 
+    #endregion
+
 
     public void LoadSelectedLevel() => SceneManager.LoadScene(currentLevel.buildIndex);
     public void LoadLevel(int levelID)
@@ -72,16 +75,23 @@ public class LevelManager : SingletonPersistent<LevelManager>
         LoadSelectedLevel();
     }
     
-    public void LoadLevel(string levelName) => LoadLevel(levelMap[levelName].ID);
+    public void LoadLevel(string levelName)
+    {
+        if (levelMap.TryGetValue(levelName, out Level level))
+            LoadLevel(level.ID);
+    }
 
     public Level GetLevel(string levelName) => levelMap[levelName];
 
-    // Carga el menu, la escena 0 deberia ser el menu principal
+    
     public static void ResetLevel() => GameManager.ResetScene();
     public static void QuitLevel() => SceneManager.LoadScene(0);
 
-    public static readonly string SelectedLevelSavePath = "selected level";
-    
-    public void LoadSelectedLevelPref() => currentLevel = levels[PlayerPrefs.GetInt(SelectedLevelSavePath, 0)];
+    #region Save/Load Selected Level
+
+    private static readonly string SelectedLevelSavePath = "selected level";
+    private void LoadSelectedLevelPref() => currentLevel = levels[PlayerPrefs.GetInt(SelectedLevelSavePath, 0)];
     public void SaveSelectedLevelPref() => PlayerPrefs.SetInt(SelectedLevelSavePath, currentLevel.ID);
+
+    #endregion
 }
