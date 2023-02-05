@@ -57,10 +57,11 @@ public class DroneMenu : Menu
                 if (droneConfig.previewImage != null)
                     dronemage = droneConfig.previewImage;
 
-                selectibles[i].GetComponent<Animator>().SetBool(DisableAnimID, false);
+                if (selectibles[i].TryGetComponent(out Animator animator))
+                    animator.SetBool(DisableAnimID, false);
             }
-            else
-                selectibles[i].GetComponent<Animator>().SetBool(DisableAnimID, true);
+            else if (selectibles[i].TryGetComponent(out Animator animator))
+                    animator.SetBool(DisableAnimID, true);
 
             selectibles[i].GetComponentInChildren<TMP_Text>().text = droneName;
             selectibles[i].GetComponentsInChildren<Image>()[1].sprite = dronemage;

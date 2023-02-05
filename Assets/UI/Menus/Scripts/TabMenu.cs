@@ -15,7 +15,7 @@ public class TabMenu : MonoBehaviour
 
     private void Awake()
     {
-        menu = GetComponent<Menu>();
+        TryGetComponent(out menu);
         buttons = tabsParent.GetComponentsInChildren<Button>().ToList();
     }
 

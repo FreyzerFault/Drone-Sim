@@ -1,9 +1,9 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace DroneSim
 {
+    [RequireComponent(typeof(PlayerInput))]
     public class DroneInputController : MonoBehaviour
     {
         private DroneController droneController;
@@ -16,13 +16,13 @@ namespace DroneSim
         {
             if (GameManager.Instance != null)
             {
-                GameManager.Instance.OnPause -= disable;
-                GameManager.Instance.OnUnpause -= enable;
+                GameManager.Instance.OnPause -= Disable;
+                GameManager.Instance.OnUnpause -= Enable;
             }
         }
 
-        private void enable() => GetComponent<PlayerInput>().enabled = true;
-        private void disable() => GetComponent<PlayerInput>().enabled = false;
+        private void Enable() => GetComponent<PlayerInput>().enabled = true;
+        private void Disable() => GetComponent<PlayerInput>().enabled = false;
 
         #region InputMessages
 

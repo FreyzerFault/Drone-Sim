@@ -31,7 +31,7 @@ public class DroneManager : SingletonPersistent<DroneManager>
         
         GameObject drone = Instantiate(CurrentDroneSettings.prefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
 
-        currentDroneController = drone.GetComponent<DroneController>();
+        drone.TryGetComponent(out currentDroneController);
         currentDroneController.droneSettings = CurrentDroneSettings;
     }
 

@@ -144,13 +144,9 @@ public class Menu : MonoBehaviour
     
     private void InitializeEventsAnimations()
     {
-        
-        // Animation
-        animator = GetComponent<Animator>();
-        
         // Si un menu es PERSISTENTE se mantiene abierto visualmente 
         // Si no es persistente se cierra visualmente el menu cuando se abre un submenu
-        if (animator != null && !isPersistent)
+        if (TryGetComponent<Animator>(out _) && !isPersistent)
             for (int i = 0; i < subMenus.Count; i++)
             {
                 subMenus[i].OnClose += OpenAnimation;

@@ -1,7 +1,9 @@
 using DroneSim;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(PlayerInput))]
 public class PauseMenu : MenuManager
 {
     private Menu AudioMenu => rootMenu.GetSubmenu(0).GetSubmenu(0);

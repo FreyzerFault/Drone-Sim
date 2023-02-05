@@ -71,8 +71,8 @@ public class DroneHUD : MonoBehaviour
     private void Awake()
     {
         // JOYSTICKS
-        joystickLeft = GameObject.FindGameObjectWithTag("Joystick I").GetComponent<JoystickUI>();
-        joystickRight = GameObject.FindGameObjectWithTag("Joystick D").GetComponent<JoystickUI>();
+        GameObject.FindGameObjectWithTag("Joystick I").TryGetComponent(out joystickLeft);
+        GameObject.FindGameObjectWithTag("Joystick D").TryGetComponent(out joystickRight);
     }
 
     private void Start()
@@ -106,9 +106,13 @@ public class DroneHUD : MonoBehaviour
     private void UpdateHoverStabilization(bool isOn)
     {
         // Animation
-        HoverStabilization.GetComponent<Animator>().SetTrigger(Pulse);
-        arrowUp.GetComponent<Animator>().SetTrigger(Up);
-        arrowUp.GetComponent<Animator>().SetTrigger(Pulse);
+        if (HoverStabilization.TryGetComponent(out Animator animator))
+            animator.SetTrigger(Pulse);
+        if (arrowUp.TryGetComponent(out animator))
+        {
+            animator.SetTrigger(Up);
+            animator.SetTrigger(Pulse);
+        }
         
         Color darkRed = Color.red;
         Vector3 drVector = new Vector3(darkRed.r, darkRed.g, darkRed.b);
@@ -119,8 +123,11 @@ public class DroneHUD : MonoBehaviour
     
     private void UpdateCameraIcon()
     {
-        arrowDown.GetComponent<Animator>().SetTrigger(Down);
-        arrowDown.GetComponent<Animator>().SetTrigger(Pulse);
+        if (arrowDown.TryGetComponent(out Animator animator))
+        {
+            animator.SetTrigger(Down);
+            animator.SetTrigger(Pulse);
+        }
         
         cameraIcon.sprite = GetCameraIcon();
     }
@@ -136,21 +143,29 @@ public class DroneHUD : MonoBehaviour
     private void UpdateFlightMode(bool next)
     {
         FlightMode.text = drone.flightMode.ToString();
-        
+
+        Animator animator;
         
         // Animation
         if (next)
         {
-            arrowRight.GetComponent<Animator>().SetTrigger(Right);
-            arrowRight.GetComponent<Animator>().SetTrigger(Pulse);
+            if (arrowRight.TryGetComponent(out animator))
+            {
+                animator.SetTrigger(Right);
+                animator.SetTrigger(Pulse);
+            }
         }
         else
         {
-            arrowLeft.GetComponent<Animator>().SetTrigger(Left);
-            arrowLeft.GetComponent<Animator>().SetTrigger(Pulse);
+            if (arrowLeft.TryGetComponent(out animator))
+            {
+                animator.SetTrigger(Left);
+                animator.SetTrigger(Pulse);
+            }
         }
             
-        FlightMode.GetComponent<Animator>().SetTrigger(Pulse);
+        if (FlightMode.TryGetComponent(out animator))
+            animator.SetTrigger(Pulse);
     }
 
     private void UpdateRotors()
@@ -167,10 +182,14 @@ public class DroneHUD : MonoBehaviour
         CCW1slider.value = powers.z;
         CCW2slider.value = powers.w;
 
-        CW1slider.fillRect.GetComponent<Image>().color = Color.Lerp(Color.white, Color.cyan, powers.x);
-        CW2slider.fillRect.GetComponent<Image>().color = Color.Lerp(Color.white, Color.cyan, powers.y);
-        CCW1slider.fillRect.GetComponent<Image>().color = Color.Lerp(Color.white, Color.cyan, powers.z);
-        CCW2slider.fillRect.GetComponent<Image>().color = Color.Lerp(Color.white, Color.cyan, powers.w);
+        if (CW1slider.fillRect.TryGetComponent(out Image fillImage))
+            fillImage.color = Color.Lerp(Color.white, Color.cyan, powers.x);
+        if (CW2slider.fillRect.TryGetComponent(out fillImage))
+            fillImage.color = Color.Lerp(Color.white, Color.cyan, powers.y);
+        if (CCW1slider.fillRect.TryGetComponent(out fillImage))
+            fillImage.color = Color.Lerp(Color.white, Color.cyan, powers.z);
+        if (CCW2slider.fillRect.TryGetComponent(out fillImage))
+            fillImage.color = Color.Lerp(Color.white, Color.cyan, powers.w);
     }
 
 

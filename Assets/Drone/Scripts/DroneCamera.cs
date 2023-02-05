@@ -1,6 +1,7 @@
 using Cinemachine;
 using UnityEngine;
 
+[RequireComponent(typeof(CinemachineVirtualCamera))]
 public class DroneCamera : MonoBehaviour
 {
     public enum CameraType
