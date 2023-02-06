@@ -19,11 +19,11 @@ public class LevelMenu : Menu
     {
         base.Start();
         
-        SelectLevel(LevelSelectedID);
-        
         // Carga los botones con el nombre y la imagen
         UpdateButtons();
         
+        SelectLevel(LevelSelectedID);
+
         OnClose += LevelManager.Instance.SaveSelectedLevelPref;
     }
     
@@ -47,7 +47,7 @@ public class LevelMenu : Menu
             Sprite levelImage = defaultLevelImage;
             if (i < LevelManager.Instance.levels.Length)
             {
-                levelName = LevelManager.Instance.levels[i].name;
+                levelName = LevelManager.Instance.levels[i].previewName;
                 levelImage = LevelManager.Instance.levels[i].previewImage;
                 
                 if (selectibles[i].TryGetComponent(out Animator animator))

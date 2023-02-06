@@ -88,6 +88,7 @@ public class DroneHUD : MonoBehaviour
         UpdateHoverStabilization(drone.hoverStabilization);
         UpdateCameraIcon();
     }
+    
 
     private void Update()
     {
@@ -216,7 +217,12 @@ public class DroneHUD : MonoBehaviour
 
     private void OnDestroy()
     {
-        drone.OnFlightModeChange -= UpdateFlightMode;
-        drone.OnHoverStabilizationToggle -= UpdateHoverStabilization;
+        if (drone != null)
+        {
+            drone.OnFlightModeChange -= UpdateFlightMode;
+            drone.OnHoverStabilizationToggle -= UpdateHoverStabilization;
+        }
+        if (CameraManager.Instance != null)
+            CameraManager.Instance.OnCameraSwitched -= UpdateCameraIcon;
     }
 }

@@ -17,7 +17,7 @@ public class AudioSettingsMenu : Menu
     {
         audioSliders[0].value = SettingsManager.Instance.GlobalVolume;
         audioSliders[1].value = SettingsManager.Instance.MusicVolume;
-        audioSliders[2].value = SettingsManager.Instance.EffectsVolume;
+        audioSliders[2].value = SettingsManager.Instance.SFXVolume;
     }
 
 

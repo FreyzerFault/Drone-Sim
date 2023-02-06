@@ -77,7 +77,7 @@ public class Ring : MonoBehaviour
 
     #region Particles
 
-    private new ParticleSystem particleSystem;
+    private ParticleSystem particleSystem;
 
     private void PlayParticles()
     {

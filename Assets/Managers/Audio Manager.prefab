@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5407371539616836698
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5407371539616836699}
+  - component: {fileID: 5407371539616836697}
+  m_Layer: 0
+  m_Name: Audio Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5407371539616836699
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5407371539616836698}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -13.255874, y: -17.003792, z: -1.6927443}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5407371539616836697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5407371539616836698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9734cbc500e9125468e3241790f29846, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mixer: {fileID: 24100000, guid: 2396f7b8426536d4e88d44ac7d690c79, type: 2}
+  musicGroup: {fileID: -36447296306555829, guid: 2396f7b8426536d4e88d44ac7d690c79, type: 2}
+  SFXGroup: {fileID: 1289283087516765187, guid: 2396f7b8426536d4e88d44ac7d690c79, type: 2}
+  MenuSFXGroup: {fileID: -1209529461266967689, guid: 2396f7b8426536d4e88d44ac7d690c79, type: 2}
+  sounds:
+  - source: {fileID: 0}
+    name: Music/Menu
+    clip: {fileID: 8300000, guid: f6ec3bd4c00492642b1e28f7bc8ed279, type: 3}
+    mixerGroup: {fileID: -36447296306555829, guid: 2396f7b8426536d4e88d44ac7d690c79, type: 2}
+    volume: 0.52
+    pitch: 1
+    loop: 1
+  - source: {fileID: 0}
+    name: Ambient/Day
+    clip: {fileID: 8300000, guid: 4b11dce170830fd4a8add6c93b85a9b1, type: 3}
+    mixerGroup: {fileID: 1289283087516765187, guid: 2396f7b8426536d4e88d44ac7d690c79, type: 2}
+    volume: 0.45
+    pitch: 1
+    loop: 1
+  - source: {fileID: 0}
+    name: Ambient/Mars
+    clip: {fileID: 8300000, guid: 3476f9afa73f7404d998d90b0d808ac0, type: 3}
+    mixerGroup: {fileID: 1289283087516765187, guid: 2396f7b8426536d4e88d44ac7d690c79, type: 2}
+    volume: 0.45
+    pitch: 1
+    loop: 1
+  - source: {fileID: 0}
+    name: SFX/PauseMenu/SFXChanged
+    clip: {fileID: 8300000, guid: 9257d9c280f5f3445afd94488a0682c8, type: 3}
+    mixerGroup: {fileID: -1209529461266967689, guid: 2396f7b8426536d4e88d44ac7d690c79, type: 2}
+    volume: 0.45
+    pitch: 1
+    loop: 0

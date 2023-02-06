@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -118,8 +119,6 @@ public class Menu : MonoBehaviour
 
     #region Animations
     
-    private Animator animator;
-    
     // Si un menu es PERSISTENTE se mantiene abierto visualmente 
     // Si no es persistente se cierra visualmente el menu cuando se abre un submenu
     [SerializeField] private bool isPersistent = false;
@@ -128,7 +127,7 @@ public class Menu : MonoBehaviour
 
     private void OpenAnimation()
     {
-        if (animator != null)
+        if (TryGetComponent(out Animator animator))
             animator.SetBool(OpenID, true);
         else if (!gameObject.activeSelf)
             gameObject.SetActive(true);
@@ -136,7 +135,7 @@ public class Menu : MonoBehaviour
     
     private void CloseAnimation()
     {
-        if (animator != null)
+        if (TryGetComponent(out Animator animator))
             animator.SetBool(OpenID, false);
         else if (gameObject.activeSelf)
             gameObject.SetActive(false);
@@ -218,6 +217,17 @@ public class Menu : MonoBehaviour
     {
         if (isOpen)
         {
+            // Comprobar si hay un dropdown abierto
+            TMP_Dropdown[] dropdowns = GetComponentsInChildren<TMP_Dropdown>();
+            foreach (TMP_Dropdown dropdown in dropdowns)
+            {
+                if (dropdown.IsExpanded)
+                {
+                    dropdown.Select();
+                    return;
+                }
+            }
+            
             if (IsAnySubmenuOpened)
                 SubmenuOpened.OnCancelRecursive();
             else if (closeOnCancel)

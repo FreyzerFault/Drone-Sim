@@ -13,10 +13,6 @@ namespace DroneSim
         public override void Enable()
         {
             base.Enable();
-            
-            GameObject initObj = GameObject.FindWithTag("Land Camera Init Point");
-            if (initObj)
-                transform.SetPositionAndRotation(initObj.transform.position, initObj.transform.rotation);
 
             virtualCamera.LookAt = FindObjectOfType<DroneController>().transform;
         }

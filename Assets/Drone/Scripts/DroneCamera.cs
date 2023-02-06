@@ -1,3 +1,4 @@
+using System;
 using Cinemachine;
 using UnityEngine;
 
@@ -20,4 +21,10 @@ public class DroneCamera : MonoBehaviour
 
     public virtual void Enable() => virtualCamera.Priority = ACTIVE_PRIORITY;
     public virtual void Disable() => virtualCamera.Priority = INACTIVE_PRIORITY;
+
+    private void OnDestroy()
+    {
+        if (CameraManager.Instance != null)
+            CameraManager.Instance.DeleteCamera(this);
+    }
 }

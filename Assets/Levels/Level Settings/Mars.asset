@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3861e70878b25e64d950c8424c639506, type: 3}
+  m_Name: Mars
+  m_EditorClassIdentifier: 
+  ID: 0
+  name: Mars
+  previewImage: {fileID: 21300000, guid: 8b99695a629de4845a9e699cf53ce7f0, type: 3}
+  completed: 0
+  buildIndex: 0
+  music: 
+  ambient: Mars
+  EnvironmentSettings: {fileID: 11400000, guid: ac9c377d835104e40aa5e09e9532648d, type: 2}

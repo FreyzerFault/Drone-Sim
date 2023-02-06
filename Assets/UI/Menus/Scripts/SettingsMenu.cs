@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -48,17 +49,6 @@ public class SettingsMenu : Menu
         GameMenu.GetComponentsInChildren<Toggle>()[0].isOn = Settings.GodMode;
     }
 
-    public void ApplyChanges() => Settings.Save();
-    public void UndoChanges()
-    {
-        Settings.Load();
-        LoadSettings();
-    }
-    public void ReturnToDefaultSettings()
-    {
-        Settings.ReturnToDefaultSettings();
-        LoadSettings();
-    }
 
     #endregion
 
@@ -70,6 +60,17 @@ public class SettingsMenu : Menu
     // Cambia la navegacion de los items seleccionables para que el ultimo siempre te lleve a la seccion de los botones inferiores
     private void UpdateBottomSectionNavigation() => botButtons.UpdateTopSection(SubmenuOpened.gameObject);
 
+    public void ApplyChanges() => Settings.Save();
+    public void UndoChanges()
+    {
+        Settings.Load();
+        LoadSettings();
+    }
+    public void ReturnToDefaultSettings()
+    {
+        Settings.ReturnToDefaultSettings();
+        LoadSettings();
+    }
     #endregion
 
 
@@ -106,5 +107,19 @@ public class SettingsMenu : Menu
     #endregion
     
 
-    public override void OnCancelRecursive() => Close();
+    public override void OnCancelRecursive()
+    {
+        // Comprobar si hay un dropdown abierto
+        TMP_Dropdown[] dropdowns = GetComponentsInChildren<TMP_Dropdown>();
+        foreach (TMP_Dropdown dropdown in dropdowns)
+        {
+            if (dropdown.IsExpanded)
+            {
+                dropdown.Select();
+                return;
+            }
+        }
+        
+        Close();
+    }
 }
