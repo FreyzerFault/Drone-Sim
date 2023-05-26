@@ -111,7 +111,7 @@ public class SettingsManager : SingletonPersistent<SettingsManager>
         int h = PlayerPrefs.GetInt(RESOLUTION_HEIGHT_ID, ResolutionManager.CurrentMonitorResolution.height);
         Resolution = new Vector2Int(w, h);
         RefreshRate = PlayerPrefs.GetInt(REFRESH_RATE_ID, ResolutionManager.CurrentMonitorRefreshRate);
-        ScreenMode = (FullScreenMode) PlayerPrefs.GetInt(SCREEN_MODE_ID, (int) ResolutionManager.CurrentScreenMode);
+        ScreenMode = (FullScreenMode) PlayerPrefs.GetInt(SCREEN_MODE_ID, (int) FullScreenMode.Windowed);
 
         // Controls
         
