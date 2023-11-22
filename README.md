@@ -10,8 +10,8 @@ Distintos modelos de dron y escenarios de entrenamiento seleccionables desde el 
 ### Trabajo de Fin de Grado en Ingeniería Informática, Mención en Sistemas Gráficos.
      
 
-<img align="left" height="240" src="https://img.itch.zone/aW1hZ2UvMTk1MDI2MC8xMTQ2NzQ5NS5wbmc=/794x1000/xVivq0.png" alt="Menu" />
-<img align="right" height="240" src="https://img.itch.zone/aW1hZ2UvMTk1MDI2MC8xMTQ2NzQ5Ni5wbmc=/794x1000/yNXSD0.png" alt="Menu" />
+<img align="left" style="width: 45%;" src="https://img.itch.zone/aW1hZ2UvMTk1MDI2MC8xMTQ2NzQ5NS5wbmc=/794x1000/xVivq0.png" alt="Menu" />
+<img align="right" style="width: 45%;" src="https://img.itch.zone/aW1hZ2UvMTk1MDI2MC8xMTQ2NzQ5Ni5wbmc=/794x1000/yNXSD0.png" alt="Menu" />
 
 
 
