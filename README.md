@@ -1,4 +1,4 @@
-# Simulador de Entramiento con Drones
+# Simulador de Entrenamiento con Drones
 
 <img align="left" height="100" src="https://img.itch.zone/aW1nLzExNDY3MjgzLnBuZw==/original/QYFnDC.png" alt="Drone" />
 
