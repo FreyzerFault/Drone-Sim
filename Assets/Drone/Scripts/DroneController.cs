@@ -21,7 +21,7 @@ namespace DroneSim
 
         private void Start()
         {
-            // Actualiza los parametros fisicos del Rigidbody
+            // Actualiza los parámetros físicos del Rigidbody
             UpdatePhysicParameters();
             
             ResetRotors();
@@ -44,7 +44,7 @@ namespace DroneSim
         private static EnvironmentSettingsSO EnvironmentSettings => LevelManager.Instance.EnvironmentSettings;
         private Rigidbody rb;
         
-        // Parametros fisicos de unity
+        // Parámetros físicos de unity
         public float Mass { get => rb.mass; set => rb.mass = value; }
         public float Weight => rb.mass * Physics.gravity.magnitude;
         public float Radius => Vector3.Distance(transform.position, rotorCW1.transform.position);
@@ -175,7 +175,7 @@ namespace DroneSim
         private void AngleMode()
         {
             // Pitch y Roll: Angle of Attack
-            // Se evalua en Curvas y se escala como porcentaje del maximo angulo de ataque configurado
+            // Se evalúa en Curvas y se escala como porcentaje del máximo angulo de ataque configurado
             Vector2 targetAngleOfAttack = new Vector2(droneSettings.pitchRollCurve.Evaluate(pitchInput), droneSettings.pitchRollCurve.Evaluate(rollInput));
             targetAngleOfAttack *= droneSettings.maxAngleOfAttack;
             
@@ -197,7 +197,7 @@ namespace DroneSim
         private void HorizonMode()
         {
             // El input se convierte en una frecuencia angular en X y Z (Pitch, Roll y Yaw)
-            // La unica diferencia entre Horizon y Manual es que en Horizon se usa PID para estabilizar la velocidad angular
+            // La única diferencia entre Horizon y Manual es que en Horizon se usa PID para estabilizar la velocidad angular
             Vector3 targetAngularVelocity = new Vector3(
                 droneSettings.pitchRollCurve.Evaluate(pitchInput),
                 droneSettings.yawCurve.Evaluate(yawInput),
@@ -335,7 +335,7 @@ namespace DroneSim
             );
             
             // Para evitar tener resultados fuera del rango [0,1]
-            // y a la vez mantener las diferencias entre rotores (no clampeandolos)
+            // y a la vez mantener las diferencias entre rotores (no clampeándolos)
             // desplazamos todos los valores tanta potencia como haya fuera del rango [0,1]
 
             // POWER               =          0 --------------------- 1
@@ -354,8 +354,8 @@ namespace DroneSim
             float min = Mathf.Min(rotorCW1.power, rotorCW2.power, rotorCCW1.power, rotorCCW2.power);
             
             if (max > 1 && min < 0) 
-                Debug.Log("Los valores de potencia estan fuera de los limites previstos:"
-                          + "\nMax: " + max + " Min: " + min);
+                Debug.Log("Los valores de potencia están fuera de los limites previstos:"
+                        + "\nMax: " + max + " Min: " + min);
 
             if (max > 1) AddRotorsPower(1 - max);
             if (min < 0) AddRotorsPower(-min);
@@ -409,7 +409,7 @@ namespace DroneSim
         private float pitch = 0;
         private float roll = 0;
         private float lift = 0;
-        // Procesa todos los inputs segun la configuracion del dron y genera los outputs correspondientes:
+        // Procesa todos los inputs según la configuración del dron y genera los outputs correspondientes:
         // Pitch, Roll, Yaw y Lift
         private void ProcessInputs()
         {
@@ -432,7 +432,7 @@ namespace DroneSim
             // Check outputs out of ranges [-1,1]?
             if (lift is < -1 or > 1 || pitch is < -1 or > 1 || roll is < -1 or > 1 || yaw is < -1 or > 1)
                 Debug.Log("Some PID results may not be in Range [-1,1]\n" +
-                          "Lift: " + lift + " Pitch: " + pitch + " Roll: " + roll + " Yaw: " + yaw);
+                        "Lift: " + lift + " Pitch: " + pitch + " Roll: " + roll + " Yaw: " + yaw);
         }
 
         #endregion
