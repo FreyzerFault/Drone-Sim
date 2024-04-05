@@ -1,0 +1,10 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/.idea.Drone-Sim.iml
+/contentModel.xml
+/modules.xml
+/projectSettingsUpdater.xml
+# GitHub Copilot persisted chat sessions
+/copilot/chatSessions
